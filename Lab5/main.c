@@ -12,7 +12,7 @@
 
 
 // TEST COMMENT #2
-
+// Nick's comment to merge
 
 void main(void)
 {
