@@ -6,6 +6,6 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LIB_SRCS += \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib 
 
 

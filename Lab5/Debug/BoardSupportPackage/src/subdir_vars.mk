@@ -6,21 +6,21 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/AsciiLib.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/BSP.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/BackChannelUart.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/ClockSys.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/Joystick.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/LCD.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/LED.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bme280.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bme280_support.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bmi160.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bmi160_support.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/demo_sysctl.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/i2c_driver.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/opt3001.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/tmp007.c 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/AsciiLib.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/BSP.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/BackChannelUart.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/ClockSys.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/Joystick.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/LCD.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/LED.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bme280.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bme280_support.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bmi160.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bmi160_support.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/demo_sysctl.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/i2c_driver.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/opt3001.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/tmp007.c 
 
 C_DEPS += \
 ./BoardSupportPackage/src/AsciiLib.d \
@@ -91,20 +91,20 @@ C_DEPS__QUOTED += \
 "BoardSupportPackage\src\tmp007.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/AsciiLib.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/BSP.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/BackChannelUart.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/ClockSys.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/Joystick.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/LCD.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/LED.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bme280.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bme280_support.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bmi160.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/bmi160_support.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/demo_sysctl.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/i2c_driver.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/opt3001.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/src/tmp007.c" 
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/AsciiLib.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/BSP.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/BackChannelUart.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/ClockSys.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/Joystick.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/LCD.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/LED.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bme280.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bme280_support.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bmi160.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/bmi160_support.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/demo_sysctl.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/i2c_driver.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/opt3001.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/tmp007.c" 
 
 

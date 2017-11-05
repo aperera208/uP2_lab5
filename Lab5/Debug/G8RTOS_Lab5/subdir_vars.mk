@@ -6,13 +6,13 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_CriticalSection.s \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_SchedulerASM.s 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_CriticalSection.s \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_SchedulerASM.s 
 
 C_SRCS += \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_FIFO.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_Scheduler.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_Semaphores.c 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_FIFO.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Scheduler.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Semaphores.c 
 
 S_DEPS += \
 ./G8RTOS_Lab5/G8RTOS_CriticalSection.d \
@@ -47,12 +47,12 @@ S_DEPS__QUOTED += \
 "G8RTOS_Lab5\G8RTOS_SchedulerASM.d" 
 
 S_SRCS__QUOTED += \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_CriticalSection.s" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_SchedulerASM.s" 
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_CriticalSection.s" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_SchedulerASM.s" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_FIFO.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_Scheduler.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS_Semaphores.c" 
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_FIFO.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Scheduler.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Semaphores.c" 
 
 

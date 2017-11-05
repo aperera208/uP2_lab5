@@ -48,7 +48,7 @@ ORDERED_OBJS += \
 "./G8RTOS_Lab5/G8RTOS_SchedulerASM.obj" \
 "./G8RTOS_Lab5/G8RTOS_Semaphores.obj" \
 "../msp432p401r.cmd" \
-"C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
 

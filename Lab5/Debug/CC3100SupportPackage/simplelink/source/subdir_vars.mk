@@ -6,16 +6,16 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/device.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/driver.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/flowcont.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/fs.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/netapp.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/netcfg.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/nonos.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/socket.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/spawn.c \
-C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/wlan.c 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/device.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/driver.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/flowcont.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/fs.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/netapp.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/netcfg.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/nonos.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/socket.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/spawn.c \
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/wlan.c 
 
 C_DEPS += \
 ./CC3100SupportPackage/simplelink/source/device.d \
@@ -66,15 +66,15 @@ C_DEPS__QUOTED += \
 "CC3100SupportPackage\simplelink\source\wlan.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/device.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/driver.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/flowcont.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/fs.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/netapp.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/netcfg.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/nonos.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/socket.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/spawn.c" \
-"C:/Users/Alex Perera/Desktop/uP2/Github_repo/Libraries/CC3100SupportPackage/simplelink/source/wlan.c" 
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/device.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/driver.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/flowcont.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/fs.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/netapp.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/netcfg.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/nonos.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/socket.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/spawn.c" \
+"C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/source/wlan.c" 
 
 

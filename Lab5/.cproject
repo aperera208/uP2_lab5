@@ -40,20 +40,22 @@
 									<listOptionValue builtIn="false" value="ccs"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_16.9.compilerID.INCLUDE_PATH.1225824927" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_16.9.compilerID.INCLUDE_PATH" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/G8RTOS_Lab5}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Lab5_gameh}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/simplelink/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/BoardSupportPackage/DriverLib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/BoardSupportPackage/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/BoardSupportPackage/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/simplelink/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CCS_BASE_ROOT}/arm/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/board}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/cc3100_usage}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/SL_Common}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/spi_cc3100}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CC3100SupportPackage/simplelink/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alex Perera\Desktop\uP2\Github_repo\Libraries\CC3100SupportPackage&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alex Perera\Desktop\uP2\Github_repo\Lab5&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alex Perera\Desktop\uP2\Libraries\G8RTOS_Lab5&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alex Perera\Desktop\uP2\Libraries\BoardSupportPackage\DriverLib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alex Perera\Desktop\uP2\Libraries\BoardSupportPackage\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CCS_BASE_ROOT}/arm/include/CMSIS&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${PROJECT_ROOT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${PROJECT_LOC}/../../Github_repo/Lab5&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP432_16.9.compilerID.LITTLE_ENDIAN.1085151080" name="Little endian code [See 'General' page to edit] (--little_endian, -me)" superClass="com.ti.ccstudio.buildDefinitions.MSP432_16.9.compilerID.LITTLE_ENDIAN" value="true" valueType="boolean"/>

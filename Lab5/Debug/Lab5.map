@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Tue Oct 31 16:56:41 2017
+>> Linked Sun Nov 05 13:50:04 2017
 
 OUTPUT FILE NAME:   <Lab5.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00014601
@@ -255,7 +255,7 @@ MODULE SUMMARY
     +--+-----------------------------+-------+---------+---------+
        Total:                        2338    0         97736  
                                                               
-    C:/Users/Alex Perera/Desktop/uP2/Libraries/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib
+    C:/Users/Alex Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/msp432p4xx_driverlib.lib
        cs.o                          942     0         16     
        pcm.o                         510     0         0      
        gpio.o                        76      0         96     
