@@ -15,8 +15,8 @@
  * Thread for client to join game
  *
 •   Only thread to run after launching the OS
-•   Set initial SpecificPlayerInfo_t strict attributes (you can get the IP address by calling getLocalIP()
-•   Send player into to the host
+•   Set initial SpecificPlayerInfo_t struct attributes (you can get the IP address by calling getLocalIP()
+•   Send player info to the host
 •   Wait for server response
 •   If you’ve joined the game, acknowledge you’ve joined to the host and show connection with an LED
 •   Initialize the board state, semaphores, and add the following threads
@@ -104,13 +104,8 @@ void EndOfGameClient();
  */
 void CreateGame()
 {
-    /*
-     * Add this thread before G8RTOS_Launch
-     *
-     *
-     *
-     */
 
+    /* Initialize the players   */
 
 }
 
