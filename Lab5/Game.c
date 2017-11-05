@@ -102,7 +102,17 @@ void EndOfGameClient();
     o   Idle
 •   Kill self
  */
-void CreateGame();
+void CreateGame()
+{
+    /*
+     * Add this thread before G8RTOS_Launch
+     *
+     *
+     *
+     */
+
+
+}
 
 /*
  * Thread that sends game state to client
