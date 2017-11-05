@@ -26,11 +26,22 @@ void main(void)
 
 	//G8RTOS_Launch();
 
-	LED_write(green, 0xFFFF);
+	LED_clear(0xFFFF);
+
+
+
+	if(GetPlayerRole() == Host)
+	{
+	    LED_write(blue, 0x00F0);
+	}
+	else
+	{
+	    LED_write(red, 0x0F00);
+	}
+
 
 	while(1)
 	{
-
 	}
 
 }

@@ -26,19 +26,40 @@ G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp43
 G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Structures.h
 G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_FIFO.h
 G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_CriticalSection.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bme280_support.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bme280.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bmi160_support.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bmi160.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/opt3001.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/tmp007.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BackChannelUart.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/ClockSys.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/Joystick.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h
-G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LCD.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BSP.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bme280_support.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bme280.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bmi160_support.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bmi160.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/opt3001.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/tmp007.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BackChannelUart.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BSP.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/ClockSys.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/Joystick.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LED.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LCD.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Lab5/Game.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/cc3100_usage/cc3100_usage.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/user.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/string.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/board/board.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/spi_cc3100/spi_cc3100.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/../source/nonos.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/../source/objInclusion.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/trace.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/fs.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/socket.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/netapp.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/wlan.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/device.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/netcfg.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/wlan_rx_filters.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/SL_Common/sl_common.h
+G8RTOS_Lab5/G8RTOS_Semaphores.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS.h
 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Semaphores.c: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS.h: 
@@ -66,16 +87,37 @@ C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h:
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Structures.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_FIFO.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_CriticalSection.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bme280_support.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bme280.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bmi160_support.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/bmi160.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/opt3001.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/tmp007.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BackChannelUart.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/ClockSys.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/Joystick.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LCD.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BSP.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bme280_support.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bme280.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bmi160_support.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/bmi160.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/opt3001.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/tmp007.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BackChannelUart.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/BSP.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/ClockSys.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/Joystick.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LED.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LCD.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Github_repo/Lab5/Game.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/cc3100_usage/cc3100_usage.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/user.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/string.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp432.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/board/board.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/spi_cc3100/spi_cc3100.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/../source/nonos.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/../source/objInclusion.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/trace.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/fs.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/socket.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/netapp.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/wlan.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/device.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/netcfg.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/wlan_rx_filters.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/SL_Common/sl_common.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/Libraries/G8RTOS_Lab5/G8RTOS.h: 

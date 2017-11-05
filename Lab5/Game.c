@@ -7,7 +7,12 @@
 
 #include "Game.h"
 #include "G8RTOS.h"
+#include "driverlib.h"
 
+GeneralPlayerInfo_t host_p0;
+GeneralPlayerInfo_t client_p1;
+SpecificPlayerInfo_t client_info;
+GameState_t GameZ;
 
 
 /*********************************************** Client Threads *********************************************************************/
@@ -29,7 +34,42 @@
 •   Kill self
  *
  */
-void JoinGame();
+void JoinGame()
+{
+    client_info.acknowledge = false;
+    client_info.ready = false;
+    client_info.joined = false;
+    client_info.playerNumber = Client;
+    client_info.displacement = 0;
+    client_info.IP_address = getLocalIP();
+
+    SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+
+    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    if(client_info.acknowledge == true)
+    {
+        LED_write(blue, 0x8000);
+    }
+
+    client_info.ready = true;
+    SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+
+    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    if(client_info.joined == true)
+    {
+        LED_write(green, 0x8000);
+    }
+
+    InitBoardState();
+
+    // TODO initialize semaphores and add more threads
+
+    G8RTOS_AddThread(IdleThread, "Idle", 255);
+
+    G8RTOS_KillSelf();
+
+}
+
 
 /*
  * Thread that receives game state packets from host
@@ -105,8 +145,42 @@ void EndOfGameClient();
 void CreateGame()
 {
 
-    /* Initialize the players   */
+    /* Initialize the players  */
+    host_p0.color = PLAYER_RED;
+    host_p0.currentCenter = BOTTOM_PLAYER_CENTER_Y;
+    host_p0.position = BOTTOM;
 
+    client_p1.color = PLAYER_BLUE;
+    client_p1.currentCenter = TOP_PLAYER_CENTER_Y;
+    client_p1.position = TOP;
+
+    initCC3100(Host);
+
+    ReceiveData((_u8*)&client_info, sizeof(client_info));
+
+    client_info.acknowledge = true;
+
+    SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
+
+    ReceiveData((_u8*)&client_info, sizeof(client_info));
+
+    if(client_info.ready == true)
+    {
+        LED_write(red, 0x4000);
+    }
+
+    client_info.joined = true;
+
+    SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
+
+    InitBoardState();
+
+    // TODO initialize semaphores and add more threads
+
+
+    G8RTOS_AddThread(IdleThread, "Idle", 255);
+
+    G8RTOS_KillSelf();
 }
 
 /*
@@ -179,7 +253,10 @@ void EndOfGameHost();
 /*
  * Idle thread
  */
-void IdleThread();
+void IdleThread()
+{
+    while(1);
+}
 
 /*
  * Thread to draw all the objects in the game
@@ -205,7 +282,22 @@ void MoveLEDs();
 /*
  * Returns either Host or Client depending on button press
  */
-playerType GetPlayerRole();
+playerType GetPlayerRole()
+{
+    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P4, GPIO_PIN4|GPIO_PIN5);
+
+    while(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) && GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5));
+
+    if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+    {
+        return Host;
+    }
+    else
+    {
+        return Client;
+    }
+
+}
 
 /*
  * Draw players given center X center coordinate
@@ -225,4 +317,17 @@ void UpdateBallOnScreen(PrevBall_t * previousBall, Ball_t * currentBall, uint16_
 /*
  * Initializes and prints initial game state
  */
-void InitBoardState();
+void InitBoardState()
+{
+    GameZ.player = client_info;
+    GameZ.players[Host] = host_p0;
+    GameZ.players[Client] = client_p1;
+    GameZ.numberOfBalls = 0;
+    GameZ.winner = false;
+    GameZ.gameDone = false;
+    GameZ.LEDScores[Host] = 0;
+    GameZ.LEDScores[Client] = 0;
+    GameZ.overallScores[Host] = 0;
+    GameZ.overallScores[Client] = 0;
+
+}
