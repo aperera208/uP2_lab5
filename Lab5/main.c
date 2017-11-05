@@ -22,9 +22,8 @@ void main(void)
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 	BSP_InitBoard();
-	//G8RTOS_Init();
+	G8RTOS_Init();
 
-	//G8RTOS_Launch();
 
 	LED_clear(0xFFFF);
 
@@ -40,6 +39,7 @@ void main(void)
 	    LED_write(red, 0x0F00);
 	    G8RTOS_AddThread(JoinGame, "Client Join", 100);
 	}
+	G8RTOS_Launch();
 
 
 	while(1)
