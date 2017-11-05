@@ -41,7 +41,9 @@ void JoinGame()
     client_info.joined = false;
     client_info.playerNumber = Client;
     client_info.displacement = 0;
+    initCC3100(Host);
     client_info.IP_address = getLocalIP();
+
 
     SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
@@ -169,7 +171,8 @@ void CreateGame()
     _i32 retval = -1;
     while(retval != 0)
     {
-       retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+
+        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
     }
 
     client_info.acknowledge = true;
