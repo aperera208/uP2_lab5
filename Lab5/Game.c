@@ -41,7 +41,7 @@ void JoinGame()
     client_info.joined = false;
     client_info.playerNumber = Client;
     client_info.displacement = 0;
-    initCC3100(Host);
+    initCC3100(Client);
     client_info.IP_address = getLocalIP();
 
 
