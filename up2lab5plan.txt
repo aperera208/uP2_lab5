@@ -1,0 +1,42 @@
+THREADS:
+void JoinGame();
+void ReceiveDataFromHost();
+void SendDataToHost();
+void ReadJoystickClient();
+void EndOfGameClient();
+
+void CreateGame();
+void SendDataToClient();
+void ReceiveDataFromClient();
+void GenerateBall();
+void ReadJoystickHost();
+void MoveBall();
+void EndOfGameHost();
+
+void IdleThread();
+void DrawObjects();
+void MoveLEDs();
+
+functions:
+playerType GetPlayerRole();
+void DrawPlayer(GeneralPlayerInfo_t * player);
+void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * outPlayer);
+void UpdateBallOnScreen(PrevBall_t * previousBall, Ball_t * currentBall, uint16_t outColor);
+void InitBoardState();
+
+List of Functions to write in order:
+1. void CreateGame(); (host)
+2. void JoinGame(); (client)
+3. IdleThread (both)
+4. MoveLEDs (both)
+5. void ReceiveDataFromHost(); (client)
+6. void SendDataToHost(); (client)
+7. void SendDataToClient(); (host)
+8. void ReceiveDataFromClient(); (host)
+9. void ReadJoystickClient(); (client)
+10. void ReadJoystickHost(); (host)
+11. void DrawObjects(); (both)
+12. void GenerateBall(); (host)
+13. void MoveBall(); (host)
+14. void EndOfGameClient(); (client)
+15. void EndOfGameHost(); (host)
