@@ -33,10 +33,12 @@ void main(void)
 	if(GetPlayerRole() == Host)
 	{
 	    LED_write(blue, 0x00F0);
+	    G8RTOS_AddThread(CreateGame, "Host Create", 100);
 	}
 	else
 	{
 	    LED_write(red, 0x0F00);
+	    G8RTOS_AddThread(JoinGame, "Client Join", 100);
 	}
 
 
