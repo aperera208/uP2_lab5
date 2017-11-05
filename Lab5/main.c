@@ -12,13 +12,10 @@
 
 
 // TEST COMMENT #2
-<<<<<<< .merge_file_a07936
 
 // ALEX COMMENT TO MERGE
 
-=======
 // Nick's comment to merge
->>>>>>> .merge_file_a17100
 
 void main(void)
 {
