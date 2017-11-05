@@ -45,7 +45,12 @@ void JoinGame()
 
     SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
-    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    _i32 retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+    }
+
     if(client_info.acknowledge == true)
     {
         LED_write(blue, 0x8000);
@@ -54,7 +59,12 @@ void JoinGame()
     client_info.ready = true;
     SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
-    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+    }
+
     if(client_info.joined == true)
     {
         LED_write(green, 0x8000);
@@ -156,13 +166,21 @@ void CreateGame()
 
     initCC3100(Host);
 
-    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    _i32 retval = -1;
+    while(retval != 0)
+    {
+       retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+    }
 
     client_info.acknowledge = true;
 
     SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
 
-    ReceiveData((_u8*)&client_info, sizeof(client_info));
+    retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+    }
 
     if(client_info.ready == true)
     {
