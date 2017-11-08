@@ -85,6 +85,7 @@ void JoinGame()
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     G8RTOS_Sleep(3000);
 
+    G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Receive data host", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
@@ -164,15 +165,23 @@ void SendDataToHost()
 /*
  * Thread to read client's joystick
  *
-•   You can read the joystick ADC values by calling GetJoystickCoordinates
-•   You’ll need to add a bias to the values (found experimentally) since every joystick is offset by some small amount displacement and noise
-•   Change Self.displacement accordingly (you can experiment with how much you want to scale the ADC value)
-•   Sleep for 10ms
-•   Then add the displacement to the bottom player in the list of players (general list that’s sent to the client and used for drawing)
-•   By sleeping before updating the bottom player’s position, it makes the game more fair between client and host
-
  */
-void ReadJoystickClient();
+void ReadJoystickClient()
+{
+    int16_t *x_coord;
+    int16_t *y_coord;
+
+    while(1)
+    {
+        GetJoystickCoordinates(x_coord, y_coord);
+
+        client_info.displacement = *x_coord;
+
+        G8RTOS_Sleep(10);
+
+
+    }
+}
 
 /*
  * End of game for the client
@@ -328,7 +337,7 @@ void ReceiveDataFromClient()
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.player = client_info;
         GameZ.players[Client].currentCenter = client_info.displacement;
-        GameZ.LEDScores[Host]++;
+        //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
@@ -353,7 +362,23 @@ void GenerateBall();
 •   Then add the displacement to the bottom player in the list of players (general list that’s sent to the client and used for drawing)
 •   By sleeping before updating the bottom player’s position, it makes the game more fair between client and host
  */
-void ReadJoystickHost();
+void ReadJoystickHost()
+{
+    int16_t *x_coord;
+    int16_t *y_coord;
+
+    while(1)
+    {
+        GetJoystickCoordinates(x_coord, y_coord);
+
+        G8RTOS_Sleep(10);
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ.players[Host].currentCenter = *x_coord;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+    }
+}
 
 /*
  * Thread to move a single ball
@@ -422,10 +447,9 @@ void MoveLEDs()
         {
             prev_leds[Host] = temp_gamez.LEDScores[Host];
 
-            //if(prev_leds[Host] > 16) prev_leds[Host] = 16;
+            if(prev_leds[Host] > 16) prev_leds[Host] = 16;
 
-            uint16_t led_pattern = prev_leds[Host];
- /*
+
             uint16_t led_pattern = 0;
 
             for(int i = 0; i < prev_leds[Host]; i++)
@@ -433,7 +457,7 @@ void MoveLEDs()
                 led_pattern = led_pattern >> 1;
                 led_pattern |= 0x8000;
             }
-*/
+
 
             LED_write(red, led_pattern);
         }
