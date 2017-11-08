@@ -264,6 +264,7 @@ void CreateGame()
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     G8RTOS_Sleep(3000);
 
+    G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
