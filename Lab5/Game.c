@@ -424,12 +424,16 @@ void MoveLEDs()
 
             if(prev_leds[Host] > 16) prev_leds[Host] = 16;
 
+            uint16_t led_pattern = prev_leds[Host];
+ /*
             uint16_t led_pattern = 0;
+
             for(int i = 0; i < prev_leds[Host]; i++)
             {
                 led_pattern = led_pattern >> 1;
                 led_pattern |= 0x8000;
             }
+*/
 
             LED_write(red, led_pattern);
         }
