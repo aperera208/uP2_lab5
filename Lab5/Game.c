@@ -14,7 +14,10 @@ GeneralPlayerInfo_t client_p1;
 SpecificPlayerInfo_t client_info;
 GameState_t GameZ;
 
-
+semaphore_t LCDMutex;
+semaphore_t CC_3100Mutex;
+semaphore_t PlayerMutex;
+semaphore_t GSMutex;
 /*********************************************** Client Threads *********************************************************************/
 /*
  * Thread for client to join game
@@ -72,11 +75,21 @@ void JoinGame()
         LED_write(green, 0x8000);
     }
 
+
     InitBoardState();
 
     // TODO initialize semaphores and add more threads
-
+    G8RTOS_InitSemaphore(&LCDMutex, 1);
+    G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
+    G8RTOS_Sleep(3000);
+
+    G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
+    G8RTOS_AddThread(ReceiveDataFromHost, "Receive data host", 200);
+    G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+
+
 
     G8RTOS_KillSelf();
 
@@ -93,7 +106,37 @@ void JoinGame()
 •   Sleep for 5ms
  *
  */
-void ReceiveDataFromHost();
+void ReceiveDataFromHost()
+{
+    GameState_t temp_gamestate;
+
+    while(1)
+    {
+
+        _i32 retval = -1;
+        while(retval != 0)
+        {
+            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
+            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            G8RTOS_Sleep(1);
+        }
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ = temp_gamestate;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        if(temp_gamestate.gameDone == true)
+        {
+            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+        }
+
+        G8RTOS_Sleep(5);
+
+    }
+
+
+}
 
 
 /*
@@ -103,7 +146,20 @@ void ReceiveDataFromHost();
 •   Sleep for 2ms
 
  */
-void SendDataToHost();
+void SendDataToHost()
+{
+
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&CC_3100Mutex);
+        SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+        G8RTOS_SignalSemaphore(&CC_3100Mutex);
+
+        G8RTOS_Sleep(2);
+
+    }
+
+}
 
 /*
  * Thread to read client's joystick
@@ -129,7 +185,10 @@ void ReadJoystickClient();
 •   Add all threads back
 •   Kill Self
  */
-void EndOfGameClient();
+void EndOfGameClient()
+{
+    while(1);
+}
 
 /*********************************************** Client Threads *********************************************************************/
 
@@ -194,12 +253,19 @@ void CreateGame()
 
     SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
 
+
     InitBoardState();
 
     // TODO initialize semaphores and add more threads
 
-
+    G8RTOS_InitSemaphore(&LCDMutex, 1);
+    G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
+    G8RTOS_Sleep(3000);
+
+    G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
+    G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
     G8RTOS_KillSelf();
 }
@@ -213,7 +279,28 @@ void CreateGame()
     o   If done, Add EndOfGameHost thread with highest priority
 •   Sleep for 5ms (found experimentally to be a good amount of time for synchronization)
  */
-void SendDataToClient();
+void SendDataToClient()
+{
+    GameState_t tempGamez;
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&GSMutex);
+        tempGamez = GameZ;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        G8RTOS_WaitSemaphore(&CC_3100Mutex);
+        SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+        G8RTOS_SignalSemaphore(&CC_3100Mutex);
+
+        if(tempGamez.gameDone == true)
+        {
+            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+        }
+
+        G8RTOS_Sleep(5);
+
+    }
+}
 
 /*
  * Thread that receives UDP packets from client
@@ -222,7 +309,31 @@ void SendDataToClient();
 •   Update the player’s current center with the displacement received from the client
 •   Sleep for 2ms (again found experimentally)
  */
-void ReceiveDataFromClient();
+void ReceiveDataFromClient()
+{
+
+    while(1)
+    {
+
+        _i32 retval = -1;
+        while(retval != 0)
+        {
+            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            G8RTOS_Sleep(1);
+        }
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ.player = client_info;
+        GameZ.players[Client].currentCenter = client_info.displacement;
+        GameZ.LEDScores[Host]++;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+
+        G8RTOS_Sleep(2);
+    }
+}
 
 /*
  * Generate Ball thread
@@ -294,7 +405,56 @@ void DrawObjects();
  *
 •   Responsible for updating the LED array with current scores
  */
-void MoveLEDs();
+void MoveLEDs()
+{
+    uint16_t prev_leds[2] = {0,0};
+    GameState_t temp_gamez;
+    LED_clear(0xFFFF);
+
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&GSMutex);
+        temp_gamez = GameZ;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        if(temp_gamez.LEDScores[Host] != prev_leds[Host] )
+        {
+            prev_leds[Host] = temp_gamez.LEDScores[Host];
+
+            if(prev_leds[Host] > 16) prev_leds[Host] = 16;
+
+            uint16_t led_pattern = 0;
+            for(int i = 0; i < prev_leds[Host]; i++)
+            {
+                led_pattern = led_pattern >> 1;
+                led_pattern |= 0x8000;
+            }
+
+            LED_write(red, led_pattern);
+        }
+
+        if(GameZ.LEDScores[Client] != prev_leds[Client])
+        {
+
+            prev_leds[Client] = temp_gamez.LEDScores[Client];
+
+            if(prev_leds[Client] > 16) prev_leds[Client] = 16;
+
+            uint16_t led_pattern = 0;
+            for(int i = 0; i < prev_leds[Client]; i++)
+            {
+                led_pattern = led_pattern >> 1;
+                led_pattern |= 0x8000;
+            }
+
+            LED_write(blue, led_pattern);
+        }
+
+        G8RTOS_Sleep(100);
+
+    }
+
+}
 
 /*********************************************** Common Threads *********************************************************************/
 
@@ -350,5 +510,18 @@ void InitBoardState()
     GameZ.LEDScores[Client] = 0;
     GameZ.overallScores[Host] = 0;
     GameZ.overallScores[Client] = 0;
+/*
+    LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MIN_Y, ARENA_MAX_Y, LCD_BLACK);           // Draw square black arena
+    LCD_DrawRectangle(ARENA_MIN_X, ARENA_MIN_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw left edge of arena in white
+    LCD_DrawRectangle(ARENA_MAX_X, ARENA_MAX_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw right edge of arena in white
+    LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MIN_Y, ARENA_MIN_Y+1, LCD_WHITE);         // Draw top edge of arena in white
+    LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MAX_Y-1, ARENA_MAX_Y, LCD_WHITE);         // Draw bottom edge of arena in white
+
+    LCD_DrawRectangle(PADDLE_X_CENTER , HORIZ_CENTER_MAX_PL , ARENA_MIN_Y+1, TOP_PADDLE_EDGE+1, client_p1.color);   // Host player paddle
+   // LCD_DrawRectangle(HORIZ_CENTER_MIN_PL, HORIZ_CENTER_MAX_PL, ARENA_MAX_Y, BOTTOM_PADDLE_EDGE-1 , host_p0.color);     // Client player paddle
+
+    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, "00", client_p1.color);      // Client score
+    LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, "00", host_p0.color);        // Host score
+    */
 
 }

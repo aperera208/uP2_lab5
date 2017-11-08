@@ -10,7 +10,6 @@
 
 
 
-
 // TEST COMMENT #2
 
 // ALEX COMMENT TO MERGE
@@ -22,6 +21,8 @@ void main(void)
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 	BSP_InitBoard();
+
+
 	G8RTOS_Init();
 
 
@@ -40,7 +41,6 @@ void main(void)
 	    G8RTOS_AddThread(JoinGame, "Client Join", 100);
 	}
 	G8RTOS_Launch();
-
 
 	while(1)
 	{
