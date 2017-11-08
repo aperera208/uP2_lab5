@@ -422,7 +422,7 @@ void MoveLEDs()
         {
             prev_leds[Host] = temp_gamez.LEDScores[Host];
 
-            if(prev_leds[Host] > 16) prev_leds[Host] = 16;
+            //if(prev_leds[Host] > 16) prev_leds[Host] = 16;
 
             uint16_t led_pattern = prev_leds[Host];
  /*
