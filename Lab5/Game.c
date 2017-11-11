@@ -386,17 +386,17 @@ void GenerateBall();
  */
 void ReadJoystickHost()
 {
-    int16_t *x_coord;
-    int16_t *y_coord;
+    int16_t x_coord;
+    int16_t y_coord;
 
     while(1)
     {
-        GetJoystickCoordinates(x_coord, y_coord);
+        GetJoystickCoordinates(&x_coord, &y_coord);
 
         G8RTOS_Sleep(10);
 
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter += *x_coord/2000;
+        GameZ.players[Host].currentCenter += x_coord/2000;
         G8RTOS_SignalSemaphore(&GSMutex);
 
     }
@@ -593,12 +593,12 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
         if(offset > 0)
         {
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, client_p1.color);
+            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         }
         else if (offset < 0)
         {
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, client_p1.color);
+            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         }
 
     }
