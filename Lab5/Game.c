@@ -162,15 +162,19 @@ void ReceiveDataFromHost()
  */
 void SendDataToHost()
 {
+    SpecificPlayerInfo_t temp_client;
 
     while(1)
     {
-        G8RTOS_WaitSemaphore(&CC_3100Mutex);
         G8RTOS_WaitSemaphore(&PlayerMutex);
-
-        SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
-
+        temp_client = client_info;
         G8RTOS_SignalSemaphore(&PlayerMutex);
+
+
+        G8RTOS_WaitSemaphore(&CC_3100Mutex);
+
+        SendData((_u8*)&temp_client, HOST_IP_ADDR, sizeof(temp_client));
+
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
         G8RTOS_Sleep(2);
