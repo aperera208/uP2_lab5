@@ -396,7 +396,7 @@ void ReadJoystickHost()
         G8RTOS_Sleep(10);
 
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter += x_coord/2000;
+        GameZ.players[Host].currentCenter += x_coord/200;
         G8RTOS_SignalSemaphore(&GSMutex);
 
     }
@@ -576,29 +576,33 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
 
     if(outPlayer->position == TOP)
     {
+        LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID , LCD_BLACK);
+        LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
         if(offset > 0)
         {
-            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
+            //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
+            //LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
         }
         else if (offset < 0)
         {
-            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
+            //LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
+            //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
         }
 
     }
     else
     {
+        LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y , LCD_BLACK);
+        LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         if(offset > 0)
         {
-            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
+            //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
+            //LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         }
         else if (offset < 0)
         {
-            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
-            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
+            //LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
+            //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         }
 
     }
