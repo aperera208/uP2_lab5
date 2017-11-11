@@ -241,11 +241,11 @@ void CreateGame()
 
     /* Initialize the players  */
     host_p0.color = PLAYER_RED;
-    host_p0.currentCenter = BOTTOM_PLAYER_CENTER_Y;
+    host_p0.currentCenter = PADDLE_X_CENTER;
     host_p0.position = BOTTOM;
 
     client_p1.color = PLAYER_BLUE;
-    client_p1.currentCenter = TOP_PLAYER_CENTER_Y;
+    client_p1.currentCenter = PADDLE_X_CENTER;
     client_p1.position = TOP;
 
     initCC3100(Host);
