@@ -99,12 +99,11 @@ void JoinGame()
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     G8RTOS_Sleep(3000);
 
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Receive data host", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
-
-
 
     G8RTOS_KillSelf();
 
@@ -294,6 +293,8 @@ void CreateGame()
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     G8RTOS_Sleep(3000);
 
+    G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
@@ -395,7 +396,7 @@ void ReadJoystickHost()
         G8RTOS_Sleep(10);
 
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter = *x_coord;
+        GameZ.players[Host].currentCenter += *x_coord/2000;
         G8RTOS_SignalSemaphore(&GSMutex);
 
     }
@@ -445,7 +446,33 @@ void IdleThread()
 •   Update players
 •   Sleep for 20ms (reasonable refresh rate)
  */
-void DrawObjects();
+void DrawObjects()
+{
+    PrevPlayer_t prevhost_p0;
+    PrevPlayer_t prevclient_p1;
+
+    prevhost_p0.Center = host_p0.currentCenter;
+    prevclient_p1.Center = client_p1.currentCenter;
+
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&GSMutex);
+        host_p0 = GameZ.players[Host];
+        client_p1 = GameZ.players[Client];
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        UpdatePlayerOnScreen(&prevhost_p0, &host_p0);
+        UpdatePlayerOnScreen(&prevclient_p1, &client_p1);
+
+        prevhost_p0.Center = host_p0.currentCenter;
+        prevclient_p1.Center = client_p1.currentCenter;
+
+        G8RTOS_Sleep(20);
+
+    }
+
+
+}
 
 /*
  * Thread to update LEDs based on score
@@ -533,12 +560,51 @@ playerType GetPlayerRole()
 /*
  * Draw players given center X center coordinate
  */
-void DrawPlayer(GeneralPlayerInfo_t * player);
+void DrawPlayer(GeneralPlayerInfo_t * player)
+{
+
+
+}
 
 /*
  * Updates player's paddle based on current and new center
  */
-void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * outPlayer);
+void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * outPlayer)
+{
+    int16_t offset = outPlayer->currentCenter - prevPlayerIn->Center;
+
+
+    if(outPlayer->position == TOP)
+    {
+        if(offset > 0)
+        {
+            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
+            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
+        }
+        else if (offset < 0)
+        {
+            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
+            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
+        }
+
+    }
+    else
+    {
+        if(offset > 0)
+        {
+            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + offset , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
+            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 + offset, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, client_p1.color);
+        }
+        else if (offset < 0)
+        {
+            LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2 - offset, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
+            LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 - offset, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, client_p1.color);
+        }
+
+    }
+
+
+}
 
 /*
  * Function updates ball position on screen
