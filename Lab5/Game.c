@@ -131,7 +131,7 @@ void ReceiveDataFromHost()
         while(retval != 0)
         {
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
+            retval = ReceiveData(&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_Sleep(1);
         }
@@ -166,7 +166,7 @@ void SendDataToHost()
     while(1)
     {
         G8RTOS_WaitSemaphore(&CC_3100Mutex);
-        SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+        SendData(&client_info, HOST_IP_ADDR, sizeof(client_info));
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
         G8RTOS_Sleep(2);
@@ -351,7 +351,7 @@ void ReceiveDataFromClient()
         while(retval != 0)
         {
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+            retval = ReceiveData(&client_info, sizeof(client_info));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_Sleep(1);
         }
