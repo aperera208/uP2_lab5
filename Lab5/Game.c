@@ -204,6 +204,14 @@ void ReadJoystickClient()
         }
         G8RTOS_SignalSemaphore(&PlayerMutex);
 
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ.player = client_info;
+        GameZ.players[Client].currentCenter = client_info.displacement;
+        //GameZ.LEDScores[Host]++;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+
+
         G8RTOS_Sleep(10);
 
     }
