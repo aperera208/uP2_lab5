@@ -293,7 +293,7 @@ void CreateGame()
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     G8RTOS_Sleep(3000);
 
-    //G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
+    G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
