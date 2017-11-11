@@ -78,6 +78,12 @@ void JoinGame()
 
     InitBoardState();
 
+    retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
+    }
+
     // TODO initialize semaphores and add more threads
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
@@ -253,6 +259,7 @@ void CreateGame()
         retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
     }
 
+
     if(client_info.ready == true)
     {
         LED_write(red, 0x4000);
@@ -264,6 +271,8 @@ void CreateGame()
 
 
     InitBoardState();
+
+    SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
 
     // TODO initialize semaphores and add more threads
 
@@ -551,6 +560,5 @@ void InitBoardState()
 
     LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, "00", client_p1.color);      // Client score
     LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, "00", host_p0.color);        // Host score
-
 
 }
