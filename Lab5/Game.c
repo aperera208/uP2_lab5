@@ -277,7 +277,7 @@ void CreateGame()
 
     SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
 
-    SendData((_u8*)&client_p1, client_info.IP_address , sizeof(client_info));
+    SendData((_u8*)&client_p1, client_info.IP_address , sizeof(client_p1));
 
     SendData((_u8*)&host_p0, client_info.IP_address , sizeof(host_p0));
 
