@@ -133,7 +133,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.LEDScores, sizeof(temp_gamestate.LEDScores));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
          retval = -1;
         while(retval != 0)
@@ -141,7 +141,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.balls, sizeof(temp_gamestate.balls));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
          retval = -1;
         while(retval != 0)
@@ -149,7 +149,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.gameDone, sizeof(temp_gamestate.gameDone));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
         retval = -1;
         while(retval != 0)
@@ -157,7 +157,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.numberOfBalls, sizeof(temp_gamestate.numberOfBalls));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
          retval = -1;
         while(retval != 0)
@@ -165,7 +165,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.overallScores, sizeof(temp_gamestate.overallScores));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
         retval = -1;
         while(retval != 0)
@@ -173,7 +173,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.player, sizeof(temp_gamestate.player));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
          retval = -1;
         while(retval != 0)
@@ -181,7 +181,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.players, sizeof(temp_gamestate.players));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
          retval = -1;
         while(retval != 0)
@@ -189,7 +189,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate.winner, sizeof(temp_gamestate.winner));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
 
         G8RTOS_WaitSemaphore(&GSMutex);
