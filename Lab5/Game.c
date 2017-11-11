@@ -122,8 +122,9 @@ void JoinGame()
  */
 void ReceiveDataFromHost()
 {
+#pragma pack (push, 1)
     GameState_t temp_gamestate;
-
+#pragma pack (pop)
     while(1)
     {
 
@@ -131,65 +132,9 @@ void ReceiveDataFromHost()
         while(retval != 0)
         {
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.LEDScores, sizeof(temp_gamestate.LEDScores));
+            retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-         retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.balls, sizeof(temp_gamestate.balls));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-         retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.gameDone, sizeof(temp_gamestate.gameDone));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-        retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.numberOfBalls, sizeof(temp_gamestate.numberOfBalls));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-         retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.overallScores, sizeof(temp_gamestate.overallScores));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-        retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.player, sizeof(temp_gamestate.player));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-         retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.players, sizeof(temp_gamestate.players));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
-        }
-         retval = -1;
-        while(retval != 0)
-        {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&temp_gamestate.winner, sizeof(temp_gamestate.winner));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
+            G8RTOS_Sleep(1);
         }
 
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -369,7 +314,9 @@ void CreateGame()
  */
 void SendDataToClient()
 {
+#pragma pack (push, 1)
     GameState_t tempGamez;
+#pragma pack (pop)
     while(1)
     {
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -377,14 +324,7 @@ void SendDataToClient()
         G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_WaitSemaphore(&CC_3100Mutex);
-        SendData((_u8*)&tempGamez.LEDScores, tempGamez.player.IP_address, sizeof(tempGamez.LEDScores));
-        SendData((_u8*)&tempGamez.balls, tempGamez.player.IP_address, sizeof(tempGamez.balls));
-        SendData((_u8*)&tempGamez.gameDone, tempGamez.player.IP_address, sizeof(tempGamez.gameDone));
-        SendData((_u8*)&tempGamez.numberOfBalls, tempGamez.player.IP_address, sizeof(tempGamez.numberOfBalls));
-        SendData((_u8*)&tempGamez.overallScores, tempGamez.player.IP_address, sizeof(tempGamez.overallScores));
-        SendData((_u8*)&tempGamez.player, tempGamez.player.IP_address, sizeof(tempGamez.player));
-        SendData((_u8*)&tempGamez.players, tempGamez.player.IP_address, sizeof(tempGamez.players));
-        SendData((_u8*)&tempGamez.winner, tempGamez.player.IP_address, sizeof(tempGamez.winner));
+        SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
 
