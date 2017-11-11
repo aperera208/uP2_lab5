@@ -43,7 +43,7 @@ void JoinGame()
     client_info.ready = false;
     client_info.joined = false;
     client_info.playerNumber = Client;
-    client_info.displacement = 0;
+    client_info.displacement = PADDLE_X_CENTER;
     initCC3100(Client);
     client_info.IP_address = getLocalIP();
 
@@ -100,7 +100,7 @@ void JoinGame()
     //G8RTOS_Sleep(3000);
 
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
-    //G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
+    G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Receive data host", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
@@ -122,9 +122,7 @@ void JoinGame()
  */
 void ReceiveDataFromHost()
 {
-#pragma pack (push, 1)
     GameState_t temp_gamestate;
-#pragma pack (pop)
     while(1)
     {
 
@@ -182,17 +180,25 @@ void SendDataToHost()
  */
 void ReadJoystickClient()
 {
-    int16_t *x_coord;
-    int16_t *y_coord;
+    int16_t x_coord;
+    int16_t y_coord;
 
     while(1)
     {
-        GetJoystickCoordinates(x_coord, y_coord);
+        GetJoystickCoordinates(&x_coord, &y_coord);
 
-        client_info.displacement = *x_coord;
+
+        client_info.displacement -= x_coord/2000;
+        if(client_info.displacement   > ARENA_MAX_X - PADDLE_LEN_D2 )
+        {
+            client_info.displacement = ARENA_MAX_X - PADDLE_LEN_D2;
+        }
+        else if(client_info.displacement < ARENA_MIN_X + PADDLE_LEN_D2 + 1)
+        {
+            client_info.displacement = ARENA_MIN_X + PADDLE_LEN_D2 + 1;
+        }
 
         G8RTOS_Sleep(10);
-
 
     }
 }
@@ -314,9 +320,7 @@ void CreateGame()
  */
 void SendDataToClient()
 {
-#pragma pack (push, 1)
     GameState_t tempGamez;
-#pragma pack (pop)
     while(1)
     {
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -362,7 +366,7 @@ void ReceiveDataFromClient()
 
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.player = client_info;
-        //GameZ.players[Client].currentCenter = client_info.displacement;
+        GameZ.players[Client].currentCenter = client_info.displacement;
         //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
 
