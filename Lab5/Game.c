@@ -97,7 +97,7 @@ void JoinGame()
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
-    G8RTOS_Sleep(3000);
+    //G8RTOS_Sleep(3000);
 
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     //G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
@@ -291,7 +291,7 @@ void CreateGame()
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
-    G8RTOS_Sleep(3000);
+    //G8RTOS_Sleep(3000);
 
     G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
@@ -321,7 +321,7 @@ void SendDataToClient()
         G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_WaitSemaphore(&CC_3100Mutex);
-        SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+        SendData(&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
         if(tempGamez.gameDone == true)
@@ -358,7 +358,7 @@ void ReceiveDataFromClient()
 
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.player = client_info;
-        GameZ.players[Client].currentCenter = client_info.displacement;
+        //GameZ.players[Client].currentCenter = client_info.displacement;
         //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
 
@@ -398,7 +398,7 @@ void ReadJoystickHost()
 
 
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter += x_coord/2000;
+        GameZ.players[Host].currentCenter -= x_coord/2000;
         if(GameZ.players[Host].currentCenter   > ARENA_MAX_X - PADDLE_LEN_D2 )
         {
             GameZ.players[Host].currentCenter = ARENA_MAX_X - PADDLE_LEN_D2;
