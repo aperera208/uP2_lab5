@@ -96,6 +96,7 @@ void JoinGame()
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&PlayerMutex, 1);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     //G8RTOS_Sleep(3000);
 
@@ -165,7 +166,11 @@ void SendDataToHost()
     while(1)
     {
         G8RTOS_WaitSemaphore(&CC_3100Mutex);
+        G8RTOS_WaitSemaphore(&PlayerMutex);
+
         SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+
+        G8RTOS_SignalSemaphore(&PlayerMutex);
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
         G8RTOS_Sleep(2);
@@ -187,7 +192,7 @@ void ReadJoystickClient()
     {
         GetJoystickCoordinates(&x_coord, &y_coord);
 
-
+        G8RTOS_WaitSemaphore(&PlayerMutex);
         client_info.displacement -= x_coord/2000;
         if(client_info.displacement   > ARENA_MAX_X - PADDLE_LEN_D2 )
         {
@@ -197,6 +202,7 @@ void ReadJoystickClient()
         {
             client_info.displacement = ARENA_MIN_X + PADDLE_LEN_D2 + 1;
         }
+        G8RTOS_SignalSemaphore(&PlayerMutex);
 
         G8RTOS_Sleep(10);
 
@@ -297,6 +303,8 @@ void CreateGame()
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
+    //G8RTOS_InitSemaphore(&PlayerMutex, 1);
+
     G8RTOS_AddThread(IdleThread, "Idle", 255);
     //G8RTOS_Sleep(3000);
 
