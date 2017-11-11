@@ -395,8 +395,18 @@ void ReadJoystickHost()
 
         G8RTOS_Sleep(10);
 
+
+
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter += x_coord/200;
+        GameZ.players[Host].currentCenter += x_coord/2000;
+        if(GameZ.players[Host].currentCenter   > ARENA_MAX_X - PADDLE_LEN_D2 )
+        {
+            GameZ.players[Host].currentCenter = ARENA_MAX_X - PADDLE_LEN_D2;
+        }
+        else if(GameZ.players[Host].currentCenter < ARENA_MIN_X + PADDLE_LEN_D2 + 1)
+        {
+            GameZ.players[Host].currentCenter = ARENA_MIN_X + PADDLE_LEN_D2 + 1;
+        }
         G8RTOS_SignalSemaphore(&GSMutex);
 
     }
