@@ -145,7 +145,7 @@ void ReceiveDataFromHost()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5);
+        G8RTOS_Sleep(3);
 
     }
 
@@ -349,7 +349,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5);
+        G8RTOS_Sleep(3);
 
     }
 }
