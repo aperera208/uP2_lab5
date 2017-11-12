@@ -152,7 +152,7 @@ void ReceiveDataFromHost()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(1);
+        G8RTOS_Sleep(5);
 
     }
 
@@ -184,7 +184,7 @@ void SendDataToHost()
 
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
-        G8RTOS_Sleep(1);
+        G8RTOS_Sleep(2);
 
     }
 
@@ -363,7 +363,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(1);
+        G8RTOS_Sleep(5);
 
     }
 }
@@ -397,7 +397,7 @@ void ReceiveDataFromClient()
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
-        G8RTOS_Sleep(1);
+        G8RTOS_Sleep(2);
     }
 }
 /*
