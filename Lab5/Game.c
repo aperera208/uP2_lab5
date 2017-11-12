@@ -413,6 +413,7 @@ void ReceiveDataFromClient()
 void MoveBall()
 {
     GameState_t temp_games;
+    bool kill = false;
 
     G8RTOS_WaitSemaphore(&GSMutex);
     temp_games = GameZ;
@@ -465,15 +466,33 @@ void MoveBall()
         }
         if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL)
         {
-            GameZ.balls[i].currentCenterY = VERT_CENTER_MAX_BALL;
+            kill = true;
+            GameZ.balls[i].alive = false;
+
+            if(GameZ.balls[i].color == LCD_BLUE)
+            {
+                GameZ.LEDScores[Client]++;
+            }
+            GameZ.numberOfBalls--;
         }
         if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL)
         {
-            GameZ.balls[i].currentCenterY = VERT_CENTER_MIN_BALL;
+            kill = true;
+            GameZ.balls[i].alive = false;
 
+            if(GameZ.balls[i].color == LCD_RED)
+            {
+                GameZ.LEDScores[Host]++;
+            }
+            GameZ.numberOfBalls--;
         }
 
         G8RTOS_SignalSemaphore(&GSMutex);
+
+        if(kill == true)
+        {
+            G8RTOS_KillSelf();
+        }
 
         G8RTOS_Sleep(35);
     }
