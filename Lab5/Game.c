@@ -599,13 +599,7 @@ void DrawObjects()
         temp_gamez = GameZ;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        host_p0 = temp_gamez.players[Host];
-        client_p1 = temp_gamez.players[Client];
 
-
-
-        prevhost_p0.Center = host_p0.currentCenter;
-        prevclient_p1.Center = client_p1.currentCenter;
 
         //G8RTOS_WaitSemaphore(&LCDMutex);
         for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
@@ -620,8 +614,14 @@ void DrawObjects()
         }
         //G8RTOS_SignalSemaphore(&LCDMutex);
 
+        host_p0 = temp_gamez.players[Host];
+        client_p1 = temp_gamez.players[Client];
+
         UpdatePlayerOnScreen(&prevhost_p0, &host_p0);
         UpdatePlayerOnScreen(&prevclient_p1, &client_p1);
+
+        prevhost_p0.Center = host_p0.currentCenter;
+        prevclient_p1.Center = client_p1.currentCenter;
 
         G8RTOS_Sleep(20);
 
