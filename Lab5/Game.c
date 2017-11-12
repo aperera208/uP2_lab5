@@ -437,7 +437,7 @@ void MoveBall()
 
     while(1)
     {
-
+        G8RTOS_Sleep(35);
     }
 }
 
