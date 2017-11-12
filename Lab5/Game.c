@@ -14,6 +14,7 @@ GeneralPlayerInfo_t client_p1;
 SpecificPlayerInfo_t client_info;
 GameState_t GameZ;
 
+
 semaphore_t LCDMutex;
 semaphore_t CC_3100Mutex;
 semaphore_t PlayerMutex;
@@ -398,13 +399,71 @@ void ReceiveDataFromClient()
         G8RTOS_Sleep(1);
     }
 }
+/*
+ * Thread to move a single ball
+•   Go through array of balls and find one that’s not alive
+•   Once found, initialize random position and X and Y velocities, as well as color and alive attributes
+•   Checking for collision given the current center and the velocity
+•   If collision occurs, adjust velocity and color accordingly
+•   If the ball passes a player, adjust score, account for the game possibly ending, and kill self
+•   Otherwise, just move the ball in its current direction according to its velocity
+•   Sleep for 35ms
+ */
+void MoveBall()
+{
+
+    int i;
+    for(i = 0; i < MAX_NUM_OF_BALLS; i++)
+    {
+        if(GameZ.balls[i].alive == false)
+        {
+            break;
+        }
+        else if(i == MAX_NUM_OF_BALLS-1)
+        {
+            G8RTOS_KillSelf();
+        }
+    }
+
+    GameZ.balls[i].alive = true;
+    GameZ.balls[i].color = LCD_ORANGE;
+
+    srand(time(NULL));
+    GameZ.balls[i].currentCenterX = rand() % HORIZ_CENTER_MAX_BALL - HORIZ_CENTER_MIN_BALL;
+    GameZ.balls[i].currentCenterY = rand() % VERT_CENTER_MAX_BALL - VERT_CENTER_MIN_BALL;
+
+
+
+    while(1)
+    {
+
+    }
+}
 
 /*
  * Generate Ball thread
 •   Adds another MoveBall thread if the number of balls is less than the max
 •   Sleeps proportional to the number of balls currently in play
  */
-void GenerateBall();
+void GenerateBall()
+{
+    int numballs = 0;
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&GSMutex);
+
+        if(GameZ.numberOfBalls < MAX_NUM_OF_BALLS)
+        {
+            G8RTOS_AddThread(MoveBall, "MoveBall", 200);
+            GameZ.numberOfBalls++;
+            numballs = GameZ.numberOfBalls;
+        }
+
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        G8RTOS_Sleep(5000*numballs);
+    }
+}
 
 /*
  * Thread to read host's joystick
@@ -444,17 +503,7 @@ void ReadJoystickHost()
     }
 }
 
-/*
- * Thread to move a single ball
-•   Go through array of balls and find one that’s not alive
-•   Once found, initialize random position and X and Y velocities, as well as color and alive attributes
-•   Checking for collision given the current center and the velocity
-•   If collision occurs, adjust velocity and color accordingly
-•   If the ball passes a player, adjust score, account for the game possibly ending, and kill self
-•   Otherwise, just move the ball in its current direction according to its velocity
-•   Sleep for 35ms
- */
-void MoveBall();
+
 
 /*
  * End of game for the host
@@ -492,6 +541,7 @@ void DrawObjects()
 {
     PrevPlayer_t prevhost_p0;
     PrevPlayer_t prevclient_p1;
+    GameState_t temp_gamez;
 
     prevhost_p0.Center = host_p0.currentCenter;
     prevclient_p1.Center = client_p1.currentCenter;
@@ -499,15 +549,24 @@ void DrawObjects()
     while(1)
     {
         G8RTOS_WaitSemaphore(&GSMutex);
-        host_p0 = GameZ.players[Host];
-        client_p1 = GameZ.players[Client];
+        temp_gamez = GameZ;
         G8RTOS_SignalSemaphore(&GSMutex);
 
+        host_p0 = temp_gamez.players[Host];
+        client_p1 = temp_gamez.players[Client];
         UpdatePlayerOnScreen(&prevhost_p0, &host_p0);
         UpdatePlayerOnScreen(&prevclient_p1, &client_p1);
 
         prevhost_p0.Center = host_p0.currentCenter;
         prevclient_p1.Center = client_p1.currentCenter;
+
+        for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
+        {
+            if(temp_gamez.balls[i].alive == true)
+            {
+                LCD_DrawRectangle(temp_gamez.balls[i].currentCenterX - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterX + BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY + BALL_SIZE_D2, temp_gamez.balls[i].color);
+            }
+        }
 
         G8RTOS_Sleep(20);
 
