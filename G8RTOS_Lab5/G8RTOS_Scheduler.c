@@ -167,7 +167,7 @@ void SysTick_Handler()
 
         for (int i = 0; i < NumberOfThreads; i++)                                                                   // Go through all the threads added
         {
-            if((ptr_t->Asleep == true) && (ptr_t->sleep_count == SystemTime))                                           // if a thread is alseep AND it is ready to be woken up
+            if((ptr_t->Asleep == true) && (ptr_t->sleep_count <= SystemTime))                                           // if a thread is alseep AND it is ready to be woken up
             {
                 ptr_t->Asleep = false;                                                                              // wake up by changing boolean value of Asleep
             }
