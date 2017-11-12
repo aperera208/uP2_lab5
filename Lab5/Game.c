@@ -427,11 +427,11 @@ void MoveBall()
     }
 
     GameZ.balls[i].alive = true;
-    GameZ.balls[i].color = LCD_ORANGE;
+    GameZ.balls[i].color = LCD_WHITE;
 
     srand(time(NULL));
-    GameZ.balls[i].currentCenterX = rand() % HORIZ_CENTER_MAX_BALL - HORIZ_CENTER_MIN_BALL;
-    GameZ.balls[i].currentCenterY = rand() % VERT_CENTER_MAX_BALL - VERT_CENTER_MIN_BALL;
+    GameZ.balls[i].currentCenterX = rand() % (HORIZ_CENTER_MAX_BALL - HORIZ_CENTER_MIN_BALL) + HORIZ_CENTER_MIN_BALL;
+    GameZ.balls[i].currentCenterY = rand() % (VERT_CENTER_MAX_BALL - VERT_CENTER_MIN_BALL) + VERT_CENTER_MIN_BALL;
 
 
 
@@ -462,7 +462,7 @@ void GenerateBall()
 
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        G8RTOS_Sleep(5000*numballs);
+        G8RTOS_Sleep(2000*numballs);
     }
 }
 
