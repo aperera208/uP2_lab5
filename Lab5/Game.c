@@ -452,6 +452,27 @@ void MoveBall()
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.balls[i].currentCenterX += x_vel;
         GameZ.balls[i].currentCenterY += y_vel;
+
+        if(GameZ.balls[i].currentCenterX > HORIZ_CENTER_MAX_BALL)
+        {
+            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
+            x_vel = -1*x_vel;
+        }
+        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL)
+        {
+            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL;
+            x_vel = -1*x_vel;
+        }
+        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL)
+        {
+            GameZ.balls[i].currentCenterY = VERT_CENTER_MAX_BALL;
+        }
+        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL)
+        {
+            GameZ.balls[i].currentCenterY = VERT_CENTER_MIN_BALL;
+
+        }
+
         G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_Sleep(35);
@@ -564,6 +585,12 @@ void DrawObjects()
 
     prevhost_p0.Center = host_p0.currentCenter;
     prevclient_p1.Center = client_p1.currentCenter;
+
+    for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
+    {
+        prevballs[i].CenterX = ARENA_MIN_X - 4;
+        prevballs[i].CenterY = ARENA_MIN_X - 4;
+    }
 
 
     while(1)
