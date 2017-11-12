@@ -458,9 +458,9 @@ void MoveBall()
             GameZ.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
             x_vel = -1*x_vel;
         }
-        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL)
+        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL + 1)
         {
-            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL;
+            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
             x_vel = -1*x_vel;
         }
         if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL)
@@ -603,8 +603,6 @@ void DrawObjects()
         client_p1 = temp_gamez.players[Client];
 
 
-        UpdatePlayerOnScreen(&prevhost_p0, &host_p0);
-        UpdatePlayerOnScreen(&prevclient_p1, &client_p1);
 
         prevhost_p0.Center = host_p0.currentCenter;
         prevclient_p1.Center = client_p1.currentCenter;
@@ -621,6 +619,9 @@ void DrawObjects()
             }
         }
         //G8RTOS_SignalSemaphore(&LCDMutex);
+
+        UpdatePlayerOnScreen(&prevhost_p0, &host_p0);
+        UpdatePlayerOnScreen(&prevclient_p1, &client_p1);
 
         G8RTOS_Sleep(20);
 
