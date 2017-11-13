@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Mon Nov 13 12:45:40 2017
+>> Linked Mon Nov 13 12:55:07 2017
 
 OUTPUT FILE NAME:   <Lab5.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 0001ac59
+ENTRY POINT SYMBOL: "_c_int00"  address: 0001ac55
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  MAIN                  00000000   00040000  0001bdf4  0002420c  R  X
+  MAIN                  00000000   00040000  0001bdf0  00024210  R  X
   INFO                  00200000   00004000  00000000  00004000  R  X
   SRAM_CODE             01000000   00010000  0000d4f4  00002b0c  RW X
   SRAM_DATA             20000000   00010000  0000d4f4  00002b0c  RW  
@@ -23,8 +23,8 @@ run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
 00000000    00000000    0001bdf8   0001bdf8    r-x
   00000000    00000000    000000e4   000000e4    r-- .intvecs
-  000000e4    000000e4    0001b366   0001b366    r-x .text
-  0001b44c    0001b44c    00000932   00000932    r-- .const
+  000000e4    000000e4    0001b362   0001b362    r-x .text
+  0001b448    0001b448    00000932   00000932    r-- .const
   0001bd80    0001bd80    00000078   00000078    r-- .cinit
 20000000    20000000    0000d2f4   00000000    rw-
   20000000    20000000    0000ce60   00000000    rw- .bss
@@ -43,186 +43,186 @@ section   page    origin      length       input sections
 
 .binit     0    00000000    00000000     
 
-.text      0    000000e4    0001b366     
+.text      0    000000e4    0001b362     
                   000000e4    0000d5d0     bmi160.obj (.text)
                   0000d6b4    00002024     driver.obj (.text)
                   0000f6d8    00001818     bme280.obj (.text)
                   00010ef0    0000113e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.obj (.text)
                   0001202e    00000002                                   : l_div0.obj (.text)
                   00012030    00000ed4     socket.obj (.text)
-                  00012f04    00000e80     Game.obj (.text)
-                  00013d84    00000c28     bmi160_support.obj (.text)
-                  000149ac    00000b44     netapp.obj (.text)
-                  000154f0    00000ab8     wlan.obj (.text)
-                  00015fa8    000008c8     G8RTOS_Scheduler.obj (.text)
-                  00016870    00000690     cc3100_usage.obj (.text)
-                  00016f00    000005f4     LCD.obj (.text)
-                  000174f4    000005b4     device.obj (.text)
-                  00017aa8    0000048c     i2c_driver.obj (.text)
-                  00017f34    000003a8     board.obj (.text)
-                  000182dc    0000032c     system_msp432p401r.obj (.text)
-                  00018608    00000318     BackChannelUart.obj (.text)
-                  00018920    000002e0     bme280_support.obj (.text)
-                  00018c00    00000234     tmp007.obj (.text)
-                  00018e34    0000021e     rtsv7M4_T_le_v4SPD16_eabi.lib : ll_div_t2.obj (.text)
-                  00019052    00000002                                   : mpu_init.obj (.text)
-                  00019054    00000210     spi_cc3100.obj (.text)
-                  00019264    000001f4     rtsv7M4_T_le_v4SPD16_eabi.lib : ull_div_t2.obj (.text)
-                  00019458    000001e4     LED.obj (.text)
-                  0001963c    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.obj (.text)
-                  000197f2    00000002                                   : startup.obj (.text)
-                  000197f4    0000017c     Joystick.obj (.text)
-                  00019970    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.obj (.text)
-                  00019aa6    00000002     --HOLE-- [fill = 0]
-                  00019aa8    00000130     nonos.obj (.text)
-                  00019bd8    00000110     netcfg.obj (.text)
-                  00019ce8    00000104     msp432p4xx_driverlib.lib : cs.o (.text:CS_getDCOFrequency)
-                  00019dec    000000fe     opt3001.obj (.text)
-                  00019eea    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.obj (.text)
-                  00019fe6    00000002     --HOLE-- [fill = 0]
-                  00019fe8    000000fc                                   : s_scalbn.obj (.text)
-                  0001a0e4    000000dc     msp432p4xx_driverlib.lib : pcm.o (.text:__PCM_setPowerModeAdvanced)
-                  0001a1c0    000000b4     ClockSys.obj (.text)
-                  0001a274    000000b0     msp432p4xx_driverlib.lib : pcm.o (.text:__PCM_setCoreVoltageLevelAdvanced)
-                  0001a324    000000a4     LCD.obj (.text:PutChar)
-                  0001a3c8    000000a0     G8RTOS_Semaphores.obj (.text)
-                  0001a468    0000009c     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXTWithTimeout)
-                  0001a504    0000009c                              : cs.o (.text:_CSComputeCLKFrequency)
-                  0001a5a0    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
-                  0001a63c    00000098                                   : hosttime.obj (.text)
-                  0001a6d4    00000094                                   : snprintf.obj (.text)
-                  0001a768    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdcmple)
-                  0001a7ee    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdrcmple)
-                  0001a874    00000080     flowcont.obj (.text)
-                  0001a8f4    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.obj (.text)
-                  0001a96e    00000002     --HOLE-- [fill = 0]
-                  0001a970    00000074     main.obj (.text)
-                  0001a9e4    00000070     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetHFXTFrequency)
-                  0001aa54    00000070     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.obj (.text)
-                  0001aac4    00000068                                   : copy_decompress_lzss.obj (.text:decompress:lzss)
-                  0001ab2c    00000068                                   : trgmsg.obj (.text)
-                  0001ab94    00000064                                   : s_frexp.obj (.text)
-                  0001abf8    00000060     LCD.obj (.text:LCD_ReadData)
-                  0001ac58    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
-                  0001acac    00000054                                   : exit.obj (.text)
-                  0001ad00    00000054                                   : ltoa.obj (.text)
-                  0001ad54    00000050     msp432p4xx_driverlib.lib : sysctl.o (.text:SysCtl_getTLVInfo)
-                  0001ada4    0000004c     G8RTOS_SchedulerASM.obj (.text)
-                  0001adf0    0000004c     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsPeripheralModuleFunctionOutputPin)
-                  0001ae3c    0000004c                              : cs.o (.text:_CSGetDOCFrequency)
-                  0001ae88    0000004c     rtsv7M4_T_le_v4SPD16_eabi.lib : atoi.obj (.text)
-                  0001aed4    0000004c                                   : cpy_tbl.obj (.text)
-                  0001af20    0000004c                                   : rand.obj (.text)
-                  0001af6c    00000048     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetDividerValue)
-                  0001afb4    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_toi_t2.obj (.text)
-                  0001affc    00000040     AsciiLib.obj (.text)
-                  0001b03c    00000040     LCD.obj (.text:LCD_WriteData)
-                  0001b07c    0000003a     BSP.obj (.text)
-                  0001b0b6    00000002     --HOLE-- [fill = 0]
-                  0001b0b8    00000034     LCD.obj (.text:LCD_WriteIndex)
-                  0001b0ec    00000030     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsInputPinWithPullUpResistor)
-                  0001b11c    00000030     LCD.obj (.text:SPISendRecvByte)
-                  0001b14c    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.obj (.text)
-                  0001b17a    0000002c     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_getCoreVoltageLevel)
-                  0001b1a6    0000002a                              : pcm.o (.text:PCM_getPowerMode)
-                  0001b1d0    00000026     demo_sysctl.obj (.text)
-                  0001b1f6    00000002     --HOLE-- [fill = 0]
-                  0001b1f8    00000024     msp432p4xx_driverlib.lib : cs.o (.text:CS_clearInterruptFlag)
-                  0001b21c    00000020     LCD.obj (.text:LCD_SetCursor)
-                  0001b23c    00000020     LCD.obj (.text:LCD_Write_Data_Only)
-                  0001b25c    0000001c     LCD.obj (.text:LCD_WriteReg)
-                  0001b278    0000001c     rtsv7M4_T_le_v4SPD16_eabi.lib : memccpy.obj (.text)
-                  0001b294    00000018     msp432p4xx_driverlib.lib : cs.o (.text:CS_getMCLK)
-                  0001b2ac    00000018                              : cs.o (.text:CS_getSMCLK)
-                  0001b2c4    00000018                              : gpio.o (.text:GPIO_getInputPinValue)
-                  0001b2dc    00000018                              : wdt_a.o (.text:WDT_A_clearTimer)
-                  0001b2f4    00000018                              : wdt_a.o (.text:WDT_A_holdTimer)
-                  0001b30c    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
-                  0001b324    00000018                                   : ll_mul_t2.obj (.text)
-                  0001b33c    00000016                                   : strchr.obj (.text)
-                  0001b352    00000002     --HOLE-- [fill = 0]
-                  0001b354    00000014     msp432p4xx_driverlib.lib : cs.o (.text:CS_setExternalClockSourceFrequency)
-                  0001b368    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
-                  0001b37c    00000014                                   : s_copysign.obj (.text)
-                  0001b390    00000014                                   : strlen.obj (.text)
-                  0001b3a4    00000010     msp432p4xx_driverlib.lib : sysctl.o (.text:SysCtl_disableNMISource)
-                  0001b3b4    00000010                              : sysctl.o (.text:SysCtl_enableNMISource)
-                  0001b3c4    0000000e     G8RTOS_CriticalSection.obj (.text)
-                  0001b3d2    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
-                  0001b3e0    0000000e                                   : time.obj (.text)
-                  0001b3ee    0000000e     startup_msp432p401r_ccs.obj (.text)
-                  0001b3fc    0000000c     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_getPowerState)
-                  0001b408    0000000c                              : sysctl.o (.text:SysCtl_getNMISourceStatus)
-                  0001b414    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
-                  0001b420    0000000a     LCD.obj (.text:LCD_Write_Data_Start)
-                  0001b42a    00000008     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_setCoreVoltageLevel)
-                  0001b432    00000008                              : pcm.o (.text:PCM_setPowerMode)
-                  0001b43a    00000006                              : cs.o (.text:CS_startHFXT)
-                  0001b440    00000006     demo_sysctl.obj (.text:SysCtlDelay)
-                  0001b446    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
+                  00012f04    00000e7c     Game.obj (.text)
+                  00013d80    00000c28     bmi160_support.obj (.text)
+                  000149a8    00000b44     netapp.obj (.text)
+                  000154ec    00000ab8     wlan.obj (.text)
+                  00015fa4    000008c8     G8RTOS_Scheduler.obj (.text)
+                  0001686c    00000690     cc3100_usage.obj (.text)
+                  00016efc    000005f4     LCD.obj (.text)
+                  000174f0    000005b4     device.obj (.text)
+                  00017aa4    0000048c     i2c_driver.obj (.text)
+                  00017f30    000003a8     board.obj (.text)
+                  000182d8    0000032c     system_msp432p401r.obj (.text)
+                  00018604    00000318     BackChannelUart.obj (.text)
+                  0001891c    000002e0     bme280_support.obj (.text)
+                  00018bfc    00000234     tmp007.obj (.text)
+                  00018e30    0000021e     rtsv7M4_T_le_v4SPD16_eabi.lib : ll_div_t2.obj (.text)
+                  0001904e    00000002                                   : mpu_init.obj (.text)
+                  00019050    00000210     spi_cc3100.obj (.text)
+                  00019260    000001f4     rtsv7M4_T_le_v4SPD16_eabi.lib : ull_div_t2.obj (.text)
+                  00019454    000001e4     LED.obj (.text)
+                  00019638    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.obj (.text)
+                  000197ee    00000002                                   : startup.obj (.text)
+                  000197f0    0000017c     Joystick.obj (.text)
+                  0001996c    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.obj (.text)
+                  00019aa2    00000002     --HOLE-- [fill = 0]
+                  00019aa4    00000130     nonos.obj (.text)
+                  00019bd4    00000110     netcfg.obj (.text)
+                  00019ce4    00000104     msp432p4xx_driverlib.lib : cs.o (.text:CS_getDCOFrequency)
+                  00019de8    000000fe     opt3001.obj (.text)
+                  00019ee6    000000fc     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_mul_t2.obj (.text)
+                  00019fe2    00000002     --HOLE-- [fill = 0]
+                  00019fe4    000000fc                                   : s_scalbn.obj (.text)
+                  0001a0e0    000000dc     msp432p4xx_driverlib.lib : pcm.o (.text:__PCM_setPowerModeAdvanced)
+                  0001a1bc    000000b4     ClockSys.obj (.text)
+                  0001a270    000000b0     msp432p4xx_driverlib.lib : pcm.o (.text:__PCM_setCoreVoltageLevelAdvanced)
+                  0001a320    000000a4     LCD.obj (.text:PutChar)
+                  0001a3c4    000000a0     G8RTOS_Semaphores.obj (.text)
+                  0001a464    0000009c     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXTWithTimeout)
+                  0001a500    0000009c                              : cs.o (.text:_CSComputeCLKFrequency)
+                  0001a59c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  0001a638    00000098                                   : hosttime.obj (.text)
+                  0001a6d0    00000094                                   : snprintf.obj (.text)
+                  0001a764    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdcmple)
+                  0001a7ea    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdrcmple)
+                  0001a870    00000080     flowcont.obj (.text)
+                  0001a8f0    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.obj (.text)
+                  0001a96a    00000002     --HOLE-- [fill = 0]
+                  0001a96c    00000074     main.obj (.text)
+                  0001a9e0    00000070     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetHFXTFrequency)
+                  0001aa50    00000070     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.obj (.text)
+                  0001aac0    00000068                                   : copy_decompress_lzss.obj (.text:decompress:lzss)
+                  0001ab28    00000068                                   : trgmsg.obj (.text)
+                  0001ab90    00000064                                   : s_frexp.obj (.text)
+                  0001abf4    00000060     LCD.obj (.text:LCD_ReadData)
+                  0001ac54    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
+                  0001aca8    00000054                                   : exit.obj (.text)
+                  0001acfc    00000054                                   : ltoa.obj (.text)
+                  0001ad50    00000050     msp432p4xx_driverlib.lib : sysctl.o (.text:SysCtl_getTLVInfo)
+                  0001ada0    0000004c     G8RTOS_SchedulerASM.obj (.text)
+                  0001adec    0000004c     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsPeripheralModuleFunctionOutputPin)
+                  0001ae38    0000004c                              : cs.o (.text:_CSGetDOCFrequency)
+                  0001ae84    0000004c     rtsv7M4_T_le_v4SPD16_eabi.lib : atoi.obj (.text)
+                  0001aed0    0000004c                                   : cpy_tbl.obj (.text)
+                  0001af1c    0000004c                                   : rand.obj (.text)
+                  0001af68    00000048     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetDividerValue)
+                  0001afb0    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_toi_t2.obj (.text)
+                  0001aff8    00000040     AsciiLib.obj (.text)
+                  0001b038    00000040     LCD.obj (.text:LCD_WriteData)
+                  0001b078    0000003a     BSP.obj (.text)
+                  0001b0b2    00000002     --HOLE-- [fill = 0]
+                  0001b0b4    00000034     LCD.obj (.text:LCD_WriteIndex)
+                  0001b0e8    00000030     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsInputPinWithPullUpResistor)
+                  0001b118    00000030     LCD.obj (.text:SPISendRecvByte)
+                  0001b148    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.obj (.text)
+                  0001b176    0000002c     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_getCoreVoltageLevel)
+                  0001b1a2    0000002a                              : pcm.o (.text:PCM_getPowerMode)
+                  0001b1cc    00000026     demo_sysctl.obj (.text)
+                  0001b1f2    00000002     --HOLE-- [fill = 0]
+                  0001b1f4    00000024     msp432p4xx_driverlib.lib : cs.o (.text:CS_clearInterruptFlag)
+                  0001b218    00000020     LCD.obj (.text:LCD_SetCursor)
+                  0001b238    00000020     LCD.obj (.text:LCD_Write_Data_Only)
+                  0001b258    0000001c     LCD.obj (.text:LCD_WriteReg)
+                  0001b274    0000001c     rtsv7M4_T_le_v4SPD16_eabi.lib : memccpy.obj (.text)
+                  0001b290    00000018     msp432p4xx_driverlib.lib : cs.o (.text:CS_getMCLK)
+                  0001b2a8    00000018                              : cs.o (.text:CS_getSMCLK)
+                  0001b2c0    00000018                              : gpio.o (.text:GPIO_getInputPinValue)
+                  0001b2d8    00000018                              : wdt_a.o (.text:WDT_A_clearTimer)
+                  0001b2f0    00000018                              : wdt_a.o (.text:WDT_A_holdTimer)
+                  0001b308    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
+                  0001b320    00000018                                   : ll_mul_t2.obj (.text)
+                  0001b338    00000016                                   : strchr.obj (.text)
+                  0001b34e    00000002     --HOLE-- [fill = 0]
+                  0001b350    00000014     msp432p4xx_driverlib.lib : cs.o (.text:CS_setExternalClockSourceFrequency)
+                  0001b364    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
+                  0001b378    00000014                                   : s_copysign.obj (.text)
+                  0001b38c    00000014                                   : strlen.obj (.text)
+                  0001b3a0    00000010     msp432p4xx_driverlib.lib : sysctl.o (.text:SysCtl_disableNMISource)
+                  0001b3b0    00000010                              : sysctl.o (.text:SysCtl_enableNMISource)
+                  0001b3c0    0000000e     G8RTOS_CriticalSection.obj (.text)
+                  0001b3ce    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  0001b3dc    0000000e                                   : time.obj (.text)
+                  0001b3ea    0000000e     startup_msp432p401r_ccs.obj (.text)
+                  0001b3f8    0000000c     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_getPowerState)
+                  0001b404    0000000c                              : sysctl.o (.text:SysCtl_getNMISourceStatus)
+                  0001b410    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  0001b41c    0000000a     LCD.obj (.text:LCD_Write_Data_Start)
+                  0001b426    00000008     msp432p4xx_driverlib.lib : pcm.o (.text:PCM_setCoreVoltageLevel)
+                  0001b42e    00000008                              : pcm.o (.text:PCM_setPowerMode)
+                  0001b436    00000006                              : cs.o (.text:CS_startHFXT)
+                  0001b43c    00000006     demo_sysctl.obj (.text:SysCtlDelay)
+                  0001b442    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
 
-.const     0    0001b44c    00000932     
-                  0001b44c    000005f0     AsciiLib.obj (.const:AsciiLib)
-                  0001ba3c    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.obj (.const:.string:_ctypes_)
-                  0001bb3d    00000003     bmi160.obj (.const:.string:INVALID_OFFSET)
-                  0001bb40    000000b0     wlan.obj (.const:$P$T0$1)
-                  0001bbf0    00000038     driver.obj (.const:_SlActionLookupTable)
-                  0001bc28    0000002c     cc3100_usage.obj (.const:$P$T0$1)
-                  0001bc54    00000024     BackChannelUart.obj (.const:backChannelUart115200Config)
-                  0001bc78    00000014     cc3100_usage.obj (.const:$P$T1$2)
-                  0001bc8c    0000000c     cc3100_usage.obj (.const:$P$T2$3)
-                  0001bc98    0000000c     bmi160.obj (.const:yas532_version_ac_coef)
-                  0001bca4    00000008     driver.obj (.const:g_H2NCnysPattern)
-                  0001bcac    00000008     driver.obj (.const:g_H2NSyncPattern)
-                  0001bcb4    00000008     bmi160.obj (.const:v_calib_data$2)
-                  0001bcbc    00000005     bme280_support.obj (.const:.string:$P$T0$1)
-                  0001bcc1    00000005     bmi160.obj (.const:.string:v_correct_u8$1)
-                  0001bcc6    00000004     driver.obj (.const:$P$T0$1)
-                  0001bcca    00000004     netapp.obj (.const:$P$T0$1)
-                  0001bcce    00000004     socket.obj (.const:$P$T0$1)
-                  0001bcd2    00000004     socket.obj (.const:$P$T1$2)
-                  0001bcd6    00000004     wlan.obj (.const:$P$T1$2)
-                  0001bcda    00000004     socket.obj (.const:$P$T2$3)
-                  0001bcde    00000004     wlan.obj (.const:$P$T2$3)
-                  0001bce2    00000004     wlan.obj (.const:$P$T3$4)
-                  0001bce6    00000004     socket.obj (.const:_SlAcceptCmdCtrl)
-                  0001bcea    00000004     device.obj (.const:_SlDeviceGetCmdCtrl)
-                  0001bcee    00000004     device.obj (.const:_SlDeviceSetCmdCtrl)
-                  0001bcf2    00000004     device.obj (.const:_SlEventMaskGetCmdCtrl)
-                  0001bcf6    00000004     device.obj (.const:_SlEventMaskSetCmdCtrl)
-                  0001bcfa    00000004     netapp.obj (.const:_SlGetHostByNameCtrl)
-                  0001bcfe    00000004     netapp.obj (.const:_SlGetHostByServiceCtrl)
-                  0001bd02    00000004     netapp.obj (.const:_SlGetServiceListeCtrl)
-                  0001bd06    00000004     socket.obj (.const:_SlGetSockOptCmdCtrl)
-                  0001bd0a    00000004     socket.obj (.const:_SlListenCmdCtrl)
-                  0001bd0e    00000004     netapp.obj (.const:_SlNetAppGetCmdCtrl)
-                  0001bd12    00000004     netapp.obj (.const:_SlNetAppSendTokenValueCmdCtrl)
-                  0001bd16    00000004     netapp.obj (.const:_SlNetAppSetCmdCtrl)
-                  0001bd1a    00000004     netapp.obj (.const:_SlNetAppStartCtrl)
-                  0001bd1e    00000004     netapp.obj (.const:_SlNetAppStopCtrl)
-                  0001bd22    00000004     netcfg.obj (.const:_SlNetCfgGetCmdCtrl)
-                  0001bd26    00000004     netcfg.obj (.const:_SlNetCfgSetCmdCtrl)
-                  0001bd2a    00000004     wlan.obj (.const:_SlPolicyGetCmdCtrl)
-                  0001bd2e    00000004     wlan.obj (.const:_SlPolicySetCmdCtrl)
-                  0001bd32    00000004     wlan.obj (.const:_SlProfileDelCmdCtrl)
-                  0001bd36    00000004     wlan.obj (.const:_SlProfileGetCmdCtrl)
-                  0001bd3a    00000004     socket.obj (.const:_SlRecvCmdCtrl)
-                  0001bd3e    00000004     socket.obj (.const:_SlRecvfomCmdCtrl)
-                  0001bd42    00000004     netapp.obj (.const:_SlRegisterServiceCtrl)
-                  0001bd46    00000004     wlan.obj (.const:_SlRxFilterAddtCmdCtrl)
-                  0001bd4a    00000004     wlan.obj (.const:_SlRxFilterGetCmdCtrl)
-                  0001bd4e    00000004     wlan.obj (.const:_SlRxFilterSetCmdCtrl)
-                  0001bd52    00000004     socket.obj (.const:_SlSelectCmdCtrl)
-                  0001bd56    00000004     socket.obj (.const:_SlSendCmdCtrl)
-                  0001bd5a    00000004     socket.obj (.const:_SlSetSockOptCmdCtrl)
-                  0001bd5e    00000004     wlan.obj (.const:_SlSmartConfigStartCmdCtrl)
-                  0001bd62    00000004     socket.obj (.const:_SlSockCloseCmdCtrl)
-                  0001bd66    00000004     socket.obj (.const:_SlSockSocketCmdCtrl)
-                  0001bd6a    00000004     device.obj (.const:_SlStopCmdCtrl)
-                  0001bd6e    00000004     wlan.obj (.const:_SlWlanCfgGetCmdCtrl)
-                  0001bd72    00000004     wlan.obj (.const:_SlWlanCfgSetCmdCtrl)
-                  0001bd76    00000004     wlan.obj (.const:_SlWlanGetNetworkListCtrl)
-                  0001bd7a    00000004     wlan.obj (.const:_SlWlanSetModeCmdCtrl)
+.const     0    0001b448    00000932     
+                  0001b448    000005f0     AsciiLib.obj (.const:AsciiLib)
+                  0001ba38    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.obj (.const:.string:_ctypes_)
+                  0001bb39    00000003     bmi160.obj (.const:.string:INVALID_OFFSET)
+                  0001bb3c    000000b0     wlan.obj (.const:$P$T0$1)
+                  0001bbec    00000038     driver.obj (.const:_SlActionLookupTable)
+                  0001bc24    0000002c     cc3100_usage.obj (.const:$P$T0$1)
+                  0001bc50    00000024     BackChannelUart.obj (.const:backChannelUart115200Config)
+                  0001bc74    00000014     cc3100_usage.obj (.const:$P$T1$2)
+                  0001bc88    0000000c     cc3100_usage.obj (.const:$P$T2$3)
+                  0001bc94    0000000c     bmi160.obj (.const:yas532_version_ac_coef)
+                  0001bca0    00000008     driver.obj (.const:g_H2NCnysPattern)
+                  0001bca8    00000008     driver.obj (.const:g_H2NSyncPattern)
+                  0001bcb0    00000008     bmi160.obj (.const:v_calib_data$2)
+                  0001bcb8    00000005     bme280_support.obj (.const:.string:$P$T0$1)
+                  0001bcbd    00000005     bmi160.obj (.const:.string:v_correct_u8$1)
+                  0001bcc2    00000004     driver.obj (.const:$P$T0$1)
+                  0001bcc6    00000004     netapp.obj (.const:$P$T0$1)
+                  0001bcca    00000004     socket.obj (.const:$P$T0$1)
+                  0001bcce    00000004     socket.obj (.const:$P$T1$2)
+                  0001bcd2    00000004     wlan.obj (.const:$P$T1$2)
+                  0001bcd6    00000004     socket.obj (.const:$P$T2$3)
+                  0001bcda    00000004     wlan.obj (.const:$P$T2$3)
+                  0001bcde    00000004     wlan.obj (.const:$P$T3$4)
+                  0001bce2    00000004     socket.obj (.const:_SlAcceptCmdCtrl)
+                  0001bce6    00000004     device.obj (.const:_SlDeviceGetCmdCtrl)
+                  0001bcea    00000004     device.obj (.const:_SlDeviceSetCmdCtrl)
+                  0001bcee    00000004     device.obj (.const:_SlEventMaskGetCmdCtrl)
+                  0001bcf2    00000004     device.obj (.const:_SlEventMaskSetCmdCtrl)
+                  0001bcf6    00000004     netapp.obj (.const:_SlGetHostByNameCtrl)
+                  0001bcfa    00000004     netapp.obj (.const:_SlGetHostByServiceCtrl)
+                  0001bcfe    00000004     netapp.obj (.const:_SlGetServiceListeCtrl)
+                  0001bd02    00000004     socket.obj (.const:_SlGetSockOptCmdCtrl)
+                  0001bd06    00000004     socket.obj (.const:_SlListenCmdCtrl)
+                  0001bd0a    00000004     netapp.obj (.const:_SlNetAppGetCmdCtrl)
+                  0001bd0e    00000004     netapp.obj (.const:_SlNetAppSendTokenValueCmdCtrl)
+                  0001bd12    00000004     netapp.obj (.const:_SlNetAppSetCmdCtrl)
+                  0001bd16    00000004     netapp.obj (.const:_SlNetAppStartCtrl)
+                  0001bd1a    00000004     netapp.obj (.const:_SlNetAppStopCtrl)
+                  0001bd1e    00000004     netcfg.obj (.const:_SlNetCfgGetCmdCtrl)
+                  0001bd22    00000004     netcfg.obj (.const:_SlNetCfgSetCmdCtrl)
+                  0001bd26    00000004     wlan.obj (.const:_SlPolicyGetCmdCtrl)
+                  0001bd2a    00000004     wlan.obj (.const:_SlPolicySetCmdCtrl)
+                  0001bd2e    00000004     wlan.obj (.const:_SlProfileDelCmdCtrl)
+                  0001bd32    00000004     wlan.obj (.const:_SlProfileGetCmdCtrl)
+                  0001bd36    00000004     socket.obj (.const:_SlRecvCmdCtrl)
+                  0001bd3a    00000004     socket.obj (.const:_SlRecvfomCmdCtrl)
+                  0001bd3e    00000004     netapp.obj (.const:_SlRegisterServiceCtrl)
+                  0001bd42    00000004     wlan.obj (.const:_SlRxFilterAddtCmdCtrl)
+                  0001bd46    00000004     wlan.obj (.const:_SlRxFilterGetCmdCtrl)
+                  0001bd4a    00000004     wlan.obj (.const:_SlRxFilterSetCmdCtrl)
+                  0001bd4e    00000004     socket.obj (.const:_SlSelectCmdCtrl)
+                  0001bd52    00000004     socket.obj (.const:_SlSendCmdCtrl)
+                  0001bd56    00000004     socket.obj (.const:_SlSetSockOptCmdCtrl)
+                  0001bd5a    00000004     wlan.obj (.const:_SlSmartConfigStartCmdCtrl)
+                  0001bd5e    00000004     socket.obj (.const:_SlSockCloseCmdCtrl)
+                  0001bd62    00000004     socket.obj (.const:_SlSockSocketCmdCtrl)
+                  0001bd66    00000004     device.obj (.const:_SlStopCmdCtrl)
+                  0001bd6a    00000004     wlan.obj (.const:_SlWlanCfgGetCmdCtrl)
+                  0001bd6e    00000004     wlan.obj (.const:_SlWlanCfgSetCmdCtrl)
+                  0001bd72    00000004     wlan.obj (.const:_SlWlanGetNetworkListCtrl)
+                  0001bd76    00000004     wlan.obj (.const:_SlWlanSetModeCmdCtrl)
 
 .cinit     0    0001bd80    00000078     
                   0001bd80    00000050     (.cinit..data.load) [load image, compression = lzss]
@@ -303,12 +303,12 @@ MODULE SUMMARY
        Module                        code     ro data   rw data
        ------                        ----     -------   -------
     .\
-       Game.obj                      3712     0         248    
+       Game.obj                      3708     0         248    
        system_msp432p401r.obj        812      0         8      
        startup_msp432p401r_ccs.obj   14       228       0      
        main.obj                      116      0         0      
     +--+-----------------------------+--------+---------+---------+
-       Total:                        4654     228       256    
+       Total:                        4650     228       256    
                                                                
     .\BoardSupportPackage\src\
        bmi160.obj                    54736    28        7590   
@@ -422,7 +422,7 @@ MODULE SUMMARY
        Stack:                        0        0         1024   
        Linker Generated:             0        116       0      
     +--+-----------------------------+--------+---------+---------+
-       Grand Total:                  111450   2698      109028 
+       Grand Total:                  111446   2698      109028 
 
 
 LINKER GENERATED COPY TABLES
@@ -444,233 +444,233 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                                                  
 -------   ----                                                  
-0001b3fb  ADC14_IRQHandler                                      
-0001b3fb  AES256_IRQHandler                                     
-00018ac1  BME280_I2C_bus_read                                   
-00018a95  BME280_I2C_bus_write                                  
-00018aed  BME280_SPI_bus_read                                   
-00018b53  BME280_SPI_bus_write                                  
-00018bc3  BME280_delay_msek                                     
-0001b07d  BSP_InitBoard                                         
-000186c5  BackChannelEventTrigger                               
-0001862d  BackChannelInit                                       
-000186dd  BackChannelOpt3001PrintRaw                            
-0001865b  BackChannelPrint                                      
-000186a7  BackChannelPrintIntVariable                           
-0001871f  BackupChannelBmi160PrintAccel                         
-0001874b  BackupChannelBmi160PrintGyro                          
-00018777  BackupChannelBmi160PrintMag                           
-000186f9  BackupChannelTmp007PrintRaw                           
-0001b3fb  BusFault_Handler                                      
+0001b3f7  ADC14_IRQHandler                                      
+0001b3f7  AES256_IRQHandler                                     
+00018abd  BME280_I2C_bus_read                                   
+00018a91  BME280_I2C_bus_write                                  
+00018ae9  BME280_SPI_bus_read                                   
+00018b4f  BME280_SPI_bus_write                                  
+00018bbf  BME280_delay_msek                                     
+0001b079  BSP_InitBoard                                         
+000186c1  BackChannelEventTrigger                               
+00018629  BackChannelInit                                       
+000186d9  BackChannelOpt3001PrintRaw                            
+00018657  BackChannelPrint                                      
+000186a3  BackChannelPrintIntVariable                           
+0001871b  BackupChannelBmi160PrintAccel                         
+00018747  BackupChannelBmi160PrintGyro                          
+00018773  BackupChannelBmi160PrintMag                           
+000186f5  BackupChannelTmp007PrintRaw                           
+0001b3f7  BusFault_Handler                                      
 2000ce2c  ButtonFunction                                        
-0001acad  C$$EXIT                                               
-0001ab5b  C$$IO$$                                               
-00017f9b  CC3100_InterruptDisable                               
-00017f61  CC3100_InterruptEnable                                
-00017f49  CC3100_disable                                        
-00017f55  CC3100_enable                                         
+0001aca9  C$$EXIT                                               
+0001ab57  C$$IO$$                                               
+00017f97  CC3100_InterruptDisable                               
+00017f5d  CC3100_InterruptEnable                                
+00017f45  CC3100_disable                                        
+00017f51  CC3100_enable                                         
 2000ce30  CC_3100Mutex                                          
-0001b3fb  COMP_E0_IRQHandler                                    
-0001b3fb  COMP_E1_IRQHandler                                    
-0001b3fb  CS_IRQHandler                                         
-0001b1f9  CS_clearInterruptFlag                                 
-00019ce9  CS_getDCOFrequency                                    
-0001b295  CS_getMCLK                                            
-0001b2ad  CS_getSMCLK                                           
-0001b355  CS_setExternalClockSourceFrequency                    
-0001b43b  CS_startHFXT                                          
-0001a469  CS_startHFXTWithTimeout                               
-0001a253  ClockSys_GetSysFreq                                   
-0001a1c1  ClockSys_SetMaxFreq                                   
-0001500d  CopyPingResultsToReport                               
+0001b3f7  COMP_E0_IRQHandler                                    
+0001b3f7  COMP_E1_IRQHandler                                    
+0001b3f7  CS_IRQHandler                                         
+0001b1f5  CS_clearInterruptFlag                                 
+00019ce5  CS_getDCOFrequency                                    
+0001b291  CS_getMCLK                                            
+0001b2a9  CS_getSMCLK                                           
+0001b351  CS_setExternalClockSourceFrequency                    
+0001b437  CS_startHFXT                                          
+0001a465  CS_startHFXTWithTimeout                               
+0001a24f  ClockSys_GetSysFreq                                   
+0001a1bd  ClockSys_SetMaxFreq                                   
+00015009  CopyPingResultsToReport                               
 0001321d  CreateGame                                            
 2000ce34  CurrentlyRunningThread                                
-0001b3fb  DMA_ERR_IRQHandler                                    
-0001b3fb  DMA_INT0_IRQHandler                                   
-0001b3fb  DMA_INT1_IRQHandler                                   
-0001b3fb  DMA_INT2_IRQHandler                                   
-0001b3fb  DMA_INT3_IRQHandler                                   
-0001b3fb  DebugMon_Handler                                      
-0001b3fb  Default_Handler                                       
-0001822d  Delay                                                 
-0001b1d1  DelayMs                                               
-000198d3  Disable_Joystick_Interrupt                            
-00013745  DrawObjects                                           
-00013a0f  DrawPlayer                                            
-0001827b  EUSCIA0_IRQHandler                                    
-0001827b  EUSCIA0_IRQHandler                                    
-0001b3fb  EUSCIA1_IRQHandler                                    
-0001b3fb  EUSCIA2_IRQHandler                                    
-0001b3fb  EUSCIA3_IRQHandler                                    
-0001b3fb  EUSCIB0_IRQHandler                                    
-00017e31  EUSCIB1_IRQHandler                                    
-00017e31  EUSCIB1_IRQHandler                                    
-0001b3fb  EUSCIB2_IRQHandler                                    
-0001b3fb  EUSCIB3_IRQHandler                                    
-0001b3cd  EndCriticalSection                                    
+0001b3f7  DMA_ERR_IRQHandler                                    
+0001b3f7  DMA_INT0_IRQHandler                                   
+0001b3f7  DMA_INT1_IRQHandler                                   
+0001b3f7  DMA_INT2_IRQHandler                                   
+0001b3f7  DMA_INT3_IRQHandler                                   
+0001b3f7  DebugMon_Handler                                      
+0001b3f7  Default_Handler                                       
+00018229  Delay                                                 
+0001b1cd  DelayMs                                               
+000198cf  Disable_Joystick_Interrupt                            
+00013741  DrawObjects                                           
+00013a0b  DrawPlayer                                            
+00018277  EUSCIA0_IRQHandler                                    
+00018277  EUSCIA0_IRQHandler                                    
+0001b3f7  EUSCIA1_IRQHandler                                    
+0001b3f7  EUSCIA2_IRQHandler                                    
+0001b3f7  EUSCIA3_IRQHandler                                    
+0001b3f7  EUSCIB0_IRQHandler                                    
+00017e2d  EUSCIB1_IRQHandler                                    
+00017e2d  EUSCIB1_IRQHandler                                    
+0001b3f7  EUSCIB2_IRQHandler                                    
+0001b3f7  EUSCIB3_IRQHandler                                    
+0001b3c9  EndCriticalSection                                    
 0001317d  EndOfGameClient                                       
-0001b3fb  FLCTL_IRQHandler                                      
-0001b3fb  FPU_IRQHandler                                        
-00016769  G8RTOS_AddAperiodicEvent                              
-000164e9  G8RTOS_AddPeriodicEvent                               
-000162b1  G8RTOS_AddThread                                      
-000165fd  G8RTOS_GetThreadID                                    
-000161b5  G8RTOS_Init                                           
-0001a3c9  G8RTOS_InitSemaphore                                  
-000167e1  G8RTOS_KillAllOtherThreads                            
-00016705  G8RTOS_KillSelf                                       
-00016631  G8RTOS_KillThread                                     
-0001620f  G8RTOS_Launch                                         
-00016085  G8RTOS_Scheduler                                      
-0001a41d  G8RTOS_SignalSemaphore                                
-0001618d  G8RTOS_Sleep                                          
-0001ada9  G8RTOS_Start                                          
-0001a3e3  G8RTOS_WaitSemaphore                                  
-0001b2c5  GPIO_getInputPinValue                                 
-0001b0ed  GPIO_setAsInputPinWithPullUpResistor                  
-0001adf1  GPIO_setAsPeripheralModuleFunctionOutputPin           
+0001b3f7  FLCTL_IRQHandler                                      
+0001b3f7  FPU_IRQHandler                                        
+00016765  G8RTOS_AddAperiodicEvent                              
+000164e5  G8RTOS_AddPeriodicEvent                               
+000162ad  G8RTOS_AddThread                                      
+000165f9  G8RTOS_GetThreadID                                    
+000161b1  G8RTOS_Init                                           
+0001a3c5  G8RTOS_InitSemaphore                                  
+000167dd  G8RTOS_KillAllOtherThreads                            
+00016701  G8RTOS_KillSelf                                       
+0001662d  G8RTOS_KillThread                                     
+0001620b  G8RTOS_Launch                                         
+00016081  G8RTOS_Scheduler                                      
+0001a419  G8RTOS_SignalSemaphore                                
+00016189  G8RTOS_Sleep                                          
+0001ada5  G8RTOS_Start                                          
+0001a3df  G8RTOS_WaitSemaphore                                  
+0001b2c1  GPIO_getInputPinValue                                 
+0001b0e9  GPIO_setAsInputPinWithPullUpResistor                  
+0001aded  GPIO_setAsPeripheralModuleFunctionOutputPin           
 2000ce38  GSMutex                                               
 2000cd0c  GameZ                                                 
-0001369b  GenerateBall                                          
-0001affd  GetASCIICode                                          
-000198e9  GetJoystickCoordinates                                
-00018179  GetLEDStatus                                          
-000139dd  GetPlayerRole                                         
-0001a68b  HOSTtime                                              
-0001a63d  HOSTtime64                                            
-0001b3fb  HardFault_Handler                                     
-000195e5  I2C_init                                              
-00018a63  I2C_routine                                           
-0001373f  IdleThread                                            
-00013baf  InitBoardState                                        
+00013699  GenerateBall                                          
+0001aff9  GetASCIICode                                          
+000198e5  GetJoystickCoordinates                                
+00018175  GetLEDStatus                                          
+000139d9  GetPlayerRole                                         
+0001a687  HOSTtime                                              
+0001a639  HOSTtime64                                            
+0001b3f7  HardFault_Handler                                     
+000195e1  I2C_init                                              
+00018a5f  I2C_routine                                           
+0001373b  IdleThread                                            
+00013bab  InitBoardState                                        
 2000ce5b  IntIsMasked                                           
 00012f05  JoinGame                                              
-00019819  Joystick_Init_Without_Interrupt                       
-00019877  Joystick_Push_Button_Init_With_Interrupt              
+00019815  Joystick_Init_Without_Interrupt                       
+00019873  Joystick_Push_Button_Init_With_Interrupt              
 2000ce3c  LCDMutex                                              
-00017149  LCD_Clear                                             
-00016fc5  LCD_DrawRectangle                                     
-00017239  LCD_Init                                              
-0001abf9  LCD_ReadData                                          
-000171ff  LCD_ReadPixelColor                                    
-0001b21d  LCD_SetCursor                                         
-000171bb  LCD_SetPoint                                          
-000170af  LCD_Text                                              
-0001b03d  LCD_WriteData                                         
-0001b0b9  LCD_WriteIndex                                        
-0001b25d  LCD_WriteReg                                          
-0001b23d  LCD_Write_Data_Only                                   
-0001b421  LCD_Write_Data_Start                                  
-000195b3  LED_clear                                             
-000194cd  LED_write                                             
-00017fbf  MaskIntHdlr                                           
-0001b3fb  MemManage_Handler                                     
+00017145  LCD_Clear                                             
+00016fc1  LCD_DrawRectangle                                     
+00017235  LCD_Init                                              
+0001abf5  LCD_ReadData                                          
+000171fb  LCD_ReadPixelColor                                    
+0001b219  LCD_SetCursor                                         
+000171b7  LCD_SetPoint                                          
+000170ab  LCD_Text                                              
+0001b039  LCD_WriteData                                         
+0001b0b5  LCD_WriteIndex                                        
+0001b259  LCD_WriteReg                                          
+0001b239  LCD_Write_Data_Only                                   
+0001b41d  LCD_Write_Data_Start                                  
+000195af  LED_clear                                             
+000194c9  LED_write                                             
+00017fbb  MaskIntHdlr                                           
+0001b3f7  MemManage_Handler                                     
 00013495  MoveBall                                              
-000138e1  MoveLEDs                                              
-0001b3fb  NMI_Handler                                           
-0001b3fb  PCM_IRQHandler                                        
-0001b17b  PCM_getCoreVoltageLevel                               
-0001b1a7  PCM_getPowerMode                                      
-0001b3fd  PCM_getPowerState                                     
-0001b42b  PCM_setCoreVoltageLevel                               
-0001b433  PCM_setPowerMode                                      
-0001822b  PORT1_IRQHandler                                      
-0001822b  PORT1_IRQHandler                                      
-00018255  PORT2_IRQHandler                                      
-00018255  PORT2_IRQHandler                                      
-0001b3fb  PORT3_IRQHandler                                      
-0001b3fb  PORT4_IRQHandler                                      
-0001b3fb  PORT5_IRQHandler                                      
-0001b3fb  PORT6_IRQHandler                                      
-0001b3fb  PSS_IRQHandler                                        
-0001adc9  PendSV_Handler                                        
-0001adc9  PendSV_Handler                                        
+000138dd  MoveLEDs                                              
+0001b3f7  NMI_Handler                                           
+0001b3f7  PCM_IRQHandler                                        
+0001b177  PCM_getCoreVoltageLevel                               
+0001b1a3  PCM_getPowerMode                                      
+0001b3f9  PCM_getPowerState                                     
+0001b427  PCM_setCoreVoltageLevel                               
+0001b42f  PCM_setPowerMode                                      
+00018227  PORT1_IRQHandler                                      
+00018227  PORT1_IRQHandler                                      
+00018251  PORT2_IRQHandler                                      
+00018251  PORT2_IRQHandler                                      
+0001b3f7  PORT3_IRQHandler                                      
+0001b3f7  PORT4_IRQHandler                                      
+0001b3f7  PORT5_IRQHandler                                      
+0001b3f7  PORT6_IRQHandler                                      
+0001b3f7  PSS_IRQHandler                                        
+0001adc5  PendSV_Handler                                        
+0001adc5  PendSV_Handler                                        
 2000ce40  PlayerMutex                                           
-0001a325  PutChar                                               
-0001b3fb  RTC_C_IRQHandler                                      
+0001a321  PutChar                                               
+0001b3f7  RTC_C_IRQHandler                                      
 00013101  ReadJoystickClient                                    
-000136e5  ReadJoystickHost                                      
-00016de9  ReceiveData                                           
+000136e1  ReadJoystickHost                                      
+00016de5  ReceiveData                                           
 000133a7  ReceiveDataFromClient                                 
 0001303f  ReceiveDataFromHost                                   
-0001b3ef  Reset_Handler                                         
+0001b3eb  Reset_Handler                                         
 UNDEFED   SHT$$INIT_ARRAY$$Base                                 
 UNDEFED   SHT$$INIT_ARRAY$$Limit                                
 00012e07  SL_FD_CLR                                             
 00012e2d  SL_FD_ISSET                                           
 00012de5  SL_FD_SET                                             
 00012e55  SL_FD_ZERO                                            
-0001b11d  SPISendRecvByte                                       
-00018a7f  SPI_routine                                           
-0001b3fb  SVC_Handler                                           
-000181e7  SelAntenna                                            
-00016dc9  SendData                                              
+0001b119  SPISendRecvByte                                       
+00018a7b  SPI_routine                                           
+0001b3f7  SVC_Handler                                           
+000181e3  SelAntenna                                            
+00016dc5  SendData                                              
 0001334d  SendDataToClient                                      
 000130c5  SendDataToHost                                        
-00016ead  SimpleLinkGeneralEventHandler                         
-00016ea1  SimpleLinkHttpServerCallback                          
-00016e69  SimpleLinkNetAppEventHandler                          
-00016eb7  SimpleLinkSockEventHandler                            
-00016e15  SimpleLinkWlanEventHandler                            
+00016ea9  SimpleLinkGeneralEventHandler                         
+00016e9d  SimpleLinkHttpServerCallback                          
+00016e65  SimpleLinkNetAppEventHandler                          
+00016eb3  SimpleLinkSockEventHandler                            
+00016e11  SimpleLinkWlanEventHandler                            
 2000d2a0  SockIDRx                                              
 2000d2a2  SockIDTx                                              
-0001b3c5  StartCriticalSection                                  
-00013cab  StartMenu                                             
-0001b441  SysCtlDelay                                           
-0001b3a5  SysCtl_disableNMISource                               
-0001b3b5  SysCtl_enableNMISource                                
-0001b409  SysCtl_getNMISourceStatus                             
-0001ad55  SysCtl_getTLVInfo                                     
-000160e1  SysTick_Handler                                       
-000160e1  SysTick_Handler                                       
+0001b3c1  StartCriticalSection                                  
+00013ca7  StartMenu                                             
+0001b43d  SysCtlDelay                                           
+0001b3a1  SysCtl_disableNMISource                               
+0001b3b1  SysCtl_enableNMISource                                
+0001b405  SysCtl_getNMISourceStatus                             
+0001ad51  SysCtl_getTLVInfo                                     
+000160dd  SysTick_Handler                                       
+000160dd  SysTick_Handler                                       
 2000d2f0  SystemCoreClock                                       
-000182dd  SystemCoreClockUpdate                                 
-00018551  SystemInit                                            
+000182d9  SystemCoreClockUpdate                                 
+0001854d  SystemInit                                            
 2000ce44  SystemTime                                            
-0001b3fb  T32_INT1_IRQHandler                                   
-0001b3fb  T32_INT2_IRQHandler                                   
-0001b3fb  T32_INTC_IRQHandler                                   
-0001b3fb  TA0_0_IRQHandler                                      
-0001b3fb  TA0_N_IRQHandler                                      
-0001b3fb  TA1_0_IRQHandler                                      
-0001b3fb  TA1_N_IRQHandler                                      
-0001b3fb  TA2_0_IRQHandler                                      
-0001b3fb  TA2_N_IRQHandler                                      
-0001b3fb  TA3_0_IRQHandler                                      
-0001b3fb  TA3_N_IRQHandler                                      
-000174b3  TP_ReadX                                              
-00017457  TP_ReadXY                                             
-000174c7  TP_ReadY                                              
-00017fc7  UnMaskIntHdlr                                         
-00013a29  UpdatePlayerOnScreen                                  
-0001b3fb  UsageFault_Handler                                    
+0001b3f7  T32_INT1_IRQHandler                                   
+0001b3f7  T32_INT2_IRQHandler                                   
+0001b3f7  T32_INTC_IRQHandler                                   
+0001b3f7  TA0_0_IRQHandler                                      
+0001b3f7  TA0_N_IRQHandler                                      
+0001b3f7  TA1_0_IRQHandler                                      
+0001b3f7  TA1_N_IRQHandler                                      
+0001b3f7  TA2_0_IRQHandler                                      
+0001b3f7  TA2_N_IRQHandler                                      
+0001b3f7  TA3_0_IRQHandler                                      
+0001b3f7  TA3_N_IRQHandler                                      
+000174af  TP_ReadX                                              
+00017453  TP_ReadXY                                             
+000174c3  TP_ReadY                                              
+00017fc3  UnMaskIntHdlr                                         
+00013a25  UpdatePlayerOnScreen                                  
+0001b3f7  UsageFault_Handler                                    
 2000d2d8  V_bmm150_maual_auto_condition_u8                      
 2000d2dc  V_fifo_time_U32                                       
 4000480c  WDTCTL_SYM                                            
-0001b3fb  WDT_A_IRQHandler                                      
-0001b2dd  WDT_A_clearTimer                                      
-0001b2f5  WDT_A_holdTimer                                       
-0001bce6  _SlAcceptCmdCtrl                                      
-0001bbf0  _SlActionLookupTable                                  
+0001b3f7  WDT_A_IRQHandler                                      
+0001b2d9  WDT_A_clearTimer                                      
+0001b2f1  WDT_A_holdTimer                                       
+0001bce2  _SlAcceptCmdCtrl                                      
+0001bbec  _SlActionLookupTable                                  
 0000e581  _SlAsyncEventGenericHandler                           
-0001bcea  _SlDeviceGetCmdCtrl                                   
-0001bcee  _SlDeviceSetCmdCtrl                                   
+0001bce6  _SlDeviceGetCmdCtrl                                   
+0001bcea  _SlDeviceSetCmdCtrl                                   
 0000ef93  _SlDrvBasicCmd                                        
 0000ec47  _SlDrvClassifyRxMsg                                   
 0000d87f  _SlDrvCmdOp                                           
 0000d92f  _SlDrvCmdSend                                         
 0000d985  _SlDrvDataReadOp                                      
 0000db89  _SlDrvDataWriteOp                                     
-00017a29  _SlDrvDeviceEventHandler                              
+00017a25  _SlDrvDeviceEventHandler                              
 0000d799  _SlDrvDriverCBDeinit                                  
 0000d6b5  _SlDrvDriverCBInit                                    
-0001a8b3  _SlDrvFlowContDeinit                                  
-0001a875  _SlDrvFlowContInit                                    
+0001a8af  _SlDrvFlowContDeinit                                  
+0001a871  _SlDrvFlowContInit                                    
 0000df4d  _SlDrvMsgRead                                         
 0000ea65  _SlDrvMsgReadCmdCtx                                   
 0000eb5f  _SlDrvMsgReadSpawnCtx                                 
 0000dd59  _SlDrvMsgWrite                                        
-000153dd  _SlDrvNetAppEventHandler                              
+000153d9  _SlDrvNetAppEventHandler                              
 0000f487  _SlDrvObjDeInit                                       
 0000f40b  _SlDrvObjInit                                         
 0000f201  _SlDrvReleasePoolObj                                  
@@ -678,47 +678,47 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 0000d83d  _SlDrvRxIrqHandler                                    
 0000ed45  _SlDrvShiftDWord                                      
 0000eff9  _SlDrvWaitForPoolObj                                  
-0001bcf2  _SlEventMaskGetCmdCtrl                                
-0001bcf6  _SlEventMaskSetCmdCtrl                                
+0001bcee  _SlEventMaskGetCmdCtrl                                
+0001bcf2  _SlEventMaskSetCmdCtrl                                
 0000f569  _SlFindAndSetActiveObj                                
-0001bcfa  _SlGetHostByNameCtrl                                  
-0001bcfe  _SlGetHostByServiceCtrl                               
-0001bd02  _SlGetServiceListeCtrl                                
-0001bd06  _SlGetSockOptCmdCtrl                                  
-0001bd0a  _SlListenCmdCtrl                                      
-0001bd0e  _SlNetAppGetCmdCtrl                                   
-0001bd12  _SlNetAppSendTokenValueCmdCtrl                        
-0001bd16  _SlNetAppSetCmdCtrl                                   
-0001bd1a  _SlNetAppStartCtrl                                    
-0001bd1e  _SlNetAppStopCtrl                                     
-0001bd22  _SlNetCfgGetCmdCtrl                                   
-0001bd26  _SlNetCfgSetCmdCtrl                                   
-00019b6d  _SlNonOsMainLoopTask                                  
-00019ac1  _SlNonOsSemGet                                        
-00019aa9  _SlNonOsSemSet                                        
-00019b1d  _SlNonOsSpawn                                         
-0001bd2a  _SlPolicyGetCmdCtrl                                   
-0001bd2e  _SlPolicySetCmdCtrl                                   
-0001bd32  _SlProfileDelCmdCtrl                                  
-0001bd36  _SlProfileGetCmdCtrl                                  
-0001bd3a  _SlRecvCmdCtrl                                        
-0001bd3e  _SlRecvfomCmdCtrl                                     
-0001bd42  _SlRegisterServiceCtrl                                
+0001bcf6  _SlGetHostByNameCtrl                                  
+0001bcfa  _SlGetHostByServiceCtrl                               
+0001bcfe  _SlGetServiceListeCtrl                                
+0001bd02  _SlGetSockOptCmdCtrl                                  
+0001bd06  _SlListenCmdCtrl                                      
+0001bd0a  _SlNetAppGetCmdCtrl                                   
+0001bd0e  _SlNetAppSendTokenValueCmdCtrl                        
+0001bd12  _SlNetAppSetCmdCtrl                                   
+0001bd16  _SlNetAppStartCtrl                                    
+0001bd1a  _SlNetAppStopCtrl                                     
+0001bd1e  _SlNetCfgGetCmdCtrl                                   
+0001bd22  _SlNetCfgSetCmdCtrl                                   
+00019b69  _SlNonOsMainLoopTask                                  
+00019abd  _SlNonOsSemGet                                        
+00019aa5  _SlNonOsSemSet                                        
+00019b19  _SlNonOsSpawn                                         
+0001bd26  _SlPolicyGetCmdCtrl                                   
+0001bd2a  _SlPolicySetCmdCtrl                                   
+0001bd2e  _SlProfileDelCmdCtrl                                  
+0001bd32  _SlProfileGetCmdCtrl                                  
+0001bd36  _SlRecvCmdCtrl                                        
+0001bd3a  _SlRecvfomCmdCtrl                                     
+0001bd3e  _SlRegisterServiceCtrl                                
 0000f4a7  _SlRemoveFromList                                     
-0001bd46  _SlRxFilterAddtCmdCtrl                                
-0001bd4a  _SlRxFilterGetCmdCtrl                                 
-0001bd4e  _SlRxFilterSetCmdCtrl                                 
-0001bd52  _SlSelectCmdCtrl                                      
-0001bd56  _SlSendCmdCtrl                                        
-0001bd5a  _SlSetSockOptCmdCtrl                                  
-0001bd5e  _SlSmartConfigStartCmdCtrl                            
-0001bd62  _SlSockCloseCmdCtrl                                   
-0001bd66  _SlSockSocketCmdCtrl                                  
-0001bd6a  _SlStopCmdCtrl                                        
-0001bd6e  _SlWlanCfgGetCmdCtrl                                  
-0001bd72  _SlWlanCfgSetCmdCtrl                                  
-0001bd76  _SlWlanGetNetworkListCtrl                             
-0001bd7a  _SlWlanSetModeCmdCtrl                                 
+0001bd42  _SlRxFilterAddtCmdCtrl                                
+0001bd46  _SlRxFilterGetCmdCtrl                                 
+0001bd4a  _SlRxFilterSetCmdCtrl                                 
+0001bd4e  _SlSelectCmdCtrl                                      
+0001bd52  _SlSendCmdCtrl                                        
+0001bd56  _SlSetSockOptCmdCtrl                                  
+0001bd5a  _SlSmartConfigStartCmdCtrl                            
+0001bd5e  _SlSockCloseCmdCtrl                                   
+0001bd62  _SlSockSocketCmdCtrl                                  
+0001bd66  _SlStopCmdCtrl                                        
+0001bd6a  _SlWlanCfgGetCmdCtrl                                  
+0001bd6e  _SlWlanCfgSetCmdCtrl                                  
+0001bd72  _SlWlanGetNetworkListCtrl                             
+0001bd76  _SlWlanSetModeCmdCtrl                                 
 2000ca7c  __CIOBUF_                                             
 20010000  __STACK_END                                           
 00000200  __STACK_SIZE                                          
@@ -726,74 +726,74 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 0001bdf8  __TI_CINIT_Limit                                      
 0001bdd0  __TI_Handler_Table_Base                               
 0001bddc  __TI_Handler_Table_Limit                              
-0001aa55  __TI_auto_init                                        
+0001aa51  __TI_auto_init                                        
 2000d2b8  __TI_cleanup_ptr                                      
-0001aac5  __TI_decompress_lzss                                  
-0001b3d3  __TI_decompress_none                                  
+0001aac1  __TI_decompress_lzss                                  
+0001b3cf  __TI_decompress_none                                  
 2000d2bc  __TI_dtors_ptr                                        
 2000d2c0  __TI_enable_exit_profile_output                       
 ffffffff  __TI_pprof_out_hndl                                   
 00011735  __TI_printfi                                          
 ffffffff  __TI_prof_data_size                                   
 ffffffff  __TI_prof_data_start                                  
-0001ab5f  __TI_readmsg                                          
+0001ab5b  __TI_readmsg                                          
 00000000  __TI_static_base__                                    
-0001ab2d  __TI_writemsg                                         
-0001b415  __TI_zero_init                                        
-0001a769  __aeabi_cdcmpeq                                       
-0001a769  __aeabi_cdcmple                                       
-0001a7ef  __aeabi_cdrcmple                                      
-0001afb5  __aeabi_d2iz                                          
-00019647  __aeabi_dadd                                          
-00019971  __aeabi_ddiv                                          
-00019eeb  __aeabi_dmul                                          
-0001963d  __aeabi_dsub                                          
-0001b14d  __aeabi_i2d                                           
+0001ab29  __TI_writemsg                                         
+0001b411  __TI_zero_init                                        
+0001a765  __aeabi_cdcmpeq                                       
+0001a765  __aeabi_cdcmple                                       
+0001a7eb  __aeabi_cdrcmple                                      
+0001afb1  __aeabi_d2iz                                          
+00019643  __aeabi_dadd                                          
+0001996d  __aeabi_ddiv                                          
+00019ee7  __aeabi_dmul                                          
+00019639  __aeabi_dsub                                          
+0001b149  __aeabi_i2d                                           
 0001202f  __aeabi_ldiv0                                         
-00018e35  __aeabi_ldivmod                                       
-0001b325  __aeabi_lmul                                          
-0001a8f5  __aeabi_memclr                                        
-0001a8f5  __aeabi_memclr4                                       
-0001a8f5  __aeabi_memclr8                                       
-0001a5a1  __aeabi_memcpy                                        
-0001a5a1  __aeabi_memcpy4                                       
-0001a5a1  __aeabi_memcpy8                                       
-0001a8f7  __aeabi_memset                                        
-0001a8f7  __aeabi_memset4                                       
-0001a8f7  __aeabi_memset8                                       
-00019265  __aeabi_uldivmod                                      
+00018e31  __aeabi_ldivmod                                       
+0001b321  __aeabi_lmul                                          
+0001a8f1  __aeabi_memclr                                        
+0001a8f1  __aeabi_memclr4                                       
+0001a8f1  __aeabi_memclr8                                       
+0001a59d  __aeabi_memcpy                                        
+0001a59d  __aeabi_memcpy4                                       
+0001a59d  __aeabi_memcpy8                                       
+0001a8f3  __aeabi_memset                                        
+0001a8f3  __aeabi_memset4                                       
+0001a8f3  __aeabi_memset8                                       
+00019261  __aeabi_uldivmod                                      
 ffffffff  __binit__                                             
 ffffffff  __c_args__                                            
-00019053  __mpu_init                                            
+0001904f  __mpu_init                                            
 2000fe00  __stack                                               
-0001b3e1  __time32                                              
-0001b30d  _args_main                                            
-0001ac59  _c_int00                                              
-0001ba3c  _ctypes_                                              
+0001b3dd  __time32                                              
+0001b309  _args_main                                            
+0001ac55  _c_int00                                              
+0001ba38  _ctypes_                                              
 2000d2d0  _lock                                                 
-0001b377  _nop                                                  
-0001b36f  _register_lock                                        
-0001b369  _register_unlock                                      
+0001b373  _nop                                                  
+0001b36b  _register_lock                                        
+0001b365  _register_unlock                                      
 00012031  _sl_BuildAddress                                      
-000174f5  _sl_GetStartResponseConvert                           
+000174f1  _sl_GetStartResponseConvert                           
 00012a45  _sl_HandleAsync_Accept                                
 0001263f  _sl_HandleAsync_Connect                               
-00014df5  _sl_HandleAsync_DnsGetHostByAddr                      
-00014f49  _sl_HandleAsync_DnsGetHostByName                      
-00014d25  _sl_HandleAsync_DnsGetHostByService                   
-00017659  _sl_HandleAsync_InitComplete                          
-00015049  _sl_HandleAsync_PingResponse                          
+00014df1  _sl_HandleAsync_DnsGetHostByAddr                      
+00014f45  _sl_HandleAsync_DnsGetHostByName                      
+00014d21  _sl_HandleAsync_DnsGetHostByService                   
+00017655  _sl_HandleAsync_InitComplete                          
+00015045  _sl_HandleAsync_PingResponse                          
 00012e6d  _sl_HandleAsync_Select                                
-0001770b  _sl_HandleAsync_Stop                                  
+00017707  _sl_HandleAsync_Stop                                  
 00012149  _sl_ParseAddress                                      
 00012081  _sl_TruncatePayloadByProtocol                         
-000197f3  _system_post_cinit                                    
-0001b447  _system_pre_init                                      
+000197ef  _system_post_cinit                                    
+0001b443  _system_pre_init                                      
 2000d2d4  _unlock                                               
-0001acb1  abort                                                 
+0001acad  abort                                                 
 2000bcac  accel_fifo                                            
 2000ce06  accelxyz                                              
-0001ae89  atoi                                                  
+0001ae85  atoi                                                  
 ffffffff  binit                                                 
 2000cd60  bme280                                                
 0000fa17  bme280_compensate_humidity_int32                      
@@ -804,7 +804,7 @@ ffffffff  binit
 0000f78f  bme280_compensate_temperature_int32                   
 0000f807  bme280_compensate_temperature_int32_sixteen_bit_output
 00010e79  bme280_compute_wait_time                              
-00018921  bme280_data_readout_template                          
+0001891d  bme280_data_readout_template                          
 0000fbef  bme280_get_calib_param                                
 000106af  bme280_get_filter                                     
 00010a13  bme280_get_forced_uncomp_pressure_temperature_humidity
@@ -815,7 +815,7 @@ ffffffff  binit
 00010501  bme280_get_spi3                                       
 00010863  bme280_get_standby_durn                               
 0000f6d9  bme280_init                                           
-00018a0d  bme280_initialize_sensor                              
+00018a09  bme280_initialize_sensor                              
 0000fb8f  bme280_read_pressure_temperature_humidity             
 00010c15  bme280_read_register                                  
 0000f9c1  bme280_read_uncomp_humidity                           
@@ -855,8 +855,8 @@ ffffffff  binit
 0000d595  bmi160_bst_yas532_set_offset                          
 0000ce4d  bmi160_bst_yas532_xy1y2_to_linear                     
 000095c1  bmi160_clear_step_counter                             
-00013dc1  bmi160_config_running_mode                            
-00014971  bmi160_delay_ms                                       
+00013dbd  bmi160_config_running_mode                            
+0001496d  bmi160_delay_ms                                       
 00001805  bmi160_fifo_data                                      
 000017a5  bmi160_fifo_length                                    
 0000191d  bmi160_get_accel_bw                                   
@@ -1021,12 +1021,12 @@ ffffffff  binit
 00003a15  bmi160_get_step_detector_enable                       
 00009627  bmi160_get_target_page                                
 00001751  bmi160_get_temp                                       
-000148d7  bmi160_i2c_burst_read                                 
-000148ab  bmi160_i2c_bus_read                                   
-00014909  bmi160_i2c_bus_write                                  
+000148d3  bmi160_i2c_burst_read                                 
+000148a7  bmi160_i2c_bus_read                                   
+00014905  bmi160_i2c_bus_write                                  
 000000e5  bmi160_init                                           
-00013d85  bmi160_initialize_sensor                              
-000147f9  bmi160_interrupt_configuration                        
+00013d81  bmi160_initialize_sensor                              
+000147f5  bmi160_interrupt_configuration                        
 000093f1  bmi160_map_significant_motion_intr                    
 000094d9  bmi160_map_step_detector_intr                         
 00000a7d  bmi160_read_accel_x                                   
@@ -1169,98 +1169,98 @@ ffffffff  binit
 00003a6b  bmi160_set_step_detector_enable                       
 00009373  bmi160_set_step_mode                                  
 00009675  bmi160_set_target_page                                
-00014935  bmi160_spi_bus_read                                   
-00014953  bmi160_spi_bus_write                                  
+00014931  bmi160_spi_bus_read                                   
+0001494f  bmi160_spi_bus_write                                  
 00000145  bmi160_write_reg                                      
 2000d2cd  burstMode                                             
-00017fdb  clear_rts                                             
+00017fd7  clear_rts                                             
 2000cdf4  client_info                                           
 2000ce12  client_p1                                             
-0001aed5  copy_in                                               
-0001b37d  copysign                                              
-0001b37d  copysignl                                             
+0001aed1  copy_in                                               
+0001b379  copysign                                              
+0001b379  copysignl                                             
 2000d2e4  errno                                                 
-0001acb9  exit                                                  
-0001ab95  frexp                                                 
-0001ab95  frexpl                                                
+0001acb5  exit                                                  
+0001ab91  frexp                                                 
+0001ab91  frexpl                                                
 2000d2cc  gFirstCmdMode                                         
-0001bca4  g_H2NCnysPattern                                      
-0001bcac  g_H2NSyncPattern                                      
+0001bca0  g_H2NCnysPattern                                      
+0001bca8  g_H2NSyncPattern                                      
 2000c918  g_StatMem                                             
 2000d290  g_Status                                              
 2000cd9c  g__SlNonOsCB                                          
 2000d2c4  g_pCB                                                 
 2000ce48  g_ui32ByteCount                                       
-00016e09  getLocalIP                                            
+00016e05  getLocalIP                                            
 2000c018  gyro_fifo                                             
 2000ce0c  gyroxyz                                               
 2000ce17  host_p0                                               
 2000d2a4  i2cConfig                                             
-00014873  i2c_routine                                           
-000181b3  initAntSelGPIO                                        
-00016d05  initCC3100                                            
-00017fe7  initClk                                               
-00017ae7  initI2C                                               
-0001808b  initLEDs                                              
+0001486f  i2c_routine                                           
+000181af  initAntSelGPIO                                        
+00016d01  initCC3100                                            
+00017fe3  initClk                                               
+00017ae3  initI2C                                               
+00018087  initLEDs                                              
 00000000  interruptVectors                                      
-00019fe9  ldexp                                                 
-00019fe9  ldexpl                                                
-0001ad01  ltoa                                                  
+00019fe5  ldexp                                                 
+00019fe5  ldexpl                                                
+0001acfd  ltoa                                                  
 2000c384  mag_fifo                                              
-0001a971  main                                                  
+0001a96d  main                                                  
 2000d2ec  main_func_sp                                          
-0001b279  memccpy                                               
-0001a5a1  memcpy                                                
-0001a8fd  memset                                                
+0001b275  memccpy                                               
+0001a59d  memcpy                                                
+0001a8f9  memset                                                
 2000ce54  pData                                                 
 2000d2e0  pIraEventHandler                                      
 2000d2c8  pPingCallBackFunc                                     
 2000cdfe  parmbuf                                               
-0001af37  rand                                                  
-00017cfd  readBurstI2C                                          
-00017bd7  readI2C                                               
+0001af33  rand                                                  
+00017cf9  readBurstI2C                                          
+00017bd3  readI2C                                               
 2000d298  receivedAlready                                       
-00017f35  registerInterruptHandler                              
+00017f31  registerInterruptHandler                              
 2000d294  retVal                                                
 2000cdc4  s_bmi160                                              
-00019fe9  scalbn                                                
-00019fe9  scalbnl                                               
-00019df9  sensorOpt3001Enable                                   
-00019ded  sensorOpt3001Init                                     
-00019e25  sensorOpt3001Read                                     
-00019e89  sensorOpt3001Test                                     
-00018c0b  sensorTmp007Enable                                    
-00018c75  sensorTmp007EnableInterruptConversion                 
-00018c01  sensorTmp007Init                                      
-00018cbf  sensorTmp007Read                                      
-00018d7d  sensorTmp007Test                                      
-00017fcf  set_rts                                               
+00019fe5  scalbn                                                
+00019fe5  scalbnl                                               
+00019df5  sensorOpt3001Enable                                   
+00019de9  sensorOpt3001Init                                     
+00019e21  sensorOpt3001Read                                     
+00019e85  sensorOpt3001Test                                     
+00018c07  sensorTmp007Enable                                    
+00018c71  sensorTmp007EnableInterruptConversion                 
+00018bfd  sensorTmp007Init                                      
+00018cbb  sensorTmp007Read                                      
+00018d79  sensorTmp007Test                                      
+00017fcb  set_rts                                               
 00012841  sl_Accept                                             
 00012223  sl_Bind                                               
 000121f9  sl_Close                                              
 000124e9  sl_Connect                                            
-00017925  sl_DevGet                                             
-000179c3  sl_DevSet                                             
-000178f1  sl_EventMaskGet                                       
-000178b7  sl_EventMaskSet                                       
+00017921  sl_DevGet                                             
+000179bf  sl_DevSet                                             
+000178ed  sl_EventMaskGet                                       
+000178b3  sl_EventMaskSet                                       
 00012bc5  sl_GetSockOpt                                         
 000129c3  sl_Htonl                                              
 00012a05  sl_Htons                                              
 00012801  sl_Listen                                             
-00014e05  sl_NetAppDnsGetHostByName                             
-00014bf5  sl_NetAppDnsGetHostByService                          
-0001534d  sl_NetAppGet                                          
-000149f5  sl_NetAppGetServiceList                               
-00014b79  sl_NetAppMDNSRegisterService                          
-00014ac5  sl_NetAppMDNSRegisterUnregisterService                
-00014bb5  sl_NetAppMDNSUnRegisterService                        
-0001510d  sl_NetAppPingStart                                    
-000152e9  sl_NetAppSendTokenValue                               
-0001527f  sl_NetAppSet                                          
-000149ad  sl_NetAppStart                                        
-000149d1  sl_NetAppStop                                         
-00019c3f  sl_NetCfgGet                                          
-00019bd9  sl_NetCfgSet                                          
+00014e01  sl_NetAppDnsGetHostByName                             
+00014bf1  sl_NetAppDnsGetHostByService                          
+00015349  sl_NetAppGet                                          
+000149f1  sl_NetAppGetServiceList                               
+00014b75  sl_NetAppMDNSRegisterService                          
+00014ac1  sl_NetAppMDNSRegisterUnregisterService                
+00014bb1  sl_NetAppMDNSUnRegisterService                        
+00015109  sl_NetAppPingStart                                    
+000152e5  sl_NetAppSendTokenValue                               
+0001527b  sl_NetAppSet                                          
+000149a9  sl_NetAppStart                                        
+000149cd  sl_NetAppStop                                         
+00019c3b  sl_NetCfgGet                                          
+00019bd5  sl_NetCfgSet                                          
 00012add  sl_Recv                                               
 000123c7  sl_RecvFrom                                           
 00012c5f  sl_Select                                             
@@ -1268,47 +1268,47 @@ ffffffff  binit
 000122ab  sl_SendTo                                             
 00012b59  sl_SetSockOpt                                         
 000121a3  sl_Socket                                             
-00017555  sl_Start                                              
-0001778f  sl_Stop                                               
-0001754d  sl_Task                                               
-000154f1  sl_WlanConnect                                        
-00015723  sl_WlanDisconnect                                     
-00015ef1  sl_WlanGet                                            
-00015bb9  sl_WlanGetNetworkList                                 
-00015799  sl_WlanPolicyGet                                      
-0001572f  sl_WlanPolicySet                                      
-0001583d  sl_WlanProfileAdd                                     
-00015b8b  sl_WlanProfileDel                                     
-00015aa9  sl_WlanProfileGet                                     
-00015c2b  sl_WlanRxFilterAdd                                    
-00015ced  sl_WlanRxFilterGet                                    
-00015c99  sl_WlanRxFilterSet                                    
-00015d7b  sl_WlanRxStatGet                                      
-00015d63  sl_WlanRxStatStart                                    
-00015d6f  sl_WlanRxStatStop                                     
-00015e7d  sl_WlanSet                                            
-00015e4d  sl_WlanSetMode                                        
-00015dc1  sl_WlanSmartConfigStart                               
-00015db1  sl_WlanSmartConfigStop                                
-0001a6d5  snprintf                                              
-00019055  spi_Close                                             
-00019061  spi_Open                                              
-000191ab  spi_Read                                              
-00019151  spi_Write                                             
-00014895  spi_routine                                           
-0001af21  srand                                                 
-00018081  stopWDT                                               
-0001b33d  strchr                                                
-0001b391  strlen                                                
-0001b3e1  time                                                  
-00018145  toggleLed                                             
+00017551  sl_Start                                              
+0001778b  sl_Stop                                               
+00017549  sl_Task                                               
+000154ed  sl_WlanConnect                                        
+0001571f  sl_WlanDisconnect                                     
+00015eed  sl_WlanGet                                            
+00015bb5  sl_WlanGetNetworkList                                 
+00015795  sl_WlanPolicyGet                                      
+0001572b  sl_WlanPolicySet                                      
+00015839  sl_WlanProfileAdd                                     
+00015b87  sl_WlanProfileDel                                     
+00015aa5  sl_WlanProfileGet                                     
+00015c27  sl_WlanRxFilterAdd                                    
+00015ce9  sl_WlanRxFilterGet                                    
+00015c95  sl_WlanRxFilterSet                                    
+00015d77  sl_WlanRxStatGet                                      
+00015d5f  sl_WlanRxStatStart                                    
+00015d6b  sl_WlanRxStatStop                                     
+00015e79  sl_WlanSet                                            
+00015e49  sl_WlanSetMode                                        
+00015dbd  sl_WlanSmartConfigStart                               
+00015dad  sl_WlanSmartConfigStop                                
+0001a6d1  snprintf                                              
+00019051  spi_Close                                             
+0001905d  spi_Open                                              
+000191a7  spi_Read                                              
+0001914d  spi_Write                                             
+00014891  spi_routine                                           
+0001af1d  srand                                                 
+0001807d  stopWDT                                               
+0001b339  strchr                                                
+0001b38d  strlen                                                
+0001b3dd  time                                                  
+00018141  toggleLed                                             
 2000d29c  transmitedAlready                                     
-00018111  turnLedOff                                            
-000180dd  turnLedOn                                             
+0001810d  turnLedOff                                            
+000180d9  turnLedOn                                             
 2000ce5e  ui8DummyRead                                          
 2000ce5f  ui8Status                                             
 2000ce60  v_fifo_data_u8                                        
-00017b05  writeI2C                                              
+00017b01  writeI2C                                              
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1741,380 +1741,380 @@ address   name
 0001334d  SendDataToClient                                      
 000133a7  ReceiveDataFromClient                                 
 00013495  MoveBall                                              
-0001369b  GenerateBall                                          
-000136e5  ReadJoystickHost                                      
-0001373f  IdleThread                                            
-00013745  DrawObjects                                           
-000138e1  MoveLEDs                                              
-000139dd  GetPlayerRole                                         
-00013a0f  DrawPlayer                                            
-00013a29  UpdatePlayerOnScreen                                  
-00013baf  InitBoardState                                        
-00013cab  StartMenu                                             
-00013d85  bmi160_initialize_sensor                              
-00013dc1  bmi160_config_running_mode                            
-000147f9  bmi160_interrupt_configuration                        
-00014873  i2c_routine                                           
-00014895  spi_routine                                           
-000148ab  bmi160_i2c_bus_read                                   
-000148d7  bmi160_i2c_burst_read                                 
-00014909  bmi160_i2c_bus_write                                  
-00014935  bmi160_spi_bus_read                                   
-00014953  bmi160_spi_bus_write                                  
-00014971  bmi160_delay_ms                                       
-000149ad  sl_NetAppStart                                        
-000149d1  sl_NetAppStop                                         
-000149f5  sl_NetAppGetServiceList                               
-00014ac5  sl_NetAppMDNSRegisterUnregisterService                
-00014b79  sl_NetAppMDNSRegisterService                          
-00014bb5  sl_NetAppMDNSUnRegisterService                        
-00014bf5  sl_NetAppDnsGetHostByService                          
-00014d25  _sl_HandleAsync_DnsGetHostByService                   
-00014df5  _sl_HandleAsync_DnsGetHostByAddr                      
-00014e05  sl_NetAppDnsGetHostByName                             
-00014f49  _sl_HandleAsync_DnsGetHostByName                      
-0001500d  CopyPingResultsToReport                               
-00015049  _sl_HandleAsync_PingResponse                          
-0001510d  sl_NetAppPingStart                                    
-0001527f  sl_NetAppSet                                          
-000152e9  sl_NetAppSendTokenValue                               
-0001534d  sl_NetAppGet                                          
-000153dd  _SlDrvNetAppEventHandler                              
-000154f1  sl_WlanConnect                                        
-00015723  sl_WlanDisconnect                                     
-0001572f  sl_WlanPolicySet                                      
-00015799  sl_WlanPolicyGet                                      
-0001583d  sl_WlanProfileAdd                                     
-00015aa9  sl_WlanProfileGet                                     
-00015b8b  sl_WlanProfileDel                                     
-00015bb9  sl_WlanGetNetworkList                                 
-00015c2b  sl_WlanRxFilterAdd                                    
-00015c99  sl_WlanRxFilterSet                                    
-00015ced  sl_WlanRxFilterGet                                    
-00015d63  sl_WlanRxStatStart                                    
-00015d6f  sl_WlanRxStatStop                                     
-00015d7b  sl_WlanRxStatGet                                      
-00015db1  sl_WlanSmartConfigStop                                
-00015dc1  sl_WlanSmartConfigStart                               
-00015e4d  sl_WlanSetMode                                        
-00015e7d  sl_WlanSet                                            
-00015ef1  sl_WlanGet                                            
-00016085  G8RTOS_Scheduler                                      
-000160e1  SysTick_Handler                                       
-000160e1  SysTick_Handler                                       
-0001618d  G8RTOS_Sleep                                          
-000161b5  G8RTOS_Init                                           
-0001620f  G8RTOS_Launch                                         
-000162b1  G8RTOS_AddThread                                      
-000164e9  G8RTOS_AddPeriodicEvent                               
-000165fd  G8RTOS_GetThreadID                                    
-00016631  G8RTOS_KillThread                                     
-00016705  G8RTOS_KillSelf                                       
-00016769  G8RTOS_AddAperiodicEvent                              
-000167e1  G8RTOS_KillAllOtherThreads                            
-00016d05  initCC3100                                            
-00016dc9  SendData                                              
-00016de9  ReceiveData                                           
-00016e09  getLocalIP                                            
-00016e15  SimpleLinkWlanEventHandler                            
-00016e69  SimpleLinkNetAppEventHandler                          
-00016ea1  SimpleLinkHttpServerCallback                          
-00016ead  SimpleLinkGeneralEventHandler                         
-00016eb7  SimpleLinkSockEventHandler                            
-00016fc5  LCD_DrawRectangle                                     
-000170af  LCD_Text                                              
-00017149  LCD_Clear                                             
-000171bb  LCD_SetPoint                                          
-000171ff  LCD_ReadPixelColor                                    
-00017239  LCD_Init                                              
-00017457  TP_ReadXY                                             
-000174b3  TP_ReadX                                              
-000174c7  TP_ReadY                                              
-000174f5  _sl_GetStartResponseConvert                           
-0001754d  sl_Task                                               
-00017555  sl_Start                                              
-00017659  _sl_HandleAsync_InitComplete                          
-0001770b  _sl_HandleAsync_Stop                                  
-0001778f  sl_Stop                                               
-000178b7  sl_EventMaskSet                                       
-000178f1  sl_EventMaskGet                                       
-00017925  sl_DevGet                                             
-000179c3  sl_DevSet                                             
-00017a29  _SlDrvDeviceEventHandler                              
-00017ae7  initI2C                                               
-00017b05  writeI2C                                              
-00017bd7  readI2C                                               
-00017cfd  readBurstI2C                                          
-00017e31  EUSCIB1_IRQHandler                                    
-00017e31  EUSCIB1_IRQHandler                                    
-00017f35  registerInterruptHandler                              
-00017f49  CC3100_disable                                        
-00017f55  CC3100_enable                                         
-00017f61  CC3100_InterruptEnable                                
-00017f9b  CC3100_InterruptDisable                               
-00017fbf  MaskIntHdlr                                           
-00017fc7  UnMaskIntHdlr                                         
-00017fcf  set_rts                                               
-00017fdb  clear_rts                                             
-00017fe7  initClk                                               
-00018081  stopWDT                                               
-0001808b  initLEDs                                              
-000180dd  turnLedOn                                             
-00018111  turnLedOff                                            
-00018145  toggleLed                                             
-00018179  GetLEDStatus                                          
-000181b3  initAntSelGPIO                                        
-000181e7  SelAntenna                                            
-0001822b  PORT1_IRQHandler                                      
-0001822b  PORT1_IRQHandler                                      
-0001822d  Delay                                                 
-00018255  PORT2_IRQHandler                                      
-00018255  PORT2_IRQHandler                                      
-0001827b  EUSCIA0_IRQHandler                                    
-0001827b  EUSCIA0_IRQHandler                                    
-000182dd  SystemCoreClockUpdate                                 
-00018551  SystemInit                                            
-0001862d  BackChannelInit                                       
-0001865b  BackChannelPrint                                      
-000186a7  BackChannelPrintIntVariable                           
-000186c5  BackChannelEventTrigger                               
-000186dd  BackChannelOpt3001PrintRaw                            
-000186f9  BackupChannelTmp007PrintRaw                           
-0001871f  BackupChannelBmi160PrintAccel                         
-0001874b  BackupChannelBmi160PrintGyro                          
-00018777  BackupChannelBmi160PrintMag                           
-00018921  bme280_data_readout_template                          
-00018a0d  bme280_initialize_sensor                              
-00018a63  I2C_routine                                           
-00018a7f  SPI_routine                                           
-00018a95  BME280_I2C_bus_write                                  
-00018ac1  BME280_I2C_bus_read                                   
-00018aed  BME280_SPI_bus_read                                   
-00018b53  BME280_SPI_bus_write                                  
-00018bc3  BME280_delay_msek                                     
-00018c01  sensorTmp007Init                                      
-00018c0b  sensorTmp007Enable                                    
-00018c75  sensorTmp007EnableInterruptConversion                 
-00018cbf  sensorTmp007Read                                      
-00018d7d  sensorTmp007Test                                      
-00018e35  __aeabi_ldivmod                                       
-00019053  __mpu_init                                            
-00019055  spi_Close                                             
-00019061  spi_Open                                              
-00019151  spi_Write                                             
-000191ab  spi_Read                                              
-00019265  __aeabi_uldivmod                                      
-000194cd  LED_write                                             
-000195b3  LED_clear                                             
-000195e5  I2C_init                                              
-0001963d  __aeabi_dsub                                          
-00019647  __aeabi_dadd                                          
-000197f3  _system_post_cinit                                    
-00019819  Joystick_Init_Without_Interrupt                       
-00019877  Joystick_Push_Button_Init_With_Interrupt              
-000198d3  Disable_Joystick_Interrupt                            
-000198e9  GetJoystickCoordinates                                
-00019971  __aeabi_ddiv                                          
-00019aa9  _SlNonOsSemSet                                        
-00019ac1  _SlNonOsSemGet                                        
-00019b1d  _SlNonOsSpawn                                         
-00019b6d  _SlNonOsMainLoopTask                                  
-00019bd9  sl_NetCfgSet                                          
-00019c3f  sl_NetCfgGet                                          
-00019ce9  CS_getDCOFrequency                                    
-00019ded  sensorOpt3001Init                                     
-00019df9  sensorOpt3001Enable                                   
-00019e25  sensorOpt3001Read                                     
-00019e89  sensorOpt3001Test                                     
-00019eeb  __aeabi_dmul                                          
-00019fe9  ldexp                                                 
-00019fe9  ldexpl                                                
-00019fe9  scalbn                                                
-00019fe9  scalbnl                                               
-0001a1c1  ClockSys_SetMaxFreq                                   
-0001a253  ClockSys_GetSysFreq                                   
-0001a325  PutChar                                               
-0001a3c9  G8RTOS_InitSemaphore                                  
-0001a3e3  G8RTOS_WaitSemaphore                                  
-0001a41d  G8RTOS_SignalSemaphore                                
-0001a469  CS_startHFXTWithTimeout                               
-0001a5a1  __aeabi_memcpy                                        
-0001a5a1  __aeabi_memcpy4                                       
-0001a5a1  __aeabi_memcpy8                                       
-0001a5a1  memcpy                                                
-0001a63d  HOSTtime64                                            
-0001a68b  HOSTtime                                              
-0001a6d5  snprintf                                              
-0001a769  __aeabi_cdcmpeq                                       
-0001a769  __aeabi_cdcmple                                       
-0001a7ef  __aeabi_cdrcmple                                      
-0001a875  _SlDrvFlowContInit                                    
-0001a8b3  _SlDrvFlowContDeinit                                  
-0001a8f5  __aeabi_memclr                                        
-0001a8f5  __aeabi_memclr4                                       
-0001a8f5  __aeabi_memclr8                                       
-0001a8f7  __aeabi_memset                                        
-0001a8f7  __aeabi_memset4                                       
-0001a8f7  __aeabi_memset8                                       
-0001a8fd  memset                                                
-0001a971  main                                                  
-0001aa55  __TI_auto_init                                        
-0001aac5  __TI_decompress_lzss                                  
-0001ab2d  __TI_writemsg                                         
-0001ab5b  C$$IO$$                                               
-0001ab5f  __TI_readmsg                                          
-0001ab95  frexp                                                 
-0001ab95  frexpl                                                
-0001abf9  LCD_ReadData                                          
-0001ac59  _c_int00                                              
-0001acad  C$$EXIT                                               
-0001acb1  abort                                                 
-0001acb9  exit                                                  
-0001ad01  ltoa                                                  
-0001ad55  SysCtl_getTLVInfo                                     
-0001ada9  G8RTOS_Start                                          
-0001adc9  PendSV_Handler                                        
-0001adc9  PendSV_Handler                                        
-0001adf1  GPIO_setAsPeripheralModuleFunctionOutputPin           
-0001ae89  atoi                                                  
-0001aed5  copy_in                                               
-0001af21  srand                                                 
-0001af37  rand                                                  
-0001afb5  __aeabi_d2iz                                          
-0001affd  GetASCIICode                                          
-0001b03d  LCD_WriteData                                         
-0001b07d  BSP_InitBoard                                         
-0001b0b9  LCD_WriteIndex                                        
-0001b0ed  GPIO_setAsInputPinWithPullUpResistor                  
-0001b11d  SPISendRecvByte                                       
-0001b14d  __aeabi_i2d                                           
-0001b17b  PCM_getCoreVoltageLevel                               
-0001b1a7  PCM_getPowerMode                                      
-0001b1d1  DelayMs                                               
-0001b1f9  CS_clearInterruptFlag                                 
-0001b21d  LCD_SetCursor                                         
-0001b23d  LCD_Write_Data_Only                                   
-0001b25d  LCD_WriteReg                                          
-0001b279  memccpy                                               
-0001b295  CS_getMCLK                                            
-0001b2ad  CS_getSMCLK                                           
-0001b2c5  GPIO_getInputPinValue                                 
-0001b2dd  WDT_A_clearTimer                                      
-0001b2f5  WDT_A_holdTimer                                       
-0001b30d  _args_main                                            
-0001b325  __aeabi_lmul                                          
-0001b33d  strchr                                                
-0001b355  CS_setExternalClockSourceFrequency                    
-0001b369  _register_unlock                                      
-0001b36f  _register_lock                                        
-0001b377  _nop                                                  
-0001b37d  copysign                                              
-0001b37d  copysignl                                             
-0001b391  strlen                                                
-0001b3a5  SysCtl_disableNMISource                               
-0001b3b5  SysCtl_enableNMISource                                
-0001b3c5  StartCriticalSection                                  
-0001b3cd  EndCriticalSection                                    
-0001b3d3  __TI_decompress_none                                  
-0001b3e1  __time32                                              
-0001b3e1  time                                                  
-0001b3ef  Reset_Handler                                         
-0001b3fb  ADC14_IRQHandler                                      
-0001b3fb  AES256_IRQHandler                                     
-0001b3fb  BusFault_Handler                                      
-0001b3fb  COMP_E0_IRQHandler                                    
-0001b3fb  COMP_E1_IRQHandler                                    
-0001b3fb  CS_IRQHandler                                         
-0001b3fb  DMA_ERR_IRQHandler                                    
-0001b3fb  DMA_INT0_IRQHandler                                   
-0001b3fb  DMA_INT1_IRQHandler                                   
-0001b3fb  DMA_INT2_IRQHandler                                   
-0001b3fb  DMA_INT3_IRQHandler                                   
-0001b3fb  DebugMon_Handler                                      
-0001b3fb  Default_Handler                                       
-0001b3fb  EUSCIA1_IRQHandler                                    
-0001b3fb  EUSCIA2_IRQHandler                                    
-0001b3fb  EUSCIA3_IRQHandler                                    
-0001b3fb  EUSCIB0_IRQHandler                                    
-0001b3fb  EUSCIB2_IRQHandler                                    
-0001b3fb  EUSCIB3_IRQHandler                                    
-0001b3fb  FLCTL_IRQHandler                                      
-0001b3fb  FPU_IRQHandler                                        
-0001b3fb  HardFault_Handler                                     
-0001b3fb  MemManage_Handler                                     
-0001b3fb  NMI_Handler                                           
-0001b3fb  PCM_IRQHandler                                        
-0001b3fb  PORT3_IRQHandler                                      
-0001b3fb  PORT4_IRQHandler                                      
-0001b3fb  PORT5_IRQHandler                                      
-0001b3fb  PORT6_IRQHandler                                      
-0001b3fb  PSS_IRQHandler                                        
-0001b3fb  RTC_C_IRQHandler                                      
-0001b3fb  SVC_Handler                                           
-0001b3fb  T32_INT1_IRQHandler                                   
-0001b3fb  T32_INT2_IRQHandler                                   
-0001b3fb  T32_INTC_IRQHandler                                   
-0001b3fb  TA0_0_IRQHandler                                      
-0001b3fb  TA0_N_IRQHandler                                      
-0001b3fb  TA1_0_IRQHandler                                      
-0001b3fb  TA1_N_IRQHandler                                      
-0001b3fb  TA2_0_IRQHandler                                      
-0001b3fb  TA2_N_IRQHandler                                      
-0001b3fb  TA3_0_IRQHandler                                      
-0001b3fb  TA3_N_IRQHandler                                      
-0001b3fb  UsageFault_Handler                                    
-0001b3fb  WDT_A_IRQHandler                                      
-0001b3fd  PCM_getPowerState                                     
-0001b409  SysCtl_getNMISourceStatus                             
-0001b415  __TI_zero_init                                        
-0001b421  LCD_Write_Data_Start                                  
-0001b42b  PCM_setCoreVoltageLevel                               
-0001b433  PCM_setPowerMode                                      
-0001b43b  CS_startHFXT                                          
-0001b441  SysCtlDelay                                           
-0001b447  _system_pre_init                                      
-0001ba3c  _ctypes_                                              
-0001bbf0  _SlActionLookupTable                                  
-0001bca4  g_H2NCnysPattern                                      
-0001bcac  g_H2NSyncPattern                                      
-0001bce6  _SlAcceptCmdCtrl                                      
-0001bcea  _SlDeviceGetCmdCtrl                                   
-0001bcee  _SlDeviceSetCmdCtrl                                   
-0001bcf2  _SlEventMaskGetCmdCtrl                                
-0001bcf6  _SlEventMaskSetCmdCtrl                                
-0001bcfa  _SlGetHostByNameCtrl                                  
-0001bcfe  _SlGetHostByServiceCtrl                               
-0001bd02  _SlGetServiceListeCtrl                                
-0001bd06  _SlGetSockOptCmdCtrl                                  
-0001bd0a  _SlListenCmdCtrl                                      
-0001bd0e  _SlNetAppGetCmdCtrl                                   
-0001bd12  _SlNetAppSendTokenValueCmdCtrl                        
-0001bd16  _SlNetAppSetCmdCtrl                                   
-0001bd1a  _SlNetAppStartCtrl                                    
-0001bd1e  _SlNetAppStopCtrl                                     
-0001bd22  _SlNetCfgGetCmdCtrl                                   
-0001bd26  _SlNetCfgSetCmdCtrl                                   
-0001bd2a  _SlPolicyGetCmdCtrl                                   
-0001bd2e  _SlPolicySetCmdCtrl                                   
-0001bd32  _SlProfileDelCmdCtrl                                  
-0001bd36  _SlProfileGetCmdCtrl                                  
-0001bd3a  _SlRecvCmdCtrl                                        
-0001bd3e  _SlRecvfomCmdCtrl                                     
-0001bd42  _SlRegisterServiceCtrl                                
-0001bd46  _SlRxFilterAddtCmdCtrl                                
-0001bd4a  _SlRxFilterGetCmdCtrl                                 
-0001bd4e  _SlRxFilterSetCmdCtrl                                 
-0001bd52  _SlSelectCmdCtrl                                      
-0001bd56  _SlSendCmdCtrl                                        
-0001bd5a  _SlSetSockOptCmdCtrl                                  
-0001bd5e  _SlSmartConfigStartCmdCtrl                            
-0001bd62  _SlSockCloseCmdCtrl                                   
-0001bd66  _SlSockSocketCmdCtrl                                  
-0001bd6a  _SlStopCmdCtrl                                        
-0001bd6e  _SlWlanCfgGetCmdCtrl                                  
-0001bd72  _SlWlanCfgSetCmdCtrl                                  
-0001bd76  _SlWlanGetNetworkListCtrl                             
-0001bd7a  _SlWlanSetModeCmdCtrl                                 
+00013699  GenerateBall                                          
+000136e1  ReadJoystickHost                                      
+0001373b  IdleThread                                            
+00013741  DrawObjects                                           
+000138dd  MoveLEDs                                              
+000139d9  GetPlayerRole                                         
+00013a0b  DrawPlayer                                            
+00013a25  UpdatePlayerOnScreen                                  
+00013bab  InitBoardState                                        
+00013ca7  StartMenu                                             
+00013d81  bmi160_initialize_sensor                              
+00013dbd  bmi160_config_running_mode                            
+000147f5  bmi160_interrupt_configuration                        
+0001486f  i2c_routine                                           
+00014891  spi_routine                                           
+000148a7  bmi160_i2c_bus_read                                   
+000148d3  bmi160_i2c_burst_read                                 
+00014905  bmi160_i2c_bus_write                                  
+00014931  bmi160_spi_bus_read                                   
+0001494f  bmi160_spi_bus_write                                  
+0001496d  bmi160_delay_ms                                       
+000149a9  sl_NetAppStart                                        
+000149cd  sl_NetAppStop                                         
+000149f1  sl_NetAppGetServiceList                               
+00014ac1  sl_NetAppMDNSRegisterUnregisterService                
+00014b75  sl_NetAppMDNSRegisterService                          
+00014bb1  sl_NetAppMDNSUnRegisterService                        
+00014bf1  sl_NetAppDnsGetHostByService                          
+00014d21  _sl_HandleAsync_DnsGetHostByService                   
+00014df1  _sl_HandleAsync_DnsGetHostByAddr                      
+00014e01  sl_NetAppDnsGetHostByName                             
+00014f45  _sl_HandleAsync_DnsGetHostByName                      
+00015009  CopyPingResultsToReport                               
+00015045  _sl_HandleAsync_PingResponse                          
+00015109  sl_NetAppPingStart                                    
+0001527b  sl_NetAppSet                                          
+000152e5  sl_NetAppSendTokenValue                               
+00015349  sl_NetAppGet                                          
+000153d9  _SlDrvNetAppEventHandler                              
+000154ed  sl_WlanConnect                                        
+0001571f  sl_WlanDisconnect                                     
+0001572b  sl_WlanPolicySet                                      
+00015795  sl_WlanPolicyGet                                      
+00015839  sl_WlanProfileAdd                                     
+00015aa5  sl_WlanProfileGet                                     
+00015b87  sl_WlanProfileDel                                     
+00015bb5  sl_WlanGetNetworkList                                 
+00015c27  sl_WlanRxFilterAdd                                    
+00015c95  sl_WlanRxFilterSet                                    
+00015ce9  sl_WlanRxFilterGet                                    
+00015d5f  sl_WlanRxStatStart                                    
+00015d6b  sl_WlanRxStatStop                                     
+00015d77  sl_WlanRxStatGet                                      
+00015dad  sl_WlanSmartConfigStop                                
+00015dbd  sl_WlanSmartConfigStart                               
+00015e49  sl_WlanSetMode                                        
+00015e79  sl_WlanSet                                            
+00015eed  sl_WlanGet                                            
+00016081  G8RTOS_Scheduler                                      
+000160dd  SysTick_Handler                                       
+000160dd  SysTick_Handler                                       
+00016189  G8RTOS_Sleep                                          
+000161b1  G8RTOS_Init                                           
+0001620b  G8RTOS_Launch                                         
+000162ad  G8RTOS_AddThread                                      
+000164e5  G8RTOS_AddPeriodicEvent                               
+000165f9  G8RTOS_GetThreadID                                    
+0001662d  G8RTOS_KillThread                                     
+00016701  G8RTOS_KillSelf                                       
+00016765  G8RTOS_AddAperiodicEvent                              
+000167dd  G8RTOS_KillAllOtherThreads                            
+00016d01  initCC3100                                            
+00016dc5  SendData                                              
+00016de5  ReceiveData                                           
+00016e05  getLocalIP                                            
+00016e11  SimpleLinkWlanEventHandler                            
+00016e65  SimpleLinkNetAppEventHandler                          
+00016e9d  SimpleLinkHttpServerCallback                          
+00016ea9  SimpleLinkGeneralEventHandler                         
+00016eb3  SimpleLinkSockEventHandler                            
+00016fc1  LCD_DrawRectangle                                     
+000170ab  LCD_Text                                              
+00017145  LCD_Clear                                             
+000171b7  LCD_SetPoint                                          
+000171fb  LCD_ReadPixelColor                                    
+00017235  LCD_Init                                              
+00017453  TP_ReadXY                                             
+000174af  TP_ReadX                                              
+000174c3  TP_ReadY                                              
+000174f1  _sl_GetStartResponseConvert                           
+00017549  sl_Task                                               
+00017551  sl_Start                                              
+00017655  _sl_HandleAsync_InitComplete                          
+00017707  _sl_HandleAsync_Stop                                  
+0001778b  sl_Stop                                               
+000178b3  sl_EventMaskSet                                       
+000178ed  sl_EventMaskGet                                       
+00017921  sl_DevGet                                             
+000179bf  sl_DevSet                                             
+00017a25  _SlDrvDeviceEventHandler                              
+00017ae3  initI2C                                               
+00017b01  writeI2C                                              
+00017bd3  readI2C                                               
+00017cf9  readBurstI2C                                          
+00017e2d  EUSCIB1_IRQHandler                                    
+00017e2d  EUSCIB1_IRQHandler                                    
+00017f31  registerInterruptHandler                              
+00017f45  CC3100_disable                                        
+00017f51  CC3100_enable                                         
+00017f5d  CC3100_InterruptEnable                                
+00017f97  CC3100_InterruptDisable                               
+00017fbb  MaskIntHdlr                                           
+00017fc3  UnMaskIntHdlr                                         
+00017fcb  set_rts                                               
+00017fd7  clear_rts                                             
+00017fe3  initClk                                               
+0001807d  stopWDT                                               
+00018087  initLEDs                                              
+000180d9  turnLedOn                                             
+0001810d  turnLedOff                                            
+00018141  toggleLed                                             
+00018175  GetLEDStatus                                          
+000181af  initAntSelGPIO                                        
+000181e3  SelAntenna                                            
+00018227  PORT1_IRQHandler                                      
+00018227  PORT1_IRQHandler                                      
+00018229  Delay                                                 
+00018251  PORT2_IRQHandler                                      
+00018251  PORT2_IRQHandler                                      
+00018277  EUSCIA0_IRQHandler                                    
+00018277  EUSCIA0_IRQHandler                                    
+000182d9  SystemCoreClockUpdate                                 
+0001854d  SystemInit                                            
+00018629  BackChannelInit                                       
+00018657  BackChannelPrint                                      
+000186a3  BackChannelPrintIntVariable                           
+000186c1  BackChannelEventTrigger                               
+000186d9  BackChannelOpt3001PrintRaw                            
+000186f5  BackupChannelTmp007PrintRaw                           
+0001871b  BackupChannelBmi160PrintAccel                         
+00018747  BackupChannelBmi160PrintGyro                          
+00018773  BackupChannelBmi160PrintMag                           
+0001891d  bme280_data_readout_template                          
+00018a09  bme280_initialize_sensor                              
+00018a5f  I2C_routine                                           
+00018a7b  SPI_routine                                           
+00018a91  BME280_I2C_bus_write                                  
+00018abd  BME280_I2C_bus_read                                   
+00018ae9  BME280_SPI_bus_read                                   
+00018b4f  BME280_SPI_bus_write                                  
+00018bbf  BME280_delay_msek                                     
+00018bfd  sensorTmp007Init                                      
+00018c07  sensorTmp007Enable                                    
+00018c71  sensorTmp007EnableInterruptConversion                 
+00018cbb  sensorTmp007Read                                      
+00018d79  sensorTmp007Test                                      
+00018e31  __aeabi_ldivmod                                       
+0001904f  __mpu_init                                            
+00019051  spi_Close                                             
+0001905d  spi_Open                                              
+0001914d  spi_Write                                             
+000191a7  spi_Read                                              
+00019261  __aeabi_uldivmod                                      
+000194c9  LED_write                                             
+000195af  LED_clear                                             
+000195e1  I2C_init                                              
+00019639  __aeabi_dsub                                          
+00019643  __aeabi_dadd                                          
+000197ef  _system_post_cinit                                    
+00019815  Joystick_Init_Without_Interrupt                       
+00019873  Joystick_Push_Button_Init_With_Interrupt              
+000198cf  Disable_Joystick_Interrupt                            
+000198e5  GetJoystickCoordinates                                
+0001996d  __aeabi_ddiv                                          
+00019aa5  _SlNonOsSemSet                                        
+00019abd  _SlNonOsSemGet                                        
+00019b19  _SlNonOsSpawn                                         
+00019b69  _SlNonOsMainLoopTask                                  
+00019bd5  sl_NetCfgSet                                          
+00019c3b  sl_NetCfgGet                                          
+00019ce5  CS_getDCOFrequency                                    
+00019de9  sensorOpt3001Init                                     
+00019df5  sensorOpt3001Enable                                   
+00019e21  sensorOpt3001Read                                     
+00019e85  sensorOpt3001Test                                     
+00019ee7  __aeabi_dmul                                          
+00019fe5  ldexp                                                 
+00019fe5  ldexpl                                                
+00019fe5  scalbn                                                
+00019fe5  scalbnl                                               
+0001a1bd  ClockSys_SetMaxFreq                                   
+0001a24f  ClockSys_GetSysFreq                                   
+0001a321  PutChar                                               
+0001a3c5  G8RTOS_InitSemaphore                                  
+0001a3df  G8RTOS_WaitSemaphore                                  
+0001a419  G8RTOS_SignalSemaphore                                
+0001a465  CS_startHFXTWithTimeout                               
+0001a59d  __aeabi_memcpy                                        
+0001a59d  __aeabi_memcpy4                                       
+0001a59d  __aeabi_memcpy8                                       
+0001a59d  memcpy                                                
+0001a639  HOSTtime64                                            
+0001a687  HOSTtime                                              
+0001a6d1  snprintf                                              
+0001a765  __aeabi_cdcmpeq                                       
+0001a765  __aeabi_cdcmple                                       
+0001a7eb  __aeabi_cdrcmple                                      
+0001a871  _SlDrvFlowContInit                                    
+0001a8af  _SlDrvFlowContDeinit                                  
+0001a8f1  __aeabi_memclr                                        
+0001a8f1  __aeabi_memclr4                                       
+0001a8f1  __aeabi_memclr8                                       
+0001a8f3  __aeabi_memset                                        
+0001a8f3  __aeabi_memset4                                       
+0001a8f3  __aeabi_memset8                                       
+0001a8f9  memset                                                
+0001a96d  main                                                  
+0001aa51  __TI_auto_init                                        
+0001aac1  __TI_decompress_lzss                                  
+0001ab29  __TI_writemsg                                         
+0001ab57  C$$IO$$                                               
+0001ab5b  __TI_readmsg                                          
+0001ab91  frexp                                                 
+0001ab91  frexpl                                                
+0001abf5  LCD_ReadData                                          
+0001ac55  _c_int00                                              
+0001aca9  C$$EXIT                                               
+0001acad  abort                                                 
+0001acb5  exit                                                  
+0001acfd  ltoa                                                  
+0001ad51  SysCtl_getTLVInfo                                     
+0001ada5  G8RTOS_Start                                          
+0001adc5  PendSV_Handler                                        
+0001adc5  PendSV_Handler                                        
+0001aded  GPIO_setAsPeripheralModuleFunctionOutputPin           
+0001ae85  atoi                                                  
+0001aed1  copy_in                                               
+0001af1d  srand                                                 
+0001af33  rand                                                  
+0001afb1  __aeabi_d2iz                                          
+0001aff9  GetASCIICode                                          
+0001b039  LCD_WriteData                                         
+0001b079  BSP_InitBoard                                         
+0001b0b5  LCD_WriteIndex                                        
+0001b0e9  GPIO_setAsInputPinWithPullUpResistor                  
+0001b119  SPISendRecvByte                                       
+0001b149  __aeabi_i2d                                           
+0001b177  PCM_getCoreVoltageLevel                               
+0001b1a3  PCM_getPowerMode                                      
+0001b1cd  DelayMs                                               
+0001b1f5  CS_clearInterruptFlag                                 
+0001b219  LCD_SetCursor                                         
+0001b239  LCD_Write_Data_Only                                   
+0001b259  LCD_WriteReg                                          
+0001b275  memccpy                                               
+0001b291  CS_getMCLK                                            
+0001b2a9  CS_getSMCLK                                           
+0001b2c1  GPIO_getInputPinValue                                 
+0001b2d9  WDT_A_clearTimer                                      
+0001b2f1  WDT_A_holdTimer                                       
+0001b309  _args_main                                            
+0001b321  __aeabi_lmul                                          
+0001b339  strchr                                                
+0001b351  CS_setExternalClockSourceFrequency                    
+0001b365  _register_unlock                                      
+0001b36b  _register_lock                                        
+0001b373  _nop                                                  
+0001b379  copysign                                              
+0001b379  copysignl                                             
+0001b38d  strlen                                                
+0001b3a1  SysCtl_disableNMISource                               
+0001b3b1  SysCtl_enableNMISource                                
+0001b3c1  StartCriticalSection                                  
+0001b3c9  EndCriticalSection                                    
+0001b3cf  __TI_decompress_none                                  
+0001b3dd  __time32                                              
+0001b3dd  time                                                  
+0001b3eb  Reset_Handler                                         
+0001b3f7  ADC14_IRQHandler                                      
+0001b3f7  AES256_IRQHandler                                     
+0001b3f7  BusFault_Handler                                      
+0001b3f7  COMP_E0_IRQHandler                                    
+0001b3f7  COMP_E1_IRQHandler                                    
+0001b3f7  CS_IRQHandler                                         
+0001b3f7  DMA_ERR_IRQHandler                                    
+0001b3f7  DMA_INT0_IRQHandler                                   
+0001b3f7  DMA_INT1_IRQHandler                                   
+0001b3f7  DMA_INT2_IRQHandler                                   
+0001b3f7  DMA_INT3_IRQHandler                                   
+0001b3f7  DebugMon_Handler                                      
+0001b3f7  Default_Handler                                       
+0001b3f7  EUSCIA1_IRQHandler                                    
+0001b3f7  EUSCIA2_IRQHandler                                    
+0001b3f7  EUSCIA3_IRQHandler                                    
+0001b3f7  EUSCIB0_IRQHandler                                    
+0001b3f7  EUSCIB2_IRQHandler                                    
+0001b3f7  EUSCIB3_IRQHandler                                    
+0001b3f7  FLCTL_IRQHandler                                      
+0001b3f7  FPU_IRQHandler                                        
+0001b3f7  HardFault_Handler                                     
+0001b3f7  MemManage_Handler                                     
+0001b3f7  NMI_Handler                                           
+0001b3f7  PCM_IRQHandler                                        
+0001b3f7  PORT3_IRQHandler                                      
+0001b3f7  PORT4_IRQHandler                                      
+0001b3f7  PORT5_IRQHandler                                      
+0001b3f7  PORT6_IRQHandler                                      
+0001b3f7  PSS_IRQHandler                                        
+0001b3f7  RTC_C_IRQHandler                                      
+0001b3f7  SVC_Handler                                           
+0001b3f7  T32_INT1_IRQHandler                                   
+0001b3f7  T32_INT2_IRQHandler                                   
+0001b3f7  T32_INTC_IRQHandler                                   
+0001b3f7  TA0_0_IRQHandler                                      
+0001b3f7  TA0_N_IRQHandler                                      
+0001b3f7  TA1_0_IRQHandler                                      
+0001b3f7  TA1_N_IRQHandler                                      
+0001b3f7  TA2_0_IRQHandler                                      
+0001b3f7  TA2_N_IRQHandler                                      
+0001b3f7  TA3_0_IRQHandler                                      
+0001b3f7  TA3_N_IRQHandler                                      
+0001b3f7  UsageFault_Handler                                    
+0001b3f7  WDT_A_IRQHandler                                      
+0001b3f9  PCM_getPowerState                                     
+0001b405  SysCtl_getNMISourceStatus                             
+0001b411  __TI_zero_init                                        
+0001b41d  LCD_Write_Data_Start                                  
+0001b427  PCM_setCoreVoltageLevel                               
+0001b42f  PCM_setPowerMode                                      
+0001b437  CS_startHFXT                                          
+0001b43d  SysCtlDelay                                           
+0001b443  _system_pre_init                                      
+0001ba38  _ctypes_                                              
+0001bbec  _SlActionLookupTable                                  
+0001bca0  g_H2NCnysPattern                                      
+0001bca8  g_H2NSyncPattern                                      
+0001bce2  _SlAcceptCmdCtrl                                      
+0001bce6  _SlDeviceGetCmdCtrl                                   
+0001bcea  _SlDeviceSetCmdCtrl                                   
+0001bcee  _SlEventMaskGetCmdCtrl                                
+0001bcf2  _SlEventMaskSetCmdCtrl                                
+0001bcf6  _SlGetHostByNameCtrl                                  
+0001bcfa  _SlGetHostByServiceCtrl                               
+0001bcfe  _SlGetServiceListeCtrl                                
+0001bd02  _SlGetSockOptCmdCtrl                                  
+0001bd06  _SlListenCmdCtrl                                      
+0001bd0a  _SlNetAppGetCmdCtrl                                   
+0001bd0e  _SlNetAppSendTokenValueCmdCtrl                        
+0001bd12  _SlNetAppSetCmdCtrl                                   
+0001bd16  _SlNetAppStartCtrl                                    
+0001bd1a  _SlNetAppStopCtrl                                     
+0001bd1e  _SlNetCfgGetCmdCtrl                                   
+0001bd22  _SlNetCfgSetCmdCtrl                                   
+0001bd26  _SlPolicyGetCmdCtrl                                   
+0001bd2a  _SlPolicySetCmdCtrl                                   
+0001bd2e  _SlProfileDelCmdCtrl                                  
+0001bd32  _SlProfileGetCmdCtrl                                  
+0001bd36  _SlRecvCmdCtrl                                        
+0001bd3a  _SlRecvfomCmdCtrl                                     
+0001bd3e  _SlRegisterServiceCtrl                                
+0001bd42  _SlRxFilterAddtCmdCtrl                                
+0001bd46  _SlRxFilterGetCmdCtrl                                 
+0001bd4a  _SlRxFilterSetCmdCtrl                                 
+0001bd4e  _SlSelectCmdCtrl                                      
+0001bd52  _SlSendCmdCtrl                                        
+0001bd56  _SlSetSockOptCmdCtrl                                  
+0001bd5a  _SlSmartConfigStartCmdCtrl                            
+0001bd5e  _SlSockCloseCmdCtrl                                   
+0001bd62  _SlSockSocketCmdCtrl                                  
+0001bd66  _SlStopCmdCtrl                                        
+0001bd6a  _SlWlanCfgGetCmdCtrl                                  
+0001bd6e  _SlWlanCfgSetCmdCtrl                                  
+0001bd72  _SlWlanGetNetworkListCtrl                             
+0001bd76  _SlWlanSetModeCmdCtrl                                 
 0001bdd0  __TI_Handler_Table_Base                               
 0001bddc  __TI_Handler_Table_Limit                              
 0001bde8  __TI_CINIT_Base                                       

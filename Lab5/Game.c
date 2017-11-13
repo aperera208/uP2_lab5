@@ -464,7 +464,7 @@ void MoveBall()
             GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
             x_vel = -1*x_vel;
         }
-        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE)
+        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
         {
             kill = true;
             GameZ.balls[i].alive = false;
@@ -475,7 +475,7 @@ void MoveBall()
             }
             GameZ.numberOfBalls--;
         }
-        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE)
+        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
         {
             kill = true;
             GameZ.balls[i].alive = false;
@@ -489,12 +489,14 @@ void MoveBall()
 
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        G8RTOS_Sleep(35);
 
         if(kill == true)
         {
             G8RTOS_KillSelf();
         }
+
+        G8RTOS_Sleep(35);
+
 
     }
 }
