@@ -103,8 +103,8 @@ void JoinGame()
 
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
-    G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
-    G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
+    G8RTOS_AddThread(SendDataToHost, "Send data to host", 190);
+    G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 190);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
     G8RTOS_KillSelf();
@@ -330,8 +330,8 @@ void CreateGame()
     G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
     G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
-    G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
-    G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
+    G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 190);
+    G8RTOS_AddThread(SendDataToClient, "Send data to client", 190);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
     G8RTOS_AddThread(IdleThread, "Idle", 255);
@@ -466,6 +466,7 @@ void MoveBall()
         int32_t dy_client = GameZ.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
 
         G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_Sleep(1);
 
         if (abs(dx_host) <= w && abs(dy_host) <= h)
         {
@@ -604,6 +605,7 @@ void MoveBall()
         }
 
         G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_Sleep(1);
 
 
 
@@ -612,7 +614,7 @@ void MoveBall()
             G8RTOS_KillSelf();
         }
 
-        G8RTOS_Sleep(35);
+        G8RTOS_Sleep(32);
 
 
     }
