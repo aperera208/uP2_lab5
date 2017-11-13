@@ -183,7 +183,7 @@ typedef struct
     int16_t Center;
 }PrevPlayer_t;
 
-
+bool restart;
 
 
 
@@ -191,6 +191,9 @@ typedef struct
 
 
 /*********************************************** Client Threads *********************************************************************/
+
+void WaitforButton();
+
 /*
  * Thread for client to join game
  */

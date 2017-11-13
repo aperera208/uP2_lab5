@@ -9,6 +9,7 @@
 #include "G8RTOS.h"
 #include "driverlib.h"
 
+
 GeneralPlayerInfo_t host_p0;
 GeneralPlayerInfo_t client_p1;
 SpecificPlayerInfo_t client_info;
@@ -242,7 +243,36 @@ void ReadJoystickClient()
  */
 void EndOfGameClient()
 {
-    while(1);
+    G8RTOS_KillAllOtherThreads();
+
+    if(GameZ.winner == Host)
+    {
+       LCD_Clear(PLAYER_RED);
+    }
+    else
+    {
+        LCD_Clear(PLAYER_BLUE);
+    }
+
+    bool ready = false;
+
+    while(1)
+    {
+        _i32 retval = -1;
+        while(retval != 0)
+        {
+            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            retval = ReceiveData((_u8*)&ready, sizeof(ready));
+            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+        }
+
+        if(ready)
+        {
+            G8RTOS_AddThread(JoinGame, "JoinGame", 100);
+            G8RTOS_KillSelf();
+        }
+
+    }
 }
 
 /*********************************************** Client Threads *********************************************************************/
@@ -367,7 +397,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(7); // Try sleeping for more on this to reduce lag
+        G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
 
     }
 }
@@ -590,15 +620,17 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= 16)
+        if(temp_games.LEDScores[Host] >= 2)
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
+            temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= 16)
+        if(temp_games.LEDScores[Client] >= 2)
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
+            temp_games.winner = Client;
         }
 
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -629,14 +661,17 @@ void GenerateBall()
     while(1)
     {
         G8RTOS_WaitSemaphore(&GSMutex);
+        numballs = GameZ.numberOfBalls;
+        G8RTOS_SignalSemaphore(&GSMutex);
 
-        if(GameZ.numberOfBalls < MAX_NUM_OF_BALLS)
+        if(numballs < MAX_NUM_OF_BALLS)
         {
             G8RTOS_AddThread(MoveBall, "MoveBall", 200);
-            GameZ.numberOfBalls++;
-            numballs = GameZ.numberOfBalls;
+            numballs++;
         }
 
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ.numberOfBalls = numballs;
         G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_Sleep(2000*numballs);
@@ -693,8 +728,42 @@ void ReadJoystickHost()
 •   Create an aperiodic thread that waits for the host’s button press (the client will just be waiting on the host to start a new game
 •   Once ready, send notification to client, reinitialize the game (adding back all the threads) and kill self
  */
-void EndOfGameHost();
+void EndOfGameHost()
+{
+    G8RTOS_KillAllOtherThreads();
 
+    if(GameZ.winner == Host)
+    {
+       LCD_Clear(PLAYER_RED);
+    }
+    else
+    {
+        LCD_Clear(PLAYER_BLUE);
+    }
+
+    // TODO: PRINT MESSAGE
+
+    G8RTOS_AddAperiodicEvent(WaitforButton, 200, PORT4_IRQn);
+
+    bool ready = true;
+    restart = false;
+
+    while(!restart)
+    {
+
+    }
+    SendData((_u8*)&ready, GameZ.player.IP_address, sizeof(ready));
+
+    G8RTOS_AddThread(CreateGame, "CreateGame", 100);
+
+    G8RTOS_KillSelf();
+
+}
+
+void WaitforButton()
+{
+    restart = true;
+}
 /*********************************************** Host Threads *********************************************************************/
 
 
@@ -932,8 +1001,8 @@ void InitBoardState()
     GameZ.gameDone = false;
     GameZ.LEDScores[Host] = 0;
     GameZ.LEDScores[Client] = 0;
-    GameZ.overallScores[Host] = 0;
-    GameZ.overallScores[Client] = 0;
+    //GameZ.overallScores[Host] = 0;
+    //GameZ.overallScores[Client] = 0;
 
     LCD_Clear(LCD_BLACK);
 
@@ -946,8 +1015,29 @@ void InitBoardState()
     LCD_DrawRectangle(client_p1.currentCenter - PADDLE_LEN_D2 , client_p1.currentCenter + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);   // Client player paddle
     LCD_DrawRectangle(host_p0.currentCenter - PADDLE_LEN_D2, host_p0.currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y , host_p0.color);     // Host player paddle
 
-    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, "00", client_p1.color);      // Client score
-    LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, "00", host_p0.color);        // Host score
+    char buffer_c[3];
+    char buffer_h[3];
+
+    //itoa(GameZ.overallScores[Client],buffer_c,10);
+    //itoa(GameZ.overallScores[Host],buffer_h,10);
+
+    sprintf(buffer_c, "%d", GameZ.overallScores[Client] );
+    sprintf(buffer_h, "%d", GameZ.overallScores[Host] );
+
+    if(GameZ.overallScores[Client] < 10)
+    {
+        buffer_c[1] = buffer_c[0];
+        buffer_c[0] = '0';
+    }
+    if(GameZ.overallScores[Host] < 10)
+    {
+        buffer_h[1] = buffer_h[0];
+        buffer_h[0] = '0';
+    }
+
+
+    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, buffer_c, client_p1.color);      // Client score
+    LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, buffer_h, host_p0.color);        // Host score
 
 }
 
@@ -964,5 +1054,8 @@ void StartMenu()
 
     LCD_Text((MAX_SCREEN_X>>1)-16, (MAX_SCREEN_Y>>2), "HOST" , LCD_BLACK);
     LCD_Text((MAX_SCREEN_X - (MAX_SCREEN_X>>2)-24), (MAX_SCREEN_Y>>1), "CLIENT" , LCD_BLACK);
+
+    GameZ.overallScores[Host] = 9;
+    GameZ.overallScores[Client] = 9;
 
 }
