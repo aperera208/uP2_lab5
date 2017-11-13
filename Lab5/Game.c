@@ -876,17 +876,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
         if(offset > 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+           // G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
 
     }
@@ -896,17 +896,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         if(offset > 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+           // G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
 
     }
