@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Mon Nov 13 17:52:11 2017
+>> Linked Mon Nov 13 18:00:22 2017
 
 OUTPUT FILE NAME:   <Lab5.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 0001af65
@@ -485,7 +485,7 @@ address   name
 0001a4ff  ClockSys_GetSysFreq                                   
 0001a46d  ClockSys_SetMaxFreq                                   
 000152b9  CopyPingResultsToReport                               
-00012361  CreateGame                                            
+0001235d  CreateGame                                            
 2000ce34  CurrentlyRunningThread                                
 0001b707  DMA_ERR_IRQHandler                                    
 0001b707  DMA_INT0_IRQHandler                                   
@@ -497,8 +497,8 @@ address   name
 000184d9  Delay                                                 
 0001b4dd  DelayMs                                               
 00019b7f  Disable_Joystick_Interrupt                            
-00012afd  DrawObjects                                           
-00012dc7  DrawPlayer                                            
+00012b01  DrawObjects                                           
+00012dcb  DrawPlayer                                            
 00018527  EUSCIA0_IRQHandler                                    
 00018527  EUSCIA0_IRQHandler                                    
 0001b707  EUSCIA1_IRQHandler                                    
@@ -511,7 +511,7 @@ address   name
 0001b707  EUSCIB3_IRQHandler                                    
 0001b6d9  EndCriticalSection                                    
 00012275  EndOfGameClient                                       
-00012aa1  EndOfGameHost                                         
+00012aa5  EndOfGameHost                                         
 0001b707  FLCTL_IRQHandler                                      
 0001b707  FPU_IRQHandler                                        
 00016a15  G8RTOS_AddAperiodicEvent                              
@@ -534,18 +534,18 @@ address   name
 0001b0fd  GPIO_setAsPeripheralModuleFunctionOutputPin           
 2000ce38  GSMutex                                               
 2000cd0c  GameZ                                                 
-000129f7  GenerateBall                                          
+000129fb  GenerateBall                                          
 0001b309  GetASCIICode                                          
 00019b95  GetJoystickCoordinates                                
 00018425  GetLEDStatus                                          
-00012d95  GetPlayerRole                                         
+00012d99  GetPlayerRole                                         
 0001a937  HOSTtime                                              
 0001a8e9  HOSTtime64                                            
 0001b707  HardFault_Handler                                     
 00019891  I2C_init                                              
 00018d0f  I2C_routine                                           
-00012afb  IdleThread                                            
-00012f45  InitBoardState                                        
+00012aff  IdleThread                                            
+00012f49  InitBoardState                                        
 2000ce5b  IntIsMasked                                           
 00012031  JoinGame                                              
 00019ac5  Joystick_Init_Without_Interrupt                       
@@ -569,7 +569,7 @@ address   name
 0001826b  MaskIntHdlr                                           
 0001b707  MemManage_Handler                                     
 000125ed  MoveBall                                              
-00012c91  MoveLEDs                                              
+00012c95  MoveLEDs                                              
 0001b707  NMI_Handler                                           
 0001b707  PCM_IRQHandler                                        
 0001b487  PCM_getCoreVoltageLevel                               
@@ -592,9 +592,9 @@ address   name
 0001a5d1  PutChar                                               
 0001b707  RTC_C_IRQHandler                                      
 00012209  ReadJoystickClient                                    
-00012a47  ReadJoystickHost                                      
+00012a4b  ReadJoystickHost                                      
 00017095  ReceiveData                                           
-000124db  ReceiveDataFromClient                                 
+000124dd  ReceiveDataFromClient                                 
 0001216b  ReceiveDataFromHost                                   
 0001b6fb  Reset_Handler                                         
 UNDEFED   SHT$$INIT_ARRAY$$Base                                 
@@ -608,7 +608,7 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 0001b707  SVC_Handler                                           
 00018493  SelAntenna                                            
 00017075  SendData                                              
-0001248f  SendDataToClient                                      
+0001248b  SendDataToClient                                      
 000121cd  SendDataToHost                                        
 00017159  SimpleLinkGeneralEventHandler                         
 0001714d  SimpleLinkHttpServerCallback                          
@@ -618,7 +618,7 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 2000d2a0  SockIDRx                                              
 2000d2a2  SockIDTx                                              
 0001b6d1  StartCriticalSection                                  
-0001307b  StartMenu                                             
+0001307d  StartMenu                                             
 0001b74d  SysCtlDelay                                           
 0001b6b1  SysCtl_disableNMISource                               
 0001b6c1  SysCtl_enableNMISource                                
@@ -645,7 +645,7 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 00017703  TP_ReadXY                                             
 00017773  TP_ReadY                                              
 00018273  UnMaskIntHdlr                                         
-00012de9  UpdatePlayerOnScreen                                  
+00012ded  UpdatePlayerOnScreen                                  
 0001b707  UsageFault_Handler                                    
 2000d2d8  V_bmm150_maual_auto_condition_u8                      
 2000d2dc  V_fifo_time_U32                                       
@@ -1716,21 +1716,21 @@ address   name
 000121cd  SendDataToHost                                        
 00012209  ReadJoystickClient                                    
 00012275  EndOfGameClient                                       
-00012361  CreateGame                                            
-0001248f  SendDataToClient                                      
-000124db  ReceiveDataFromClient                                 
+0001235d  CreateGame                                            
+0001248b  SendDataToClient                                      
+000124dd  ReceiveDataFromClient                                 
 000125ed  MoveBall                                              
-000129f7  GenerateBall                                          
-00012a47  ReadJoystickHost                                      
-00012aa1  EndOfGameHost                                         
-00012afb  IdleThread                                            
-00012afd  DrawObjects                                           
-00012c91  MoveLEDs                                              
-00012d95  GetPlayerRole                                         
-00012dc7  DrawPlayer                                            
-00012de9  UpdatePlayerOnScreen                                  
-00012f45  InitBoardState                                        
-0001307b  StartMenu                                             
+000129fb  GenerateBall                                          
+00012a4b  ReadJoystickHost                                      
+00012aa5  EndOfGameHost                                         
+00012aff  IdleThread                                            
+00012b01  DrawObjects                                           
+00012c95  MoveLEDs                                              
+00012d99  GetPlayerRole                                         
+00012dcb  DrawPlayer                                            
+00012ded  UpdatePlayerOnScreen                                  
+00012f49  InitBoardState                                        
+0001307d  StartMenu                                             
 0001315d  _sl_BuildAddress                                      
 000131ad  _sl_TruncatePayloadByProtocol                         
 00013275  _sl_ParseAddress                                      
