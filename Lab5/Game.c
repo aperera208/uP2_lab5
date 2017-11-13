@@ -265,6 +265,8 @@ void EndOfGameClient()
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
+        SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
+
 
         G8RTOS_AddThread(JoinGame, "JoinGame", 100);
         G8RTOS_KillSelf();
@@ -744,6 +746,14 @@ void EndOfGameHost()
 
     GetPlayerRole();
     SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
+
+    _i32 retval = -1;
+    while(retval != 0)
+    {
+        //G8RTOS_WaitSemaphore(&CC_3100Mutex);
+        retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
+        //G8RTOS_SignalSemaphore(&CC_3100Mutex);
+    }
 
     G8RTOS_AddThread(CreateGame, "CreateGame", 100);
 
