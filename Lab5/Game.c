@@ -473,6 +473,10 @@ void MoveBall()
             int32_t wy = w * dy_host;
             int32_t hx = h * dx_host;
 
+            G8RTOS_WaitSemaphore(&GSMutex);
+            GameZ.balls[i].color = PLAYER_RED;
+            G8RTOS_SignalSemaphore(&GSMutex);
+
             if (wy > hx)
                 if (wy > -hx)
                 {
@@ -504,6 +508,10 @@ void MoveBall()
         {
             int32_t wy = w * dy_client;
             int32_t hx = h * dx_client;
+
+            G8RTOS_WaitSemaphore(&GSMutex);
+            GameZ.balls[i].color = PLAYER_BLUE;
+            G8RTOS_SignalSemaphore(&GSMutex);
 
             if (wy > hx)
                 if (wy > -hx)
@@ -565,7 +573,8 @@ void MoveBall()
             kill = true;
             GameZ.balls[i].alive = false;
 
-            if(GameZ.balls[i].color == LCD_BLUE)
+
+            if(GameZ.balls[i].color == PLAYER_BLUE)
             {
                 GameZ.LEDScores[Client]++;
             }
@@ -576,14 +585,23 @@ void MoveBall()
             kill = true;
             GameZ.balls[i].alive = false;
 
-            if(GameZ.balls[i].color == LCD_RED)
+            if(GameZ.balls[i].color == PLAYER_RED)
             {
                 GameZ.LEDScores[Host]++;
             }
             GameZ.numberOfBalls--;
         }
 
-
+        if(GameZ.LEDScores[Host] >= 16)
+        {
+            GameZ.overallScores[Host]++;
+            GameZ.gameDone = true;
+        }
+        if(GameZ.LEDScores[Client] >= 16)
+        {
+            GameZ.overallScores[Client]++;
+            GameZ.gameDone = true;
+        }
 
         G8RTOS_SignalSemaphore(&GSMutex);
 
