@@ -12,7 +12,7 @@ BoardSupportPackage/src/LED.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmI
 BoardSupportPackage/src/LED.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h
 BoardSupportPackage/src/LED.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h
 BoardSupportPackage/src/LED.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h
-BoardSupportPackage/src/LED.obj: C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LED.h
+BoardSupportPackage/src/LED.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h
 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/src/LED.c: 
 C:/ti/ccsv7/ccs_base/arm/include/msp.h: 
@@ -26,4 +26,4 @@ C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h:
 C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
 C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
 C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/Libraries/BoardSupportPackage/inc/LED.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h: 

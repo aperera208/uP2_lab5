@@ -104,7 +104,7 @@ void JoinGame()
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
-    G8RTOS_AddThread(ReceiveDataFromHost, "Receive data host", 200);
+    G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
     G8RTOS_KillSelf();
@@ -363,7 +363,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5);
+        G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
 
     }
 }
@@ -814,6 +814,8 @@ void InitBoardState()
     GameZ.overallScores[Host] = 0;
     GameZ.overallScores[Client] = 0;
 
+    LCD_Clear(LCD_BLACK);
+
     LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MIN_Y, ARENA_MAX_Y, LCD_BLACK);           // Draw square black arena
     LCD_DrawRectangle(ARENA_MIN_X, ARENA_MIN_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw left edge of arena in white
     LCD_DrawRectangle(ARENA_MAX_X, ARENA_MAX_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw right edge of arena in white
@@ -825,5 +827,21 @@ void InitBoardState()
 
     LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, "00", client_p1.color);      // Client score
     LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, "00", host_p0.color);        // Host score
+
+}
+
+
+void StartMenu()
+{
+    LCD_Text((MAX_SCREEN_X>>1)-64, (MAX_SCREEN_Y>>4), "WELCOME TO PONG!" , LCD_WHITE);
+
+    LCD_DrawRectangle((MIN_SCREEN_X + (MAX_SCREEN_X>>2)-32), (MIN_SCREEN_X +(MAX_SCREEN_X>>2)+32), (MAX_SCREEN_Y>>1)-24, (MAX_SCREEN_Y>>1)+40, LCD_WHITE);
+    LCD_DrawRectangle((MAX_SCREEN_X>>1)-32, (MAX_SCREEN_X>>1)+32, (MAX_SCREEN_Y - (MAX_SCREEN_Y>>2)-24), (MAX_SCREEN_Y - (MAX_SCREEN_Y>>2)+40), LCD_WHITE);
+
+    LCD_DrawRectangle((MAX_SCREEN_X>>1)-32, (MAX_SCREEN_X>>1)+32, (MAX_SCREEN_Y>>2)-24, (MAX_SCREEN_Y>>2)+40, LCD_RED);
+    LCD_DrawRectangle((MAX_SCREEN_X - (MAX_SCREEN_X>>2)-32), (MAX_SCREEN_X - (MAX_SCREEN_X>>2)+32), (MAX_SCREEN_Y>>1)-24, (MAX_SCREEN_Y>>1)+40, LCD_BLUE);
+
+    LCD_Text((MAX_SCREEN_X>>1)-16, (MAX_SCREEN_Y>>2), "HOST" , LCD_BLACK);
+    LCD_Text((MAX_SCREEN_X - (MAX_SCREEN_X>>2)-24), (MAX_SCREEN_Y>>1), "CLIENT" , LCD_BLACK);
 
 }

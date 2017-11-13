@@ -108,39 +108,25 @@ void LCD_DrawRectangle(int16_t xStart, int16_t xEnd, int16_t yStart, int16_t yEn
 
     /* Check special cases for out of bounds */
 
-    if(xStart > MAX_SCREEN_X)
-    {
-        xStart = MIN_SCREEN_X;
-    }
-    else if(xEnd > MAX_SCREEN_X)
-    {
-        xEnd = MIN_SCREEN_X;
-    }
-    else if(yEnd > MAX_SCREEN_Y)
-    {
-        yEnd = MIN_SCREEN_Y;
-    }
-    else if(yStart > MAX_SCREEN_Y)
-    {
-        yStart = MIN_SCREEN_Y;
-    }
 
-    if(xStart < MIN_SCREEN_X)
-    {
-        xStart = MAX_SCREEN_X;
-    }
-    else if(xEnd < MIN_SCREEN_X)
+    if(xEnd > MAX_SCREEN_X)
     {
         xEnd = MAX_SCREEN_X;
     }
-    else if(yEnd < MIN_SCREEN_Y)
+    else if(xStart < MIN_SCREEN_X)
+    {
+        xStart = MIN_SCREEN_X;
+    }
+
+    if(yEnd > MAX_SCREEN_Y)
     {
         yEnd = MAX_SCREEN_Y;
     }
     else if(yStart < MIN_SCREEN_Y)
     {
-        yStart = MAX_SCREEN_Y;
+        yStart = MIN_SCREEN_Y;
     }
+
 
 
     /* Set window area for high-speed RAM write */

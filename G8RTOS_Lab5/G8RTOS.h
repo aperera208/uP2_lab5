@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "Game.h"
 #include "G8RTOS_Semaphores.h"
 #include "G8RTOS_Scheduler.h"
 #include "G8RTOS_FIFO.h"
@@ -18,7 +19,6 @@
 #include "G8RTOS_CriticalSection.h"
 #include "msp.h"
 #include "BSP.h"
-#include "Game.h"
 
 
 

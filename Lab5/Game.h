@@ -14,6 +14,8 @@
 #include "cc3100_usage.h"
 #include "LCD.h"
 #include "G8RTOS.h"
+#include "G8RTOS_Semaphores.h"
+
 /*********************************************** Includes ********************************************************************/
 
 /*********************************************** Externs ********************************************************************/
@@ -21,6 +23,8 @@
 extern semaphore_t LCDMutex;
 extern semaphore_t CC_3100Mutex;
 extern semaphore_t PlayerMutex;
+extern semaphore_t GSMutex;
+
 
 /*********************************************** Externs ********************************************************************/
 
@@ -52,7 +56,7 @@ extern semaphore_t PlayerMutex;
 #define HORIZ_CENTER_MAX_PL          (ARENA_MAX_X - PADDLE_LEN_D2)
 #define HORIZ_CENTER_MIN_PL          (ARENA_MIN_X + PADDLE_LEN_D2)
 
-/* Constant enters of each player */
+/* Constant centers of each player */
 #define TOP_PLAYER_CENTER_Y          (ARENA_MIN_Y + PADDLE_WID_D2)
 #define BOTTOM_PLAYER_CENTER_Y       (ARENA_MAX_Y - PADDLE_WID_D2)
 
@@ -89,6 +93,7 @@ extern semaphore_t PlayerMutex;
 #define BLUE_LED BIT2
 #define RED_LED BIT0
 
+
 /* Enums for player colors */
 typedef enum
 {
@@ -107,6 +112,8 @@ typedef enum
 
 /*********************************************** Data Structures ********************************************************************/
 /*********************************************** Data Structures ********************************************************************/
+
+
 #pragma pack ( push, 1)
 /*
  * Struct to be sent from the client to the host
@@ -175,6 +182,11 @@ typedef struct
 {
     int16_t Center;
 }PrevPlayer_t;
+
+
+
+
+
 /*********************************************** Data Structures ********************************************************************/
 
 
@@ -224,6 +236,11 @@ void SendDataToClient();
 void ReceiveDataFromClient();
 
 /*
+ * Thread to move a single ball
+ */
+void MoveBall();
+
+/*
  * Generate Ball thread
  */
 void GenerateBall();
@@ -233,10 +250,6 @@ void GenerateBall();
  */
 void ReadJoystickHost();
 
-/*
- * Thread to move a single ball
- */
-void MoveBall();
 
 /*
  * End of game for the host
@@ -290,6 +303,11 @@ void UpdateBallOnScreen(PrevBall_t * previousBall, Ball_t * currentBall, uint16_
  * Initializes and prints initial game state
  */
 void InitBoardState();
+
+/*
+ * Start Menu
+ */
+void StartMenu();
 
 /*********************************************** Public Functions *********************************************************************/
 

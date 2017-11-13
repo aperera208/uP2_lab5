@@ -40,6 +40,7 @@ Game.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h
 Game.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h
 Game.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/time.h
 Game.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/abi_prefix.h
+Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/Game.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Semaphores.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Scheduler.h
@@ -59,7 +60,6 @@ Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/ClockSys.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/Joystick.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h
-Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5_gameh/Game.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/driverlib.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/adc14.h
 Game.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/aes256.h
@@ -131,6 +131,7 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/time.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/abi_prefix.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/Game.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Semaphores.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/G8RTOS_Lab5/G8RTOS_Scheduler.h: 
@@ -150,7 +151,6 @@ C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/BSP.h:
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/ClockSys.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/Joystick.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/inc/LED.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5_gameh/Game.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/driverlib.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/adc14.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/BoardSupportPackage/DriverLib/aes256.h: 

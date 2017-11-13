@@ -41,11 +41,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/G8RTOS_Lab5</locationURI>
 		</link>
 		<link>
-			<name>Game.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Github_repo/Lab5/Game.h</locationURI>
-		</link>
-		<link>
 			<name>Lab5_gameh</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Lab5_gameh</locationURI>
