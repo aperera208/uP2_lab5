@@ -512,9 +512,9 @@ void MoveBall()
     while(1)
     {
 
-        G8RTOS_WaitSemaphore(&GSMutex);
+        //G8RTOS_WaitSemaphore(&GSMutex);
         temp_games = GameZ;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        //G8RTOS_SignalSemaphore(&GSMutex);
 
 
         int32_t dx_host = temp_games.balls[i].currentCenterX - temp_games.players[Host].currentCenter;
@@ -657,9 +657,9 @@ void MoveBall()
             temp_games.winner = Client;
         }
 
-        G8RTOS_WaitSemaphore(&GSMutex);
+        //G8RTOS_WaitSemaphore(&GSMutex);
         GameZ = temp_games;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        //G8RTOS_SignalSemaphore(&GSMutex);
 
 
 
@@ -879,7 +879,7 @@ void DrawObjects()
         prevhost_p0.Center = host_p0.currentCenter;
         prevclient_p1.Center = client_p1.currentCenter;
 
-        G8RTOS_Sleep(20);
+        G8RTOS_Sleep(10);
 
     }
 
