@@ -260,9 +260,9 @@ void EndOfGameClient()
         _i32 retval = -1;
         while(retval != 0)
         {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            //G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
 
