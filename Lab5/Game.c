@@ -447,6 +447,9 @@ void MoveBall()
     GameZ = temp_games;
     G8RTOS_SignalSemaphore(&GSMutex);
 
+    int32_t w = 0.5 * (BALL_SIZE + PADDLE_WID);
+    int32_t h = 0.5 * (BALL_SIZE + PADDLE_LEN);
+
 
     while(1)
     {
@@ -487,7 +490,74 @@ void MoveBall()
             GameZ.numberOfBalls--;
         }
 
+        int32_t dx_host = GameZ.balls[i].currentCenterX - GameZ.players[Host].currentCenter;
+        int32_t dy_host = GameZ.balls[i].currentCenterY - PADDLE_LEN + VERT_CENTER_MAX_BALL;
+
+        int32_t dx_client = GameZ.balls[i].currentCenterX - GameZ.players[Client].currentCenter;
+        int32_t dy_client = GameZ.balls[i].currentCenterY -  PADDLE_LEN + VERT_CENTER_MIN_BALL;
+
         G8RTOS_SignalSemaphore(&GSMutex);
+
+        if (abs(dx_host) <= w && abs(dy_host) <= h)
+        {
+            /* collision! */
+            int32_t wy = w * dy_host;
+            int32_t hx = h * dx_host;
+
+            if (wy > hx)
+                if (wy > -hx)
+                {
+                   /* collision at the top */
+                    x_vel = 0;
+                    y_vel = -1*y_vel - 1;
+                }
+
+                else
+                {
+                    /* on the left */
+                    y_vel = -1*y_vel - 1;
+                    x_vel = -1*(abs(x_vel)+1);
+                }
+            else
+                if (wy > -hx)
+                {
+                    /* on the right */
+                    y_vel = -1*y_vel - 1;
+                    x_vel = (abs(x_vel)+1);
+                }
+                //else
+                //{
+
+                //}
+
+        }
+        else if(abs(dx_client) <= w && abs(dy_client) <= h)
+        {
+            int32_t wy = w * dy_client;
+            int32_t hx = h * dx_client;
+
+            if (wy > hx)
+                if (wy > -hx)
+                {
+                   /* collision at the top */
+                    x_vel = 0;
+                    y_vel = -1*y_vel + 1;
+                }
+
+                else
+                {
+                    /* on the left */
+                    y_vel = -1*y_vel + 1;
+                    x_vel = -1*(abs(x_vel)+1);
+                }
+            else
+                if (wy > -hx)
+                {
+                    /* on the right */
+                    y_vel = -1*y_vel + 1;
+                    x_vel = (abs(x_vel)+1);
+                }
+        }
 
 
         if(kill == true)
