@@ -141,11 +141,13 @@ void ReceiveDataFromHost()
         GameZ = temp_gamestate;
         G8RTOS_SignalSemaphore(&GSMutex);
 
+        /*
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.player = client_info;
         GameZ.players[Client].currentCenter = client_info.displacement;
         //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
+        */
 
         if(temp_gamestate.gameDone == true)
         {
@@ -456,7 +458,7 @@ void MoveBall()
         G8RTOS_WaitSemaphore(&GSMutex);
 
         int32_t dx_host = GameZ.balls[i].currentCenterX - GameZ.players[Host].currentCenter;
-        int32_t dy_host = GameZ.balls[i].currentCenterY - (PADDLE_WID + VERT_CENTER_MAX_BALL);
+        int32_t dy_host = GameZ.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID-4);
 
         int32_t dx_client = GameZ.balls[i].currentCenterX - GameZ.players[Client].currentCenter;
         int32_t dy_client = GameZ.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
@@ -522,6 +524,24 @@ void MoveBall()
                     y_vel = -1*y_vel + 1;
                     x_vel = (abs(x_vel)+1);
                 }
+        }
+
+        if(x_vel > MAX_BALL_SPEED)
+        {
+            x_vel = MAX_BALL_SPEED;
+        }
+        else if ( x_vel < -1*MAX_BALL_SPEED)
+        {
+            x_vel = -1*MAX_BALL_SPEED;
+        }
+
+        if(y_vel > MAX_BALL_SPEED)
+        {
+            y_vel = MAX_BALL_SPEED;
+        }
+        else if( y_vel < -1*MAX_BALL_SPEED)
+        {
+            y_vel = -1*MAX_BALL_SPEED;
         }
 
         G8RTOS_WaitSemaphore(&GSMutex);
