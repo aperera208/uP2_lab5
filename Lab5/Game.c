@@ -100,7 +100,7 @@ void JoinGame()
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     //G8RTOS_Sleep(3000);
 
-    G8RTOS_AddThread(DrawObjects, "Draw Objects", 195);
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 190);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 190);
@@ -154,7 +154,7 @@ void ReceiveDataFromHost()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5);
+        G8RTOS_Sleep(10);
 
     }
 
@@ -186,7 +186,7 @@ void SendDataToHost()
 
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
-        G8RTOS_Sleep(2);
+        G8RTOS_Sleep(5);
 
     }
 
@@ -329,7 +329,7 @@ void CreateGame()
 
     G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
     G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
-    G8RTOS_AddThread(DrawObjects, "Draw Objects", 195);
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 190);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 190);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
@@ -367,7 +367,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
+        G8RTOS_Sleep(10); // Try sleeping for more on this to reduce lag
 
     }
 }
@@ -401,7 +401,7 @@ void ReceiveDataFromClient()
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
-        G8RTOS_Sleep(2);
+        G8RTOS_Sleep(5);
     }
 }
 /*
