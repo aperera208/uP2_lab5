@@ -243,6 +243,10 @@ void ReadJoystickClient()
  */
 void EndOfGameClient()
 {
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    G8RTOS_WaitSemaphore(&CC_3100Mutex);
+
     G8RTOS_KillAllOtherThreads();
 
     if(GameZ.winner == Host)
@@ -729,7 +733,15 @@ void ReadJoystickHost()
  */
 void EndOfGameHost()
 {
+
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    G8RTOS_WaitSemaphore(&CC_3100Mutex);
+
+
     G8RTOS_KillAllOtherThreads();
+
+    G8RTOS_Sleep(1000);
 
     if(GameZ.winner == Host)
     {
@@ -746,7 +758,8 @@ void EndOfGameHost()
 
     GetPlayerRole();
 
-
+    while(1)
+    {
     SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
 
     _i32 retval = -1;
@@ -760,6 +773,7 @@ void EndOfGameHost()
     G8RTOS_AddThread(CreateGame, "CreateGame", 100);
 
     G8RTOS_KillSelf();
+    }
 
 }
 
