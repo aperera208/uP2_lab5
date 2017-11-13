@@ -457,16 +457,18 @@ void MoveBall()
 
     while(1)
     {
+
         G8RTOS_WaitSemaphore(&GSMutex);
-
-        int32_t dx_host = GameZ.balls[i].currentCenterX - GameZ.players[Host].currentCenter;
-        int32_t dy_host = GameZ.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID-4);
-
-        int32_t dx_client = GameZ.balls[i].currentCenterX - GameZ.players[Client].currentCenter;
-        int32_t dy_client = GameZ.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
-
+        temp_games = GameZ;
         G8RTOS_SignalSemaphore(&GSMutex);
-        G8RTOS_Sleep(1);
+
+
+        int32_t dx_host = temp_games.balls[i].currentCenterX - temp_games.players[Host].currentCenter;
+        int32_t dy_host = temp_games.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID-4);
+
+        int32_t dx_client = temp_games.balls[i].currentCenterX - temp_games.players[Client].currentCenter;
+        int32_t dy_client = temp_games.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
+
 
         if (abs(dx_host) <= w && abs(dy_host) <= h)
         {
@@ -474,9 +476,7 @@ void MoveBall()
             int32_t wy = w * dy_host;
             int32_t hx = h * dx_host;
 
-            G8RTOS_WaitSemaphore(&GSMutex);
-            GameZ.balls[i].color = PLAYER_RED;
-            G8RTOS_SignalSemaphore(&GSMutex);
+            temp_games.balls[i].color = PLAYER_RED;
 
             if (wy > hx)
                 if (wy > -hx)
@@ -510,9 +510,7 @@ void MoveBall()
             int32_t wy = w * dy_client;
             int32_t hx = h * dx_client;
 
-            G8RTOS_WaitSemaphore(&GSMutex);
-            GameZ.balls[i].color = PLAYER_BLUE;
-            G8RTOS_SignalSemaphore(&GSMutex);
+            temp_games.balls[i].color = PLAYER_BLUE;
 
             if (wy > hx)
                 if (wy > -hx)
@@ -555,57 +553,57 @@ void MoveBall()
             y_vel = -1*MAX_BALL_SPEED;
         }
 
+        temp_games.balls[i].currentCenterX += x_vel;
+        temp_games.balls[i].currentCenterY += y_vel;
+
+        if(temp_games.balls[i].currentCenterX > HORIZ_CENTER_MAX_BALL)
+        {
+            temp_games.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
+            x_vel = -1*x_vel;
+        }
+        if(temp_games.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL + 1)
+        {
+            temp_games.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
+            x_vel = -1*x_vel;
+        }
+        if(temp_games.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
+        {
+            kill = true;
+            temp_games.balls[i].alive = false;
+
+
+            if(temp_games.balls[i].color == PLAYER_BLUE)
+            {
+                temp_games.LEDScores[Client]++;
+            }
+            temp_games.numberOfBalls--;
+        }
+        if(temp_games.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
+        {
+            kill = true;
+            temp_games.balls[i].alive = false;
+
+            if(temp_games.balls[i].color == PLAYER_RED)
+            {
+                temp_games.LEDScores[Host]++;
+            }
+            temp_games.numberOfBalls--;
+        }
+
+        if(temp_games.LEDScores[Host] >= 16)
+        {
+            temp_games.overallScores[Host]++;
+            temp_games.gameDone = true;
+        }
+        if(temp_games.LEDScores[Client] >= 16)
+        {
+            temp_games.overallScores[Client]++;
+            temp_games.gameDone = true;
+        }
+
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.balls[i].currentCenterX += x_vel;
-        GameZ.balls[i].currentCenterY += y_vel;
-
-        if(GameZ.balls[i].currentCenterX > HORIZ_CENTER_MAX_BALL)
-        {
-            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
-            x_vel = -1*x_vel;
-        }
-        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL + 1)
-        {
-            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
-            x_vel = -1*x_vel;
-        }
-        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
-        {
-            kill = true;
-            GameZ.balls[i].alive = false;
-
-
-            if(GameZ.balls[i].color == PLAYER_BLUE)
-            {
-                GameZ.LEDScores[Client]++;
-            }
-            GameZ.numberOfBalls--;
-        }
-        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
-        {
-            kill = true;
-            GameZ.balls[i].alive = false;
-
-            if(GameZ.balls[i].color == PLAYER_RED)
-            {
-                GameZ.LEDScores[Host]++;
-            }
-            GameZ.numberOfBalls--;
-        }
-
-        if(GameZ.LEDScores[Host] >= 16)
-        {
-            GameZ.overallScores[Host]++;
-            GameZ.gameDone = true;
-        }
-        if(GameZ.LEDScores[Client] >= 16)
-        {
-            GameZ.overallScores[Client]++;
-            GameZ.gameDone = true;
-        }
-
+        GameZ = temp_games;
         G8RTOS_SignalSemaphore(&GSMutex);
-        G8RTOS_Sleep(1);
 
 
 
@@ -614,7 +612,7 @@ void MoveBall()
             G8RTOS_KillSelf();
         }
 
-        G8RTOS_Sleep(32);
+        G8RTOS_Sleep(35);
 
 
     }
