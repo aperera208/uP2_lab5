@@ -192,7 +192,6 @@ bool restart;
 
 /*********************************************** Client Threads *********************************************************************/
 
-void WaitforButton();
 
 /*
  * Thread for client to join game

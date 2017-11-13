@@ -254,7 +254,6 @@ void EndOfGameClient()
         LCD_Clear(PLAYER_BLUE);
     }
 
-    bool ready = false;
 
     while(1)
     {
@@ -262,15 +261,14 @@ void EndOfGameClient()
         while(retval != 0)
         {
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&ready, sizeof(ready));
+            retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
-        if(ready)
-        {
-            G8RTOS_AddThread(JoinGame, "JoinGame", 100);
-            G8RTOS_KillSelf();
-        }
+
+        G8RTOS_AddThread(JoinGame, "JoinGame", 100);
+        G8RTOS_KillSelf();
+
 
     }
 }
@@ -725,7 +723,6 @@ void ReadJoystickHost()
 •   Re-initialize semaphores
 •   Clear screen with the winner’s color
 •   Print some message that waits for the host’s action to start a new game
-•   Create an aperiodic thread that waits for the host’s button press (the client will just be waiting on the host to start a new game
 •   Once ready, send notification to client, reinitialize the game (adding back all the threads) and kill self
  */
 void EndOfGameHost()
@@ -743,16 +740,10 @@ void EndOfGameHost()
 
     // TODO: PRINT MESSAGE
 
-    G8RTOS_AddAperiodicEvent(WaitforButton, 200, PORT4_IRQn);
 
-    bool ready = true;
-    restart = false;
 
-    while(!restart)
-    {
-
-    }
-    SendData((_u8*)&ready, GameZ.player.IP_address, sizeof(ready));
+    GetPlayerRole();
+    SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
 
     G8RTOS_AddThread(CreateGame, "CreateGame", 100);
 
@@ -760,10 +751,7 @@ void EndOfGameHost()
 
 }
 
-void WaitforButton()
-{
-    restart = true;
-}
+
 /*********************************************** Host Threads *********************************************************************/
 
 
