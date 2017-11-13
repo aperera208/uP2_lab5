@@ -473,9 +473,9 @@ void MoveBall()
     GameState_t temp_games;
     bool kill = false;
 
-    G8RTOS_WaitSemaphore(&GSMutex);
+    //G8RTOS_WaitSemaphore(&GSMutex);
     temp_games = GameZ;
-    G8RTOS_SignalSemaphore(&GSMutex);
+    //G8RTOS_SignalSemaphore(&GSMutex);
 
     srand(time(NULL));
 
@@ -501,9 +501,9 @@ void MoveBall()
     int x_vel = (rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
     int y_vel = (rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
 
-    G8RTOS_WaitSemaphore(&GSMutex);
+    //G8RTOS_WaitSemaphore(&GSMutex);
     GameZ = temp_games;
-    G8RTOS_SignalSemaphore(&GSMutex);
+    //G8RTOS_SignalSemaphore(&GSMutex);
 
     int32_t w = 0.5 * (BALL_SIZE + PADDLE_LEN);
     int32_t h = 0.5 * (BALL_SIZE + PADDLE_WID);
@@ -644,13 +644,13 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= 2)
+        if(temp_games.LEDScores[Host] >= 16)
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
             temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= 2)
+        if(temp_games.LEDScores[Client] >= 16)
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
@@ -684,9 +684,9 @@ void GenerateBall()
     int numballs = 0;
     while(1)
     {
-        G8RTOS_WaitSemaphore(&GSMutex);
+        //G8RTOS_WaitSemaphore(&GSMutex);
         numballs = GameZ.numberOfBalls;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        //G8RTOS_SignalSemaphore(&GSMutex);
 
         if(numballs < MAX_NUM_OF_BALLS)
         {
@@ -694,9 +694,9 @@ void GenerateBall()
             numballs++;
         }
 
-        G8RTOS_WaitSemaphore(&GSMutex);
+        //G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.numberOfBalls = numballs;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        //G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_Sleep(2000*numballs);
     }
@@ -776,7 +776,7 @@ void EndOfGameHost()
 
 
 
-    GetPlayerRole();
+    //GetPlayerRole();
 
     while(1)
     {
