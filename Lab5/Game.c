@@ -394,7 +394,7 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
-            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+            G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
         G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
@@ -874,7 +874,7 @@ void MoveLEDs()
             LED_write(red, led_pattern);
         }
 
-        if(GameZ.LEDScores[Client] != prev_leds[Client])
+        if(temp_gamez.LEDScores[Client] != prev_leds[Client])
         {
 
             prev_leds[Client] = temp_gamez.LEDScores[Client];
