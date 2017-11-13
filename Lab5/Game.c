@@ -217,12 +217,13 @@ void ReadJoystickClient()
         }
         G8RTOS_SignalSemaphore(&PlayerMutex);
 
+        /*
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.player = client_info;
         GameZ.players[Client].currentCenter = client_info.displacement;
         //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
-
+*/
         G8RTOS_Sleep(10);
 
     }
@@ -324,7 +325,6 @@ void CreateGame()
     G8RTOS_InitSemaphore(&GSMutex, 1);
     //G8RTOS_InitSemaphore(&PlayerMutex, 1);
 
-    G8RTOS_AddThread(IdleThread, "Idle", 255);
     //G8RTOS_Sleep(3000);
 
     G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
@@ -333,6 +333,8 @@ void CreateGame()
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+
+    G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     G8RTOS_KillSelf();
 }
