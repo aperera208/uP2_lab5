@@ -447,54 +447,19 @@ void MoveBall()
     GameZ = temp_games;
     G8RTOS_SignalSemaphore(&GSMutex);
 
-    int32_t w = 0.5 * (BALL_SIZE + PADDLE_WID);
-    int32_t h = 0.5 * (BALL_SIZE + PADDLE_LEN);
+    int32_t w = 0.5 * (BALL_SIZE + PADDLE_LEN);
+    int32_t h = 0.5 * (BALL_SIZE + PADDLE_WID);
 
 
     while(1)
     {
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.balls[i].currentCenterX += x_vel;
-        GameZ.balls[i].currentCenterY += y_vel;
-
-        if(GameZ.balls[i].currentCenterX > HORIZ_CENTER_MAX_BALL)
-        {
-            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
-            x_vel = -1*x_vel;
-        }
-        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL + 1)
-        {
-            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
-            x_vel = -1*x_vel;
-        }
-        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
-        {
-            kill = true;
-            GameZ.balls[i].alive = false;
-
-            if(GameZ.balls[i].color == LCD_BLUE)
-            {
-                GameZ.LEDScores[Client]++;
-            }
-            GameZ.numberOfBalls--;
-        }
-        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
-        {
-            kill = true;
-            GameZ.balls[i].alive = false;
-
-            if(GameZ.balls[i].color == LCD_RED)
-            {
-                GameZ.LEDScores[Host]++;
-            }
-            GameZ.numberOfBalls--;
-        }
 
         int32_t dx_host = GameZ.balls[i].currentCenterX - GameZ.players[Host].currentCenter;
-        int32_t dy_host = GameZ.balls[i].currentCenterY - PADDLE_LEN + VERT_CENTER_MAX_BALL;
+        int32_t dy_host = GameZ.balls[i].currentCenterY - (PADDLE_WID + VERT_CENTER_MAX_BALL);
 
         int32_t dx_client = GameZ.balls[i].currentCenterX - GameZ.players[Client].currentCenter;
-        int32_t dy_client = GameZ.balls[i].currentCenterY -  PADDLE_LEN + VERT_CENTER_MIN_BALL;
+        int32_t dy_client = GameZ.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
 
         G8RTOS_SignalSemaphore(&GSMutex);
 
@@ -558,6 +523,48 @@ void MoveBall()
                     x_vel = (abs(x_vel)+1);
                 }
         }
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        GameZ.balls[i].currentCenterX += x_vel;
+        GameZ.balls[i].currentCenterY += y_vel;
+
+        if(GameZ.balls[i].currentCenterX > HORIZ_CENTER_MAX_BALL)
+        {
+            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MAX_BALL;
+            x_vel = -1*x_vel;
+        }
+        if(GameZ.balls[i].currentCenterX < HORIZ_CENTER_MIN_BALL + 1)
+        {
+            GameZ.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
+            x_vel = -1*x_vel;
+        }
+        if(GameZ.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
+        {
+            kill = true;
+            GameZ.balls[i].alive = false;
+
+            if(GameZ.balls[i].color == LCD_BLUE)
+            {
+                GameZ.LEDScores[Client]++;
+            }
+            GameZ.numberOfBalls--;
+        }
+        if(GameZ.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
+        {
+            kill = true;
+            GameZ.balls[i].alive = false;
+
+            if(GameZ.balls[i].color == LCD_RED)
+            {
+                GameZ.LEDScores[Host]++;
+            }
+            GameZ.numberOfBalls--;
+        }
+
+
+
+        G8RTOS_SignalSemaphore(&GSMutex);
+
 
 
         if(kill == true)
