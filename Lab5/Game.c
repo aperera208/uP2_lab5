@@ -261,6 +261,7 @@ void EndOfGameClient()
 
     while(1)
     {
+        /*
         _i32 retval = -1;
         while(retval != 0)
         {
@@ -273,6 +274,21 @@ void EndOfGameClient()
 
 
         G8RTOS_AddThread(JoinGame, "JoinGame", 100);
+        */
+
+        StartMenu();
+
+        if(GetPlayerRole() == Host)
+        {
+            LED_write(red, 0x00F0);
+            G8RTOS_AddThread(CreateGame, "Host Create", 100);
+        }
+        else
+        {
+            LED_write(blue, 0x0F00);
+            G8RTOS_AddThread(JoinGame, "Client Join", 100);
+        }
+
         G8RTOS_KillSelf();
 
 
@@ -398,6 +414,10 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
+            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
@@ -760,6 +780,7 @@ void EndOfGameHost()
 
     while(1)
     {
+        /*
     SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
 
     _i32 retval = -1;
@@ -771,8 +792,21 @@ void EndOfGameHost()
     }
 
     G8RTOS_AddThread(CreateGame, "CreateGame", 100);
+    */
+        StartMenu();
 
-    G8RTOS_KillSelf();
+        if(GetPlayerRole() == Host)
+        {
+            LED_write(red, 0x00F0);
+            G8RTOS_AddThread(CreateGame, "Host Create", 100);
+        }
+        else
+        {
+            LED_write(blue, 0x0F00);
+            G8RTOS_AddThread(JoinGame, "Client Join", 100);
+        }
+
+        G8RTOS_KillSelf();
     }
 
 }
