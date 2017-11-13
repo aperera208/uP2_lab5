@@ -152,7 +152,7 @@ void ReceiveDataFromHost()
 
         if(temp_gamestate.gameDone == true)
         {
-            G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
+            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
         }
 
         G8RTOS_Sleep(5);
@@ -398,7 +398,7 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
-            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+            G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
         G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
@@ -741,7 +741,7 @@ void EndOfGameHost()
 
     G8RTOS_KillAllOtherThreads();
 
-    G8RTOS_Sleep(1000);
+    //G8RTOS_Sleep(1000);
 
     if(GameZ.winner == Host)
     {
