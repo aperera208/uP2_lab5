@@ -489,12 +489,13 @@ void MoveBall()
 
         G8RTOS_SignalSemaphore(&GSMutex);
 
+        G8RTOS_Sleep(35);
+
         if(kill == true)
         {
             G8RTOS_KillSelf();
         }
 
-        G8RTOS_Sleep(35);
     }
 }
 
@@ -748,7 +749,8 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
 {
     int16_t offset = outPlayer->currentCenter - prevPlayerIn->Center;
 
-
+    // TODO: PRINT_OFFSET. This is used to print more of the paddle on the opposite side of the direction it’s moving.
+    // Without this, you might encounter some blips cause by previously deleted balls, so you might find this idea useful.
     if(outPlayer->position == TOP)
     {
         //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID , LCD_BLACK);
