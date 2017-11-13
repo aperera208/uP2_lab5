@@ -98,14 +98,14 @@ void JoinGame()
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
-    G8RTOS_AddThread(IdleThread, "Idle", 255);
     //G8RTOS_Sleep(3000);
 
-    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 195);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 190);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 190);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+    G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     G8RTOS_KillSelf();
 
@@ -329,7 +329,7 @@ void CreateGame()
 
     G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
     G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
-    G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
+    G8RTOS_AddThread(DrawObjects, "Draw Objects", 195);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 190);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 190);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
