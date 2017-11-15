@@ -234,7 +234,7 @@ void ReadJoystickClient()
         GetJoystickCoordinates(&x_coord, &y_coord);
 
         G8RTOS_WaitSemaphore(&PlayerMutex);
-        client_info.displacement -= x_coord/2000;
+        client_info.displacement -= x_coord/3500;
         if(client_info.displacement   > ARENA_MAX_X - PADDLE_LEN_D2 )
         {
             client_info.displacement = ARENA_MAX_X - PADDLE_LEN_D2;
@@ -816,7 +816,7 @@ void ReadJoystickHost()
 
 
         G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ.players[Host].currentCenter -= x_coord/2000;
+        GameZ.players[Host].currentCenter -= x_coord/3500;
         if(GameZ.players[Host].currentCenter   > ARENA_MAX_X - PADDLE_LEN_D2 )
         {
             GameZ.players[Host].currentCenter = ARENA_MAX_X - PADDLE_LEN_D2;
