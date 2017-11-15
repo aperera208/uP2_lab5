@@ -315,26 +315,16 @@ void EndOfGameClient()
         LCD_Clear(PLAYER_BLUE);
     }
 
-    PrevPlayer_t test;
-    test.Center = 0;
 
-
-        while( test.Center != 4744)
-        {
         _i32 retval = -1;
         while(retval != 0)
         {
             //G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&test, sizeof(test));
+            retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
-        PrevPlayer_t test2;
-        test2.Center = 3737;
 
-
-        SendData((_u8*)&test2, HOST_IP_ADDR, sizeof(test2));
-        }
 
 
         InitBoardState();
@@ -904,24 +894,12 @@ void EndOfGameHost()
 
     // TODO: PRINT MESSAGE
 
-    PrevPlayer_t test;
-    test.Center = 4744;
 
 
     GetPlayerRole();
 
-    while(test.Center != 3737)
-    {
-    SendData((_u8*)&test, GameZ.player.IP_address, sizeof(test));
+    SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
 
-    _i32 retval = -1;
-    while(retval != 0 )
-    {
-        //G8RTOS_WaitSemaphore(&CC_3100Mutex);
-        retval = ReceiveData((_u8*)&test, sizeof(test));
-        //G8RTOS_SignalSemaphore(&CC_3100Mutex);
-    }
-    }
 
 
     while(1)
