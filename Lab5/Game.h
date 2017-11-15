@@ -65,7 +65,7 @@ extern semaphore_t GSMutex;
 #define BOTTOM_PADDLE_EDGE           (ARENA_MAX_Y - PADDLE_WID)
 
 /* Amount of allowable space for collisions with the sides of paddles */
-#define WIGGLE_ROOM                  2
+#define WIGGLE_ROOM                  4
 
 /* Value for velocities from contact with paddles */
 #define _1_3_PADDLE                  11
@@ -92,6 +92,8 @@ extern semaphore_t GSMutex;
 /* Used as status LEDs for Wi-Fi */
 #define BLUE_LED BIT2
 #define RED_LED BIT0
+
+#define ScoreToWin 16
 
 
 /* Enums for player colors */

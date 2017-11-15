@@ -632,6 +632,10 @@ void MoveBall()
                    /* collision at the top */
                     x_vel = 0;
                     y_vel = -1*y_vel - 1;
+                    if(y_vel == 0)
+                    {
+                        y_vel -= 1;
+                    }
                 }
 
                 else
@@ -639,6 +643,10 @@ void MoveBall()
                     /* on the left */
                     y_vel = -1*y_vel - 1;
                     x_vel = -1*(abs(x_vel)+1);
+                    if(y_vel == 0)
+                    {
+                        y_vel -= 1;
+                    }
                 }
             else
                 if (wy > -hx)
@@ -646,6 +654,10 @@ void MoveBall()
                     /* on the right */
                     y_vel = -1*y_vel - 1;
                     x_vel = (abs(x_vel)+1);
+                    if(y_vel == 0)
+                    {
+                        y_vel -= 1;
+                    }
                 }
                 //else
                 //{
@@ -666,6 +678,10 @@ void MoveBall()
                    /* collision at the top */
                     x_vel = 0;
                     y_vel = -1*y_vel + 1;
+                    if(y_vel == 0)
+                    {
+                        y_vel += 1;
+                    }
                 }
 
                 else
@@ -673,6 +689,10 @@ void MoveBall()
                     /* on the left */
                     y_vel = -1*y_vel + 1;
                     x_vel = -1*(abs(x_vel)+1);
+                    if(y_vel == 0)
+                    {
+                        y_vel += 1;
+                    }
                 }
             else
                 if (wy > -hx)
@@ -680,8 +700,14 @@ void MoveBall()
                     /* on the right */
                     y_vel = -1*y_vel + 1;
                     x_vel = (abs(x_vel)+1);
+                    if(y_vel == 0)
+                    {
+                        y_vel += 1;
+                    }
                 }
         }
+
+
 
         if(x_vel > MAX_BALL_SPEED)
         {
@@ -714,7 +740,7 @@ void MoveBall()
             temp_games.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
             x_vel = -1*x_vel;
         }
-        if(temp_games.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
+        if(temp_games.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 6)
         {
             kill = true;
             temp_games.balls[i].alive = false;
@@ -726,7 +752,7 @@ void MoveBall()
             }
             temp_games.numberOfBalls--;
         }
-        if(temp_games.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
+        if(temp_games.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 6)
         {
             kill = true;
             temp_games.balls[i].alive = false;
@@ -738,13 +764,13 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= 2)
+        if(temp_games.LEDScores[Host] >= ScoreToWin && temp_games.gameDone == false)
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
             temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= 2)
+        if(temp_games.LEDScores[Client] >= ScoreToWin && temp_games.gameDone == false)
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
@@ -792,7 +818,7 @@ void GenerateBall()
         GameZ.numberOfBalls = numballs;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        G8RTOS_Sleep(1500*numballs);
+        G8RTOS_Sleep(500*numballs);
     }
 }
 
@@ -1115,7 +1141,22 @@ playerType GetPlayerRole()
 void DrawPlayer(GeneralPlayerInfo_t * player)
 {
 
+    if(player->position == TOP)
+    {
+        G8RTOS_WaitSemaphore(&LCDMutex);
+        //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
+        LCD_DrawRectangle(player->currentCenter - PADDLE_LEN_D2, player->currentCenter + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
+        G8RTOS_SignalSemaphore(&LCDMutex);
 
+    }
+    else
+    {
+        G8RTOS_WaitSemaphore(&LCDMutex);
+        //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
+        LCD_DrawRectangle(player->currentCenter - PADDLE_LEN_D2, player->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
+        G8RTOS_SignalSemaphore(&LCDMutex);
+
+    }
 }
 
 /*
@@ -1131,17 +1172,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     {
         if(offset > 0)
         {
-            //G8RTOS_WaitSemaphore(&LCDMutex);
+            G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            //G8RTOS_SignalSemaphore(&LCDMutex);
+            G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-           // G8RTOS_WaitSemaphore(&LCDMutex);
+            G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            //G8RTOS_SignalSemaphore(&LCDMutex);
+            G8RTOS_SignalSemaphore(&LCDMutex);
         }
         //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
@@ -1150,17 +1191,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     {
         if(offset > 0)
         {
-            //G8RTOS_WaitSemaphore(&LCDMutex);
+            G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-           // G8RTOS_SignalSemaphore(&LCDMutex);
+            G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-            //G8RTOS_WaitSemaphore(&LCDMutex);
+            G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-            //G8RTOS_SignalSemaphore(&LCDMutex);
+            G8RTOS_SignalSemaphore(&LCDMutex);
         }
         //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
