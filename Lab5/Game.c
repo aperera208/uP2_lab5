@@ -504,10 +504,10 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
-            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            //G8RTOS_WaitSemaphore(&CC_3100Mutex);
+           // SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            //SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            //G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
