@@ -758,7 +758,7 @@ void MoveBall()
             G8RTOS_KillSelf();
         }
 
-        G8RTOS_Sleep(100);
+        G8RTOS_Sleep(35);
 
 
     }
@@ -1015,7 +1015,7 @@ void DrawObjects()
         prevhost_p0.Center = host_p0.currentCenter;
         prevclient_p1.Center = client_p1.currentCenter;
 
-        G8RTOS_Sleep(10);
+        G8RTOS_Sleep(20);
 
     }
 
