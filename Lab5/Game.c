@@ -452,10 +452,9 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
-            G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
-            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
-            G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            //G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            //SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            //G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
@@ -935,7 +934,7 @@ void DrawObjects()
 
 
 
-        //G8RTOS_WaitSemaphore(&LCDMutex);
+        G8RTOS_WaitSemaphore(&LCDMutex);
         for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
         {
             if(temp_gamez.balls[i].alive == true)
@@ -946,7 +945,7 @@ void DrawObjects()
                 LCD_DrawRectangle(temp_gamez.balls[i].currentCenterX - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterX + BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY + BALL_SIZE_D2, temp_gamez.balls[i].color);
             }
         }
-        //G8RTOS_SignalSemaphore(&LCDMutex);
+        G8RTOS_SignalSemaphore(&LCDMutex);
 
         host_p0 = temp_gamez.players[Host];
         client_p1 = temp_gamez.players[Client];
