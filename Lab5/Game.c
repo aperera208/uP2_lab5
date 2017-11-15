@@ -116,7 +116,7 @@ void JoinGame()
     // TODO initialize semaphores and add more threads
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
-    G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 4);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     //G8RTOS_Sleep(3000);
 
@@ -303,7 +303,7 @@ void EndOfGameClient()
 
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
-    G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 4);
     G8RTOS_InitSemaphore(&LCDMutex, 1);
 
     if(GameZ.winner == Host)
@@ -460,7 +460,7 @@ void CreateGame()
 
     // TODO initialize semaphores and add more threads
 
-    G8RTOS_InitSemaphore(&LCDMutex, 1);
+    G8RTOS_InitSemaphore(&LCDMutex, 4);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
@@ -588,8 +588,8 @@ void MoveBall()
     temp_games.balls[i].currentCenterX = rand() % (HORIZ_CENTER_MAX_BALL - HORIZ_CENTER_MIN_BALL) + HORIZ_CENTER_MIN_BALL;
     temp_games.balls[i].currentCenterY = rand() % (VERT_CENTER_MAX_BALL - VERT_CENTER_MIN_BALL) + VERT_CENTER_MIN_BALL;
 
-    int x_vel = (rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
-    int y_vel = (rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
+    int x_vel = 1;//(rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
+    int y_vel = 1;//(rand() % MAX_BALL_SPEED*2 + 1) - MAX_BALL_SPEED;
 
     //G8RTOS_WaitSemaphore(&GSMutex);
     GameZ = temp_games;
@@ -734,13 +734,13 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= 2)
+        if(temp_games.LEDScores[Host] >= 16)
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
             temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= 2)
+        if(temp_games.LEDScores[Client] >= 16)
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
@@ -774,9 +774,9 @@ void GenerateBall()
     int numballs = 0;
     while(1)
     {
-        G8RTOS_WaitSemaphore(&GSMutex);
+        //G8RTOS_WaitSemaphore(&GSMutex);
         numballs = GameZ.numberOfBalls;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        //G8RTOS_SignalSemaphore(&GSMutex);
 
         if(numballs < MAX_NUM_OF_BALLS)
         {
@@ -875,7 +875,7 @@ void EndOfGameHost()
 
     LED_write(blue, led_pattern);
 
-    G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 4);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
