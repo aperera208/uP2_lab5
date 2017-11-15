@@ -505,8 +505,8 @@ void MoveBall()
     GameZ = temp_games;
     //G8RTOS_SignalSemaphore(&GSMutex);
 
-    int32_t w = 0.5 * (BALL_SIZE + PADDLE_LEN);
-    int32_t h = 0.5 * (BALL_SIZE + PADDLE_WID);
+    int32_t w = WIDTH_TOP_OR_BOTTOM;//0.5 * (BALL_SIZE + PADDLE_LEN);
+    int32_t h = HEIGHT_TOP_OR_BOTTOM;//0.5 * (BALL_SIZE + PADDLE_WID);
 
 
     while(1)
@@ -698,7 +698,7 @@ void GenerateBall()
         GameZ.numberOfBalls = numballs;
         //G8RTOS_SignalSemaphore(&GSMutex);
 
-        G8RTOS_Sleep(2000*numballs);
+        G8RTOS_Sleep(1500*numballs);
     }
 }
 
@@ -989,8 +989,6 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     // Without this, you might encounter some blips cause by previously deleted balls, so you might find this idea useful.
     if(outPlayer->position == TOP)
     {
-        //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID , LCD_BLACK);
-        //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
         if(offset > 0)
         {
             //G8RTOS_WaitSemaphore(&LCDMutex);
@@ -1009,8 +1007,6 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     }
     else
     {
-        //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y , LCD_BLACK);
-        //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
         if(offset > 0)
         {
             //G8RTOS_WaitSemaphore(&LCDMutex);
@@ -1063,29 +1059,16 @@ void InitBoardState()
     LCD_DrawRectangle(client_p1.currentCenter - PADDLE_LEN_D2 , client_p1.currentCenter + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);   // Client player paddle
     LCD_DrawRectangle(host_p0.currentCenter - PADDLE_LEN_D2, host_p0.currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y , host_p0.color);     // Host player paddle
 
-    char buffer_c[3];
-    char buffer_h[3];
-
-    //itoa(GameZ.overallScores[Client],buffer_c,10);
-    //itoa(GameZ.overallScores[Host],buffer_h,10);
-
-    sprintf(buffer_c, "%d", GameZ.overallScores[Client] );
-    sprintf(buffer_h, "%d", GameZ.overallScores[Host] );
-
-    if(GameZ.overallScores[Client] < 10)
-    {
-        buffer_c[1] = buffer_c[0];
-        buffer_c[0] = '0';
-    }
-    if(GameZ.overallScores[Host] < 10)
-    {
-        buffer_h[1] = buffer_h[0];
-        buffer_h[0] = '0';
-    }
+    char buffer_c[2];
+    char buffer_h[2];
 
 
-    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, buffer_c, client_p1.color);      // Client score
-    LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, buffer_h, host_p0.color);        // Host score
+    sprintf(buffer_c, "%02d", GameZ.overallScores[Client] );
+    sprintf(buffer_h, "%02d", GameZ.overallScores[Host] );
+
+
+    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, client_p1.color);      // Client score
+    LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, (uint8_t*)buffer_h, host_p0.color);        // Host score
 
 }
 
@@ -1103,7 +1086,7 @@ void StartMenu()
     LCD_Text((MAX_SCREEN_X>>1)-16, (MAX_SCREEN_Y>>2), "HOST" , LCD_BLACK);
     LCD_Text((MAX_SCREEN_X - (MAX_SCREEN_X>>2)-24), (MAX_SCREEN_Y>>1), "CLIENT" , LCD_BLACK);
 
-    GameZ.overallScores[Host] = 9;
-    GameZ.overallScores[Client] = 9;
+    GameZ.overallScores[Host] = 0;
+    GameZ.overallScores[Client] = 0;
 
 }
