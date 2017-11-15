@@ -299,6 +299,7 @@ void EndOfGameClient()
         LCD_Clear(PLAYER_BLUE);
     }
 
+    PrevPlayer_t test;
 
     while(1)
     {
@@ -307,7 +308,7 @@ void EndOfGameClient()
         while(retval != 0)
         {
             //G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            retval = ReceiveData((_u8*)&GameZ, sizeof(GameZ));
+            retval = ReceiveData((_u8*)&test, sizeof(test));
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
@@ -476,9 +477,10 @@ void SendDataToClient()
 
         if(tempGamez.gameDone == true)
         {
-            //G8RTOS_WaitSemaphore(&CC_3100Mutex);
-            //SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
-            //G8RTOS_SignalSemaphore(&CC_3100Mutex);
+            G8RTOS_WaitSemaphore(&CC_3100Mutex);
+            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            SendData((_u8*)&tempGamez, tempGamez.player.IP_address, sizeof(tempGamez));
+            G8RTOS_SignalSemaphore(&CC_3100Mutex);
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
@@ -865,10 +867,10 @@ void EndOfGameHost()
 
     // TODO: PRINT MESSAGE
 
-
+    PrevPlayer_t test;
 
     GetPlayerRole();
-    SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
+    SendData((_u8*)&test, GameZ.player.IP_address, sizeof(test));
 
 
 
