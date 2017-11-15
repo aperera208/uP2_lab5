@@ -51,13 +51,19 @@ void JoinGame()
 
     while(client_info.acknowledge == false || client_info.ready == false || client_info.joined == false)
     {
+    int count = 0;
+
     SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
     _i32 retval = -1;
-    while(retval != 0)
+    while(retval != 0 && count  < 10)
     {
         retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+        count++;
     }
+
+    if(count >= 10) continue;
+    count = 0;
 
     if(client_info.acknowledge == true)
     {
@@ -68,10 +74,14 @@ void JoinGame()
     SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
     retval = -1;
-    while(retval != 0)
+    while(retval != 0 && count  < 10)
     {
         retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+        count++;
     }
+
+    if(count >= 10) continue;
+    count = 0;
 
     if(client_info.joined == true)
     {
@@ -373,23 +383,30 @@ void CreateGame()
 
     while(client_info.acknowledge == false || client_info.ready == false)
     {
+    int count = 0;
     _i32 retval = -1;
-    while(retval != 0)
+    while(retval != 0 && count < 10)
     {
 
         retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+        count++;
     }
+
+    if(count >= 10) continue;
+    count = 0;
 
     client_info.acknowledge = true;
 
     SendData((_u8*)&client_info, client_info.IP_address, sizeof(client_info));
 
     retval = -1;
-    while(retval != 0)
+    while(retval != 0 && count < 10)
     {
         retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+        count++;
     }
-
+    if(count >= 10) continue;
+    count = 0;
 
     if(client_info.ready == true)
     {
@@ -476,7 +493,6 @@ void SendDataToClient()
  */
 void ReceiveDataFromClient()
 {
-
     while(1)
     {
 
@@ -497,6 +513,7 @@ void ReceiveDataFromClient()
 
 
         G8RTOS_Sleep(2);
+
     }
 }
 /*
