@@ -182,7 +182,7 @@ void ReceiveDataFromHost()
         */
 
 
-        G8RTOS_Sleep(5);
+        G8RTOS_Sleep(2);
 
     }
 
@@ -511,7 +511,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
-        G8RTOS_Sleep(5); // Try sleeping for more on this to reduce lag
+        G8RTOS_Sleep(2); // Try sleeping for more on this to reduce lag
 
     }
 }
