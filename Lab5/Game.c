@@ -1022,7 +1022,7 @@ void DrawObjects()
                 {
                     hit_paddle_bot = ( prevballs[i].CenterY + BALL_SIZE_D2);
                 }
-                LCD_DrawRectangle(prevballs[i].CenterX - BALL_SIZE_D2, prevballs[i].CenterX + BALL_SIZE_D2, hit_paddle_top, hit_paddle_top, LCD_BLACK);
+                LCD_DrawRectangle(prevballs[i].CenterX - BALL_SIZE_D2, prevballs[i].CenterX + BALL_SIZE_D2, hit_paddle_top, hit_paddle_bot, LCD_BLACK);
                 prevballs[i].CenterX = temp_gamez.balls[i].currentCenterX;
                 prevballs[i].CenterY = temp_gamez.balls[i].currentCenterY;
                 LCD_DrawRectangle(temp_gamez.balls[i].currentCenterX - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterX + BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY + BALL_SIZE_D2, temp_gamez.balls[i].color);
