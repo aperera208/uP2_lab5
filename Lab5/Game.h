@@ -114,7 +114,7 @@ typedef enum
 /*********************************************** Data Structures ********************************************************************/
 
 
-#pragma pack ( push, 1)
+#pragma pack ( push, 2)
 /*
  * Struct to be sent from the client to the host
  */

@@ -182,7 +182,7 @@ void ReceiveDataFromHost()
         */
 
 
-        G8RTOS_Sleep(2);
+        G8RTOS_Sleep(5);
 
     }
 
@@ -511,7 +511,7 @@ void SendDataToClient()
             G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
         }
 
-        G8RTOS_Sleep(2); // Try sleeping for more on this to reduce lag
+        G8RTOS_Sleep(7); // Try sleeping for more on this to reduce lag
 
     }
 }
@@ -544,7 +544,7 @@ void ReceiveDataFromClient()
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
-        G8RTOS_Sleep(2);
+        G8RTOS_Sleep(4);
 
     }
 }
@@ -602,9 +602,9 @@ void MoveBall()
     while(1)
     {
 
-        //G8RTOS_WaitSemaphore(&GSMutex);
+        G8RTOS_WaitSemaphore(&GSMutex);
         temp_games = GameZ;
-        //G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_SignalSemaphore(&GSMutex);
 
 
         int32_t dx_host = temp_games.balls[i].currentCenterX - temp_games.players[Host].currentCenter;
@@ -747,9 +747,9 @@ void MoveBall()
             temp_games.winner = Client;
         }
 
-        //G8RTOS_WaitSemaphore(&GSMutex);
+        G8RTOS_WaitSemaphore(&GSMutex);
         GameZ = temp_games;
-        //G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_SignalSemaphore(&GSMutex);
 
 
 
@@ -774,9 +774,9 @@ void GenerateBall()
     int numballs = 0;
     while(1)
     {
-        //G8RTOS_WaitSemaphore(&GSMutex);
+        G8RTOS_WaitSemaphore(&GSMutex);
         numballs = GameZ.numberOfBalls;
-        //G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_SignalSemaphore(&GSMutex);
 
         if(numballs < MAX_NUM_OF_BALLS)
         {
@@ -784,9 +784,9 @@ void GenerateBall()
             numballs++;
         }
 
-        //G8RTOS_WaitSemaphore(&GSMutex);
+        G8RTOS_WaitSemaphore(&GSMutex);
         GameZ.numberOfBalls = numballs;
-        //G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_SignalSemaphore(&GSMutex);
 
         G8RTOS_Sleep(1500*numballs);
     }
@@ -1015,7 +1015,7 @@ void DrawObjects()
         prevhost_p0.Center = host_p0.currentCenter;
         prevclient_p1.Center = client_p1.currentCenter;
 
-        G8RTOS_Sleep(20);
+        G8RTOS_Sleep(10);
 
     }
 
