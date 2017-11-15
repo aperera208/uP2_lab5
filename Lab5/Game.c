@@ -246,8 +246,13 @@ void EndOfGameClient()
 
     G8RTOS_WaitSemaphore(&GSMutex);
     G8RTOS_WaitSemaphore(&CC_3100Mutex);
+    G8RTOS_WaitSemaphore(&PlayerMutex);
 
     G8RTOS_KillAllOtherThreads();
+
+    G8RTOS_InitSemaphore(&PlayerMutex, 1);
+    G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
+    G8RTOS_InitSemaphore(&GSMutex, 1);
 
     if(GameZ.winner == Host)
     {
@@ -261,7 +266,7 @@ void EndOfGameClient()
 
     while(1)
     {
-        /*
+
         _i32 retval = -1;
         while(retval != 0)
         {
@@ -270,12 +275,22 @@ void EndOfGameClient()
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
-        SendData((_u8*)&GameZ, HOST_IP_ADDR, sizeof(GameZ));
+        InitBoardState();
+
+        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
+        G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
+        G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
+        G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
+        G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+        G8RTOS_AddThread(IdleThread, "Idle", 255);
 
 
-        G8RTOS_AddThread(JoinGame, "JoinGame", 100);
-        */
+        //SendData((_u8*)&GameZ, HOST_IP_ADDR, sizeof(GameZ));
 
+
+        //G8RTOS_AddThread(JoinGame, "JoinGame", 100);
+
+/*
         StartMenu();
 
         if(GetPlayerRole() == Host)
@@ -288,6 +303,7 @@ void EndOfGameClient()
             LED_write(blue, 0x0F00);
             G8RTOS_AddThread(JoinGame, "Client Join", 100);
         }
+        */
 
         G8RTOS_KillSelf();
 
@@ -761,6 +777,9 @@ void EndOfGameHost()
 
     G8RTOS_KillAllOtherThreads();
 
+    G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
+
     //G8RTOS_Sleep(1000);
 
     if(GameZ.winner == Host)
@@ -776,7 +795,10 @@ void EndOfGameHost()
 
 
 
-    //GetPlayerRole();
+    GetPlayerRole();
+    SendData((_u8*)&GameZ, GameZ.player.IP_address, sizeof(GameZ));
+
+
 
     while(1)
     {
@@ -792,7 +814,7 @@ void EndOfGameHost()
     }
 
     G8RTOS_AddThread(CreateGame, "CreateGame", 100);
-    */
+
         StartMenu();
 
         if(GetPlayerRole() == Host)
@@ -805,6 +827,18 @@ void EndOfGameHost()
             LED_write(blue, 0x0F00);
             G8RTOS_AddThread(JoinGame, "Client Join", 100);
         }
+        */
+
+        InitBoardState();
+
+        G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
+        G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
+        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
+        G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
+        G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
+        G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+
+        G8RTOS_AddThread(IdleThread, "Idle", 255);
 
         G8RTOS_KillSelf();
     }
