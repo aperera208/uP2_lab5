@@ -329,6 +329,7 @@ void EndOfGameClient()
         test.Center = 3737;
 
         SendData((_u8*)&test, HOST_IP_ADDR, sizeof(test));
+        test.Center = 4744;
         }
 
 
