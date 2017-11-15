@@ -157,14 +157,21 @@ void ReceiveDataFromHost()
             G8RTOS_Sleep(1);
         }
 
-        //if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
-        //{
+        if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
+        {
+              G8RTOS_WaitSemaphore(&GSMutex);
+              GameZ = temp_gamestate;
+              G8RTOS_SignalSemaphore(&GSMutex);
 
-        //}
+              if(temp_gamestate.gameDone == true)
+              {
+                  G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+              }
 
-        G8RTOS_WaitSemaphore(&GSMutex);
-        GameZ = temp_gamestate;
-        G8RTOS_SignalSemaphore(&GSMutex);
+
+        }
+
+
 
         /*
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -174,10 +181,6 @@ void ReceiveDataFromHost()
         G8RTOS_SignalSemaphore(&GSMutex);
         */
 
-        if(temp_gamestate.gameDone == true)
-        {
-            G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
-        }
 
         G8RTOS_Sleep(5);
 
