@@ -536,7 +536,7 @@ void SendDataToClient()
  */
 void ReceiveDataFromClient()
 {
-    G8RTOS_Sleep(300);
+    G8RTOS_Sleep(350);
     while(1)
     {
 
