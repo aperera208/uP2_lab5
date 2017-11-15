@@ -90,17 +90,25 @@ void JoinGame()
 
 
     }
+
     _i32 retval = -1;
     while(retval != 0)
     {
         retval = ReceiveData((_u8*)&client_p1, sizeof(client_p1));
     }
 
+    SendData((_u8*)&client_p1, client_info.IP_address , sizeof(client_p1));
+
+
     retval = -1;
     while(retval != 0)
     {
         retval = ReceiveData((_u8*)&host_p0, sizeof(host_p0));
     }
+
+    SendData((_u8*)&host_p0, client_info.IP_address , sizeof(host_p0));
+
+
     InitBoardState();
 
 
@@ -426,7 +434,19 @@ void CreateGame()
 
     SendData((_u8*)&client_p1, client_info.IP_address , sizeof(client_p1));
 
+    _i32 retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&client_p1, sizeof(client_p1));
+    }
+
     SendData((_u8*)&host_p0, client_info.IP_address , sizeof(host_p0));
+
+    retval = -1;
+    while(retval != 0)
+    {
+        retval = ReceiveData((_u8*)&host_p0, sizeof(host_p0));
+    }
 
     InitBoardState();
 
