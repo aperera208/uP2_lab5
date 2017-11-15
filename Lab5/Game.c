@@ -250,6 +250,28 @@ void EndOfGameClient()
 
     G8RTOS_KillAllOtherThreads();
 
+    uint16_t led_pattern = 0;
+
+    for(int i = 0; i < GameZ.LEDScores[Host]; i++)
+    {
+        led_pattern = led_pattern >> 1;
+        led_pattern |= 0x8000;
+    }
+
+
+    LED_write(red, led_pattern);
+     led_pattern = 0;
+
+
+    for(int i = 0; i < GameZ.LEDScores[Client]; i++)
+    {
+        led_pattern = led_pattern >> 1;
+        led_pattern |= 0x8000;
+    }
+
+
+    LED_write(blue, led_pattern);
+
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
@@ -777,6 +799,28 @@ void EndOfGameHost()
 
     G8RTOS_KillAllOtherThreads();
 
+    uint16_t led_pattern = 0;
+
+    for(int i = 0; i < GameZ.LEDScores[Host]; i++)
+    {
+        led_pattern = led_pattern >> 1;
+        led_pattern |= 0x8000;
+    }
+
+
+    LED_write(red, led_pattern);
+     led_pattern = 0;
+
+
+    for(int i = 0; i < GameZ.LEDScores[Client]; i++)
+    {
+        led_pattern = led_pattern >> 1;
+        led_pattern |= 0x8000;
+    }
+
+
+    LED_write(blue, led_pattern);
+
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
 
@@ -1071,6 +1115,8 @@ void UpdateBallOnScreen(PrevBall_t * previousBall, Ball_t * currentBall, uint16_
  */
 void InitBoardState()
 {
+    host_p0.currentCenter = PADDLE_X_CENTER;
+    client_p1.currentCenter = PADDLE_X_CENTER;
     GameZ.player = client_info;
     GameZ.players[Host] = host_p0;
     GameZ.players[Client] = client_p1;
@@ -1085,6 +1131,11 @@ void InitBoardState()
         GameZ.balls[i].alive = false;
         GameZ.balls[i].color = LCD_WHITE;
     }
+
+
+
+
+
 
     //GameZ.overallScores[Host] = 0;
     //GameZ.overallScores[Client] = 0;
