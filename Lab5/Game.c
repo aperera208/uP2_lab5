@@ -41,85 +41,90 @@ semaphore_t GSMutex;
  */
 void JoinGame()
 {
+    // Initialize specific player client info //
     client_info.acknowledge = false;
     client_info.ready = false;
     client_info.joined = false;
     client_info.playerNumber = Client;
     client_info.displacement = PADDLE_X_CENTER;
+
+    // Initialize CC3100 //
     initCC3100(Client);
+
+    // Set the IP of the client by calling getLocalIP //
     client_info.IP_address = getLocalIP();
 
+    // Performs handshaking UNTIL connection is made and acknowledge, ready, joined are changed and sent back and forth  //
     while(client_info.acknowledge == false || client_info.ready == false || client_info.joined == false)
-    {
-    int count = 0;
+        {
+        int count = 0;
 
-    SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+        SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
 
-    _i32 retval = -1;
-    while(retval != 0 && count  < 10)
-    {
-        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
-        count++;
+        _i32 retval = -1;
+        while(retval != 0 && count  < 10)
+        {
+            retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+            count++;
+        }
+
+        if(count >= 10) continue;
+        count = 0;
+
+        if(client_info.acknowledge == true)
+        {
+            LED_write(blue, 0x8000);
+        }
+
+        client_info.ready = true;
+        SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
+
+        retval = -1;
+        while(retval != 0 && count  < 10)
+        {
+            retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
+            count++;
+        }
+
+        if(count >= 10) continue;
+        count = 0;
+
+        if(client_info.joined == true)
+        {
+            LED_write(green, 0x8000);
+        }
     }
 
-    if(count >= 10) continue;
-    count = 0;
-
-    if(client_info.acknowledge == true)
-    {
-        LED_write(blue, 0x8000);
-    }
-
-    client_info.ready = true;
-    SendData((_u8*)&client_info, HOST_IP_ADDR, sizeof(client_info));
-
-    retval = -1;
-    while(retval != 0 && count  < 10)
-    {
-        retval = ReceiveData((_u8*)&client_info, sizeof(client_info));
-        count++;
-    }
-
-    if(count >= 10) continue;
-    count = 0;
-
-    if(client_info.joined == true)
-    {
-        LED_write(green, 0x8000);
-    }
-
-
-    }
-
+    // Receive client general player info from the host //
     _i32 retval = -1;
     while(retval != 0)
     {
         retval = ReceiveData((_u8*)&client_p1, sizeof(client_p1));
     }
 
+    // Send the client general player info to the host for handshaking  //
     SendData((_u8*)&client_p1, HOST_IP_ADDR , sizeof(client_p1));
 
-
+    // Receive the host specific player info from the host //
     retval = -1;
     while(retval != 0)
     {
         retval = ReceiveData((_u8*)&host_p0, sizeof(host_p0));
     }
 
+    // Send the host specific player info to the host for handshaking  //
     SendData((_u8*)&host_p0, HOST_IP_ADDR , sizeof(host_p0));
 
-
+    // Initialize the LCD with the PONG game board  //
     InitBoardState();
 
-
-
-    // TODO initialize semaphores and add more threads
+    // Initialize Semaphores //
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
-    //G8RTOS_Sleep(3000);
 
+    // Add threads for the client to use  //
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 100);
@@ -127,8 +132,8 @@ void JoinGame()
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
+    // Kill JoinGame thread  //
     G8RTOS_KillSelf();
-
 }
 
 
@@ -144,18 +149,23 @@ void JoinGame()
  */
 void ReceiveDataFromHost()
 {
+    // Temporary gamestate to avoid overuse of semaphores  //
     GameState_t temp_gamestate;
+
+    G8RTOS_Sleep(50);
+
     while(1)
     {
-
+        // Receive the Gamestate from the Host //
         _i32 retval = -1;
         while(retval != 0)
         {
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-//            G8RTOS_Sleep(1);
+            // G8RTOS_Sleep(1);
         }
+
 
         if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
         {
@@ -526,6 +536,7 @@ void SendDataToClient()
  */
 void ReceiveDataFromClient()
 {
+    G8RTOS_Sleep(50);
     while(1)
     {
 
