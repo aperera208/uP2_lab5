@@ -313,10 +313,10 @@ void EndOfGameClient()
     }
 
     PrevPlayer_t test;
-    //test.Center = 4744;
+    test.Center = 0;
 
 
-        while(test.Center && test.Center != 4744)
+        while( test.Center != 4744)
         {
         _i32 retval = -1;
         while(retval != 0)

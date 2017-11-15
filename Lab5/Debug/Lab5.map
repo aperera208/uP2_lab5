@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Tue Nov 14 21:46:56 2017
+>> Linked Tue Nov 14 21:53:48 2017
 
 OUTPUT FILE NAME:   <Lab5.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 0001b291
@@ -497,7 +497,7 @@ address   name
 00018805  Delay                                                 
 0001b809  DelayMs                                               
 00019eab  Disable_Joystick_Interrupt                            
-00011c8d  DrawObjects                                           
+00011c91  DrawObjects                                           
 00011f8f  DrawPlayer                                            
 00018853  EUSCIA0_IRQHandler                                    
 00018853  EUSCIA0_IRQHandler                                    
@@ -618,7 +618,7 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 2000d2a0  SockIDRx                                              
 2000d2a2  SockIDTx                                              
 0001b9fd  StartCriticalSection                                  
-00012255  StartMenu                                             
+00012253  StartMenu                                             
 0001ba79  SysCtlDelay                                           
 0001b9dd  SysCtl_disableNMISource                               
 0001b9ed  SysCtl_enableNMISource                                
@@ -1722,13 +1722,13 @@ address   name
 00011aad  ReadJoystickHost                                      
 00011b07  EndOfGameHost                                         
 00011c6b  IdleThread                                            
-00011c8d  DrawObjects                                           
+00011c91  DrawObjects                                           
 00011e31  MoveLEDs                                              
 00011f5d  GetPlayerRole                                         
 00011f8f  DrawPlayer                                            
 00011fa1  UpdatePlayerOnScreen                                  
 000120fd  InitBoardState                                        
-00012255  StartMenu                                             
+00012253  StartMenu                                             
 00012b8d  __TI_printfi                                          
 00013487  __aeabi_ldiv0                                         
 00013489  _sl_BuildAddress                                      
