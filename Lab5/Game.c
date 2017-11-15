@@ -252,7 +252,7 @@ void ReadJoystickClient()
         //GameZ.LEDScores[Host]++;
         G8RTOS_SignalSemaphore(&GSMutex);
 */
-        G8RTOS_Sleep(10);
+        G8RTOS_Sleep(25);
 
     }
 }
@@ -811,7 +811,7 @@ void ReadJoystickHost()
     {
         GetJoystickCoordinates(&x_coord, &y_coord);
 
-        G8RTOS_Sleep(10);
+        G8RTOS_Sleep(25);
 
 
 
