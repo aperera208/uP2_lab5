@@ -303,7 +303,7 @@ void EndOfGameClient()
     }
 
     // Print message for client to wait for host to restart //
-    LCD_Text((ARENA_MAX_X>>1)-112, (ARENA_MAX_Y>>1), "WAITING FOR HOST TO RESTART", LCD_BLACK);
+    LCD_Text(0, (ARENA_MAX_Y>>1), "WAITING FOR HOST TO RESTART", LCD_BLACK);
 
     // Receive the Gamestate from the Host
     _i32 retval = -1;
@@ -900,7 +900,7 @@ void EndOfGameHost()
     }
 
     // Print message for host to hit button to restart //
-    LCD_Text((ARENA_MAX_X>>1)-80, (ARENA_MAX_Y>>1), "PRESS B1 TO RESTART", LCD_BLACK);
+    LCD_Text(0, (ARENA_MAX_Y>>1), "PRESS B1 TO RESTART", LCD_BLACK);
 
     // Wait for Host to press button //
     GetPlayerRole();
