@@ -1120,6 +1120,9 @@ void InitBoardState()
 {
     host_p0.currentCenter = PADDLE_X_CENTER;
     client_p1.currentCenter = PADDLE_X_CENTER;
+    client_info.displacement = PADDLE_X_CENTER;
+
+
     GameZ.player = client_info;
     GameZ.players[Host] = host_p0;
     GameZ.players[Client] = client_p1;
@@ -1129,7 +1132,6 @@ void InitBoardState()
     GameZ.LEDScores[Host] = 0;
     GameZ.LEDScores[Client] = 0;
 
-    client_info.displacement = PADDLE_X_CENTER;
     GameZ.player.displacement = PADDLE_X_CENTER;
 
     for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
