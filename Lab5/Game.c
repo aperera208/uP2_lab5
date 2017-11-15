@@ -154,7 +154,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
 
         if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
