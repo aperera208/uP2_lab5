@@ -258,6 +258,8 @@ void EndOfGameClient()
     G8RTOS_WaitSemaphore(&GSMutex);
     G8RTOS_WaitSemaphore(&CC_3100Mutex);
     G8RTOS_WaitSemaphore(&PlayerMutex);
+    G8RTOS_WaitSemaphore(&LCDMutex);
+
 
     G8RTOS_KillAllOtherThreads();
 
@@ -286,6 +288,7 @@ void EndOfGameClient()
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
+    G8RTOS_InitSemaphore(&LCDMutex, 1);
 
     if(GameZ.winner == Host)
     {
@@ -432,7 +435,7 @@ void CreateGame()
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
-    //G8RTOS_InitSemaphore(&PlayerMutex, 1);
+    G8RTOS_InitSemaphore(&PlayerMutex, 1);
 
     //G8RTOS_Sleep(3000);
 
@@ -815,6 +818,8 @@ void EndOfGameHost()
 
     G8RTOS_WaitSemaphore(&GSMutex);
     G8RTOS_WaitSemaphore(&CC_3100Mutex);
+    G8RTOS_WaitSemaphore(&LCDMutex);
+    G8RTOS_WaitSemaphore(&PlayerMutex);
 
 
     G8RTOS_KillAllOtherThreads();
@@ -843,6 +848,9 @@ void EndOfGameHost()
 
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
+    G8RTOS_InitSemaphore(&LCDMutex, 1);
+    G8RTOS_InitSemaphore(&PlayerMutex, 1);
+
 
     //G8RTOS_Sleep(1000);
 
