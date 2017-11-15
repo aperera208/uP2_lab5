@@ -1126,6 +1126,8 @@ void InitBoardState()
     GameZ.LEDScores[Host] = 0;
     GameZ.LEDScores[Client] = 0;
 
+    client_info.displacement = 0;
+
     for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
     {
         GameZ.balls[i].alive = false;
