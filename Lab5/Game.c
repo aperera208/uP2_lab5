@@ -660,13 +660,13 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= 16)
+        if(temp_games.LEDScores[Host] >= 2)
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
             temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= 16)
+        if(temp_games.LEDScores[Client] >= 2)
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
@@ -1079,6 +1079,13 @@ void InitBoardState()
     GameZ.gameDone = false;
     GameZ.LEDScores[Host] = 0;
     GameZ.LEDScores[Client] = 0;
+
+    for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
+    {
+        GameZ.balls[i].alive = false;
+        GameZ.balls[i].color = LCD_WHITE;
+    }
+
     //GameZ.overallScores[Host] = 0;
     //GameZ.overallScores[Client] = 0;
 
