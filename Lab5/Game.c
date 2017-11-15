@@ -152,7 +152,7 @@ void ReceiveDataFromHost()
     // Temporary gamestate to avoid overuse of semaphores  //
     GameState_t temp_gamestate;
 
-    G8RTOS_Sleep(200);
+    G8RTOS_Sleep(300);
 
     while(1)
     {
@@ -536,7 +536,7 @@ void SendDataToClient()
  */
 void ReceiveDataFromClient()
 {
-    G8RTOS_Sleep(250);
+    G8RTOS_Sleep(300);
     while(1)
     {
 
