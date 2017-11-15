@@ -154,7 +154,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            G8RTOS_Sleep(1);
+            //G8RTOS_Sleep(1);
         }
 
         if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
@@ -612,7 +612,7 @@ void MoveBall()
 
 
         int32_t dx_host = temp_games.balls[i].currentCenterX - temp_games.players[Host].currentCenter;
-        int32_t dy_host = temp_games.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID );
+        int32_t dy_host = temp_games.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID - 4);
 
         int32_t dx_client = temp_games.balls[i].currentCenterX - temp_games.players[Client].currentCenter;
         int32_t dy_client = temp_games.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
