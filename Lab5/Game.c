@@ -303,7 +303,7 @@ void EndOfGameClient()
 
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
-    G8RTOS_InitSemaphore(&GSMutex, 4);
+    G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&LCDMutex, 1);
 
     if(GameZ.winner == Host)
@@ -329,11 +329,11 @@ void EndOfGameClient()
 
         InitBoardState();
 
-        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
         G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
         G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
         G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
         G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
         G8RTOS_AddThread(IdleThread, "Idle", 255);
 
 
@@ -460,7 +460,7 @@ void CreateGame()
 
     // TODO initialize semaphores and add more threads
 
-    G8RTOS_InitSemaphore(&LCDMutex, 4);
+    G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
@@ -764,13 +764,15 @@ void MoveBall()
             temp_games.numberOfBalls--;
         }
 
-        if(temp_games.LEDScores[Host] >= ScoreToWin && temp_games.gameDone == false)
+        if(temp_games.LEDScores[Host] >= ScoreToWin && temp_games.gameDone == false )
         {
             temp_games.overallScores[Host]++;
             temp_games.gameDone = true;
             temp_games.winner = Host;
         }
-        if(temp_games.LEDScores[Client] >= ScoreToWin && temp_games.gameDone == false)
+
+
+        if(temp_games.LEDScores[Client] >= ScoreToWin && temp_games.gameDone == false )
         {
             temp_games.overallScores[Client]++;
             temp_games.gameDone = true;
@@ -905,7 +907,7 @@ void EndOfGameHost()
 
     LED_write(blue, led_pattern);
 
-    G8RTOS_InitSemaphore(&GSMutex, 4);
+    G8RTOS_InitSemaphore(&GSMutex, 1);
     G8RTOS_InitSemaphore(&CC_3100Mutex, 1);
     G8RTOS_InitSemaphore(&LCDMutex, 1);
     G8RTOS_InitSemaphore(&PlayerMutex, 1);
@@ -963,12 +965,12 @@ void EndOfGameHost()
 
         InitBoardState();
 
-        G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
         G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
-        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
         G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 100);
         G8RTOS_AddThread(SendDataToClient, "Send data to client", 100);
         G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
+        G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
+        G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
 
         G8RTOS_AddThread(IdleThread, "Idle", 255);
 
@@ -1005,8 +1007,8 @@ void DrawObjects()
     GameState_t temp_gamez;
     PrevBall_t prevballs[MAX_NUM_OF_BALLS];
 
-    prevhost_p0.Center = host_p0.currentCenter;
-    prevclient_p1.Center = client_p1.currentCenter;
+    prevhost_p0.Center = PADDLE_X_CENTER;//host_p0.currentCenter;
+    prevclient_p1.Center = PADDLE_X_CENTER;//client_p1.currentCenter;
 
     for(int i = 0; i < MAX_NUM_OF_BALLS; i++)
     {
@@ -1172,17 +1174,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     {
         if(offset > 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
         //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, LCD_BLACK);
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2 , ARENA_MIN_Y, ARENA_MIN_Y + PADDLE_WID, client_p1.color);
@@ -1191,17 +1193,17 @@ void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * out
     {
         if(offset > 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , outPlayer->currentCenter - PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(prevPlayerIn->Center + PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
         else if (offset < 0)
         {
-            G8RTOS_WaitSemaphore(&LCDMutex);
+            //G8RTOS_WaitSemaphore(&LCDMutex);
             LCD_DrawRectangle(outPlayer->currentCenter + PADDLE_LEN_D2, prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
             LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, prevPlayerIn->Center - PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);
-            G8RTOS_SignalSemaphore(&LCDMutex);
+            //G8RTOS_SignalSemaphore(&LCDMutex);
         }
         //LCD_DrawRectangle(prevPlayerIn->Center - PADDLE_LEN_D2 , prevPlayerIn->Center + PADDLE_LEN_D2 , ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, LCD_BLACK);
         //LCD_DrawRectangle(outPlayer->currentCenter - PADDLE_LEN_D2, outPlayer->currentCenter + PADDLE_LEN_D2, ARENA_MAX_Y-PADDLE_WID, ARENA_MAX_Y, host_p0.color);

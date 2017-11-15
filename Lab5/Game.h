@@ -93,7 +93,7 @@ extern semaphore_t GSMutex;
 #define BLUE_LED BIT2
 #define RED_LED BIT0
 
-#define ScoreToWin 16
+#define ScoreToWin 2
 
 
 /* Enums for player colors */
