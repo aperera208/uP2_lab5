@@ -10,10 +10,10 @@
 #include "driverlib.h"
 
 
-GeneralPlayerInfo_t host_p0;
-GeneralPlayerInfo_t client_p1;
-SpecificPlayerInfo_t client_info;
-GameState_t GameZ;
+volatile GeneralPlayerInfo_t host_p0;
+volatile GeneralPlayerInfo_t client_p1;
+volatile SpecificPlayerInfo_t client_info;
+volatile GameState_t GameZ;
 
 
 semaphore_t LCDMutex;
@@ -122,8 +122,8 @@ void JoinGame()
 
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
     G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
-    G8RTOS_AddThread(SendDataToHost, "Send data to host", 205);
-    G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 205);
+    G8RTOS_AddThread(SendDataToHost, "Send data to host", 100);
+    G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 100);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
@@ -154,7 +154,7 @@ void ReceiveDataFromHost()
             G8RTOS_WaitSemaphore(&CC_3100Mutex);
             retval = ReceiveData((_u8*)&temp_gamestate, sizeof(temp_gamestate));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
-            //G8RTOS_Sleep(1);
+            G8RTOS_Sleep(1);
         }
 
         if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
@@ -331,8 +331,8 @@ void EndOfGameClient()
 
         G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
         G8RTOS_AddThread(ReadJoystickClient, "Read JoyClient", 200);
-        G8RTOS_AddThread(SendDataToHost, "Send data to host", 205);
-        G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 205);
+        G8RTOS_AddThread(SendDataToHost, "Send data to host", 100);
+        G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 100);
         G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
         G8RTOS_AddThread(IdleThread, "Idle", 255);
 
@@ -470,8 +470,8 @@ void CreateGame()
     G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
     G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
     G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
-    G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 205);
-    G8RTOS_AddThread(SendDataToClient, "Send data to client", 205);
+    G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 100);
+    G8RTOS_AddThread(SendDataToClient, "Send data to client", 100);
     G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
     G8RTOS_AddThread(IdleThread, "Idle", 255);
@@ -568,10 +568,10 @@ void MoveBall()
     //G8RTOS_SignalSemaphore(&GSMutex);
 
 
-    uint16_t light;
-    sensorOpt3001Read(&light);
+    //uint16_t light;
+    //sensorOpt3001Read(&light);
 
-    srand(light);
+    //srand(light);
 
     int i;
     for(i = 0; i < MAX_NUM_OF_BALLS; i++)
@@ -940,8 +940,8 @@ void EndOfGameHost()
         G8RTOS_AddThread(GenerateBall, "Gen Ball", 200);
         G8RTOS_AddThread(ReadJoystickHost, "R Joy Host", 200);
         G8RTOS_AddThread(DrawObjects, "Draw Objects", 200);
-        G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 205);
-        G8RTOS_AddThread(SendDataToClient, "Send data to client", 205);
+        G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 100);
+        G8RTOS_AddThread(SendDataToClient, "Send data to client", 100);
         G8RTOS_AddThread(MoveLEDs, "LED Thread", 250);
 
         G8RTOS_AddThread(IdleThread, "Idle", 255);

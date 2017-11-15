@@ -24,6 +24,8 @@ void main(void)
 
 	LED_clear(0xFFFF);
 
+	srand(time(NULL));
+
 	StartMenu();
 
 	if(GetPlayerRole() == Host)
