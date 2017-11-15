@@ -157,6 +157,11 @@ void ReceiveDataFromHost()
             G8RTOS_Sleep(1);
         }
 
+        //if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
+        //{
+
+        //}
+
         G8RTOS_WaitSemaphore(&GSMutex);
         GameZ = temp_gamestate;
         G8RTOS_SignalSemaphore(&GSMutex);
@@ -308,10 +313,11 @@ void EndOfGameClient()
     }
 
     PrevPlayer_t test;
+    //test.Center = 4744;
 
-    while(1)
-    {
 
+        while(test.Center && test.Center != 4744)
+        {
         _i32 retval = -1;
         while(retval != 0)
         {
@@ -319,6 +325,12 @@ void EndOfGameClient()
             retval = ReceiveData((_u8*)&test, sizeof(test));
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
+
+        test.Center = 3737;
+
+        SendData((_u8*)&test, HOST_IP_ADDR, sizeof(test));
+        }
+
 
         InitBoardState();
 
@@ -353,7 +365,7 @@ void EndOfGameClient()
         G8RTOS_KillSelf();
 
 
-    }
+
 }
 
 /*********************************************** Client Threads *********************************************************************/
@@ -888,10 +900,23 @@ void EndOfGameHost()
     // TODO: PRINT MESSAGE
 
     PrevPlayer_t test;
+    test.Center = 4744;
+
 
     GetPlayerRole();
+
+    while(test.Center != 3737)
+    {
     SendData((_u8*)&test, GameZ.player.IP_address, sizeof(test));
 
+    _i32 retval = -1;
+    while(retval != 0 )
+    {
+        //G8RTOS_WaitSemaphore(&CC_3100Mutex);
+        retval = ReceiveData((_u8*)&test, sizeof(test));
+        //G8RTOS_SignalSemaphore(&CC_3100Mutex);
+    }
+    }
 
 
     while(1)
