@@ -97,7 +97,7 @@ void JoinGame()
         retval = ReceiveData((_u8*)&client_p1, sizeof(client_p1));
     }
 
-    SendData((_u8*)&client_p1, client_info.IP_address , sizeof(client_p1));
+    SendData((_u8*)&client_p1, HOST_IP_ADDR , sizeof(client_p1));
 
 
     retval = -1;
@@ -106,7 +106,7 @@ void JoinGame()
         retval = ReceiveData((_u8*)&host_p0, sizeof(host_p0));
     }
 
-    SendData((_u8*)&host_p0, client_info.IP_address , sizeof(host_p0));
+    SendData((_u8*)&host_p0, HOST_IP_ADDR , sizeof(host_p0));
 
 
     InitBoardState();
