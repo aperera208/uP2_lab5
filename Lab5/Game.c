@@ -612,7 +612,7 @@ void MoveBall()
 
 
         int32_t dx_host = temp_games.balls[i].currentCenterX - temp_games.players[Host].currentCenter;
-        int32_t dy_host = temp_games.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID-4);
+        int32_t dy_host = temp_games.balls[i].currentCenterY - (VERT_CENTER_MAX_BALL - PADDLE_WID - 4);
 
         int32_t dx_client = temp_games.balls[i].currentCenterX - temp_games.players[Client].currentCenter;
         int32_t dy_client = temp_games.balls[i].currentCenterY -  (PADDLE_WID + VERT_CENTER_MIN_BALL);
@@ -714,7 +714,7 @@ void MoveBall()
             temp_games.balls[i].currentCenterX = HORIZ_CENTER_MIN_BALL + 1;
             x_vel = -1*x_vel;
         }
-        if(temp_games.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 4)
+        if(temp_games.balls[i].currentCenterY > VERT_CENTER_MAX_BALL + BALL_SIZE + 6)
         {
             kill = true;
             temp_games.balls[i].alive = false;
@@ -726,7 +726,7 @@ void MoveBall()
             }
             temp_games.numberOfBalls--;
         }
-        if(temp_games.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 4)
+        if(temp_games.balls[i].currentCenterY < VERT_CENTER_MIN_BALL - BALL_SIZE - 6)
         {
             kill = true;
             temp_games.balls[i].alive = false;
@@ -988,6 +988,9 @@ void DrawObjects()
         prevballs[i].CenterY = ARENA_MIN_X - 4;
     }
 
+    int16_t hit_paddle_top;
+    int16_t hit_paddle_bot;
+
 
     while(1)
     {
@@ -1002,7 +1005,24 @@ void DrawObjects()
         {
             if(temp_gamez.balls[i].alive == true)
             {
-                LCD_DrawRectangle(prevballs[i].CenterX - BALL_SIZE_D2, prevballs[i].CenterX + BALL_SIZE_D2, prevballs[i].CenterY - BALL_SIZE_D2, prevballs[i].CenterY + BALL_SIZE_D2, LCD_BLACK);
+                if((prevballs[i].CenterY - BALL_SIZE_D2) < (ARENA_MIN_Y + PADDLE_WID))
+                {
+                    hit_paddle_top = (ARENA_MIN_Y + PADDLE_WID);
+                }
+                else
+                {
+                    hit_paddle_top = (prevballs[i].CenterY - BALL_SIZE_D2);
+                }
+
+                if(( prevballs[i].CenterY + BALL_SIZE_D2) > (ARENA_MAX_Y - PADDLE_WID))
+                {
+                    hit_paddle_bot = (ARENA_MAX_Y - PADDLE_WID);
+                }
+                else
+                {
+                    hit_paddle_bot = ( prevballs[i].CenterY + BALL_SIZE_D2);
+                }
+                LCD_DrawRectangle(prevballs[i].CenterX - BALL_SIZE_D2, prevballs[i].CenterX + BALL_SIZE_D2, hit_paddle_top, hit_paddle_top, LCD_BLACK);
                 prevballs[i].CenterX = temp_gamez.balls[i].currentCenterX;
                 prevballs[i].CenterY = temp_gamez.balls[i].currentCenterY;
                 LCD_DrawRectangle(temp_gamez.balls[i].currentCenterX - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterX + BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY - BALL_SIZE_D2, temp_gamez.balls[i].currentCenterY + BALL_SIZE_D2, temp_gamez.balls[i].color);
