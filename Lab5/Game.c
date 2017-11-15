@@ -326,10 +326,11 @@ void EndOfGameClient()
             //G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
 
-        test.Center = 3737;
+        PrevPlayer_t test2;
+        test2.Center = 3737;
 
-        SendData((_u8*)&test, HOST_IP_ADDR, sizeof(test));
-        test.Center = 4744;
+
+        SendData((_u8*)&test2, HOST_IP_ADDR, sizeof(test2));
         }
 
 
