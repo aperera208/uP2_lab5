@@ -512,7 +512,7 @@ void CreateGame()
     G8RTOS_AddThread(Read_Joystick_Button_Host, "R Joy Host", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
-    G8RTOS_AddPeriodicEvent(periodic_button, 100);
+    G8RTOS_AddPeriodicEvent(periodic_button, 250);
 
     // Kill self //
     G8RTOS_KillSelf();
