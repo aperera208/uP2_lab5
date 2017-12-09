@@ -11,7 +11,8 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "Game.h"
+//#include "Game.h"
+#include "FinalProj.h"
 #include "G8RTOS_Semaphores.h"
 #include "G8RTOS_Scheduler.h"
 #include "G8RTOS_FIFO.h"

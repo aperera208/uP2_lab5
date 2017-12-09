@@ -291,12 +291,12 @@ playerType GetPlayerRole();
 /*
  * Draw players given center X center coordinate
  */
-void DrawPlayer(GeneralPlayerInfo_t * player);
+//void DrawPlayer(GeneralPlayerInfo_t * player);
 
 /*
  * Updates player's paddle based on current and new center
  */
-void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * outPlayer);
+//void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, GeneralPlayerInfo_t * outPlayer);
 
 /*
  * Function updates ball position on screen

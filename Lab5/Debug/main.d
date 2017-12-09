@@ -10,7 +10,7 @@ main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h
 main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h
 main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/time.h
 main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/abi_prefix.h
-main.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/Game.h
+main.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/FinalProj.h
 main.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/cc3100_usage/cc3100_usage.h
 main.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h
 main.obj: C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/user.h
@@ -70,7 +70,7 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdio.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/stdarg.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/time.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/abi_prefix.h: 
-C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/Game.h: 
+C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/Lab5/FinalProj.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/cc3100_usage/cc3100_usage.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/simplelink.h: 
 C:/Users/Alex\ Perera/Desktop/uP2/uP2_lab5/CC3100SupportPackage/simplelink/include/user.h: 

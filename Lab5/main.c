@@ -26,6 +26,9 @@ void main(void)
 
 	srand(time(NULL));
 
+	//InitBoardState();
+
+
 	StartMenu();
 
 	if(GetPlayerRole() == Host)
@@ -43,6 +46,7 @@ void main(void)
 
 	while(1)
 	{
+
 	}
 
 }

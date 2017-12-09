@@ -161,6 +161,7 @@ void LCD_DrawRectangle(int16_t xStart, int16_t xEnd, int16_t yStart, int16_t yEn
 
 }
 
+
 /******************************************************************************
  * Function Name  : PutChar
  * Description    : Lcd screen displays a character
@@ -394,7 +395,7 @@ inline uint8_t SPISendRecvByte (uint8_t byte)
 
 
     /* Return received value*/
-    return EUSCI_B3->RXBUF;
+    return 0;//EUSCI_B3->RXBUF;
 }
 
 /*******************************************************************************
