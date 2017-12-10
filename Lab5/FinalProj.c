@@ -928,14 +928,15 @@ void MoveBullets()
         {
             if(temp_game.bullets[i].alive == true)
             {
-                temp_game.bullets[i].x_center += temp_game.bullets[i].x_vel;
-                temp_game.bullets[i].y_center += temp_game.bullets[i].y_vel;
-
-                if(((temp_game.bullets[i].x_center > MAX_SCREEN_X) || (temp_game.bullets[i].x_center < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center < MIN_SCREEN_Y) ))
+                if(((temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel > MAX_SCREEN_X) || (temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel < MIN_SCREEN_Y) ))
                 {
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
                 }
+
+                temp_game.bullets[i].x_center += temp_game.bullets[i].x_vel;
+                temp_game.bullets[i].y_center += temp_game.bullets[i].y_vel;
+
             }
         }
 
