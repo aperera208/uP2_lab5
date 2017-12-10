@@ -19,7 +19,7 @@
 #define MAX_NUM_OF_BULLETS          10
 
 #define BULLETSIZE                  2
-#define BULLETD2                    BULLETSIZE>>1
+#define BULLETD2                    (BULLETSIZE>>1)
 
 
 /* Size of game arena */
@@ -31,7 +31,7 @@
 /* Ship attributes */
 #define MAX_HP              16
 #define shipSize                16
-#define sizediv2            shipSize>>1
+#define sizediv2            (shipSize>>1)
 #define ALIVE               1
 #define DEAD                0
 #define INVIS               2

@@ -516,7 +516,7 @@ void CreateGame()
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
     G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
-    G8RTOS_AddPeriodicEvent(periodic_button_host, 250);
+    G8RTOS_AddPeriodicEvent(periodic_button_host, 500);
 
     // Kill self //
     G8RTOS_KillSelf();
