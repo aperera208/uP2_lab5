@@ -18,6 +18,9 @@
 #define MAX_NUM_OF_ASTEROIDS        10
 #define MAX_NUM_OF_BULLETS          10
 
+#define BULLETSIZE                  2
+#define BULLETD2                    BULLETSIZE>>1
+
 
 /* Size of game arena */
 #define ARENA_MIN_X                  40
@@ -116,13 +119,22 @@ typedef struct
  */
 typedef struct
 {
-    uint16_t x_center;
-    uint16_t y_center;
-    uint8_t x_vel;
-    uint8_t y_vel;
+    int16_t x_center;
+    int16_t y_center;
+    int16_t x_vel;
+    int16_t y_vel;
     bullets bullet_type;
+    bool alive;
 }Bullets_t;
 
+/*
+ * Struct of all the previous bullet locations, only changed by self for drawing!
+ */
+typedef struct
+{
+    int16_t CenterX;
+    int16_t CenterY;
+}PrevBullet_t;
 
 /*
  * Struct to be sent from the host to the client
@@ -132,10 +144,11 @@ typedef struct
     GeneralPlayerInfo_t players[2];
     Asteroid_t asteroids[MAX_NUM_OF_ASTEROIDS];
     Bullets_t bullets[MAX_NUM_OF_BULLETS];
-    uint16_t numberOfbullets;
-    uint16_t numberOfasteroids;
+    uint8_t numberOfbullets;
+    uint8_t numberOfasteroids;
     bool gameDone;
     uint16_t Score;
+    PrevBullet_t prevbullets[MAX_NUM_OF_BULLETS];
 } GameState_t;
 #pragma pack ( pop )
 
@@ -150,14 +163,7 @@ typedef struct
 }PrevAsteroid_t;
 
 
-/*
- * Struct of all the previous bullet locations, only changed by self for drawing!
- */
-typedef struct
-{
-    int16_t CenterX;
-    int16_t CenterY;
-}PrevBullet_t;
+
 
 /*
  * Struct of all the previous players locations, only changed by self for drawing
@@ -201,6 +207,14 @@ void Read_Joystick_Button_Client();
  */
 void EndOfGameClient();
 
+
+void periodic_button_client();
+
+/*
+ * Generate Bullet based on button press flag
+ */
+void GenerateBulletClient();
+
 /*********************************************** Client Threads *********************************************************************/
 
 /*********************************************** Host Threads *********************************************************************/
@@ -237,7 +251,7 @@ void GenerateAsteroid();
 /*
  * Generate Bullet based on button press flag
  */
-void GenerateBullet();
+void GenerateBulletHost();
 
 /*
  * Thread to read host's joystick
@@ -249,7 +263,7 @@ void Read_Joystick_Button_Host();
  */
 void EndOfGameHost();
 
-void periodic_button();
+void periodic_button_host();
 
 
 /*********************************************** Host Threads *********************************************************************/

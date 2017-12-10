@@ -14,6 +14,9 @@ volatile GeneralPlayerInfo_t host_p0;
 volatile GeneralPlayerInfo_t client_p1;
 volatile Wifi_Info_t client_info;
 volatile GameState_t Game;
+ PrevBullet_t prevBullets;
+//prevBullets.CenterX = 0;
+//prevBulletss.CenterY = 0;
 
 semaphore_t LCDMutex;
 semaphore_t CC_3100Mutex;
@@ -512,7 +515,8 @@ void CreateGame()
     G8RTOS_AddThread(Read_Joystick_Button_Host, "R Joy Host", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
-    G8RTOS_AddPeriodicEvent(periodic_button, 250);
+    G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
+    G8RTOS_AddPeriodicEvent(periodic_button_host, 250);
 
     // Kill self //
     G8RTOS_KillSelf();
@@ -766,27 +770,183 @@ void EndOfGameHost()
 }
 
 
-void periodic_button()
+void periodic_button_host()
 {
     if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(blue, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Host].state |= SHIELD;
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(green, ++count);
+        G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Host].bullet_request = normal_shot;
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(red, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Host].bullet_request = spread_shot;
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(blue, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Host].bullet_request = charged0;
     }
 }
 
+void GenerateBulletHost()
+{
 
+    G8RTOS_WaitSemaphore(&GSMutex);
+    GameState_t temp_game = Game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+    if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
+    {
+        G8RTOS_KillSelf();
+    }
+
+    if( temp_game.players[Host].bullet_request == normal_shot)
+    {
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_game.bullets[i].alive == false)
+            {
+                temp_game.bullets[i].alive = true;
+                temp_game.bullets[i].bullet_type = normal_shot;
+                if(temp_game.players[Host].rotation == up)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = -1;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == down)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = 1;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
+                    temp_game.bullets[i].x_vel = -1;
+                    temp_game.bullets[i].y_vel = 0;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
+                    temp_game.bullets[i].x_vel = 1;
+                    temp_game.bullets[i].y_vel = 0;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == up_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
+                    temp_game.bullets[i].x_vel = -1;
+                    temp_game.bullets[i].y_vel = -1;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == up_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
+                    temp_game.bullets[i].x_vel = 1;
+                    temp_game.bullets[i].y_vel = -1;
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == down_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
+                    temp_game.bullets[i].x_vel = -1;
+                    temp_game.bullets[i].y_vel = 1;
+                    break;
+                }
+                else if(temp_game.players[Host].rotation == down_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
+                    temp_game.bullets[i].x_vel = 1;
+                    temp_game.bullets[i].y_vel = 1;
+                    break;
+                }
+
+            }
+
+        }
+        temp_game.numberOfbullets++;
+
+
+    }
+    /*else if(request = spread_shot)
+    {
+
+    }
+    else if(request = charged0)
+    {
+
+    }*/
+
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    Game = temp_game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+
+    G8RTOS_KillSelf();
+}
+
+void MoveBullets()
+{
+    GameState_t temp_game;
+
+    while(1)
+    {
+        G8RTOS_WaitSemaphore(&GSMutex);
+        temp_game = Game;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_game.bullets[i].alive == true)
+            {
+                temp_game.bullets[i].x_center += temp_game.bullets[i].x_vel;
+                temp_game.bullets[i].y_center += temp_game.bullets[i].y_vel;
+
+                if(((temp_game.bullets[i].x_center > MAX_SCREEN_X) || (temp_game.bullets[i].x_center < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center < MIN_SCREEN_Y) ))
+                {
+                    temp_game.bullets[i].alive = false;
+                    temp_game.numberOfbullets--;
+                }
+            }
+        }
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        Game = temp_game;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        G8RTOS_Sleep(20);
+    }
+
+}
 
 
 
@@ -815,6 +975,25 @@ void DrawObjects()
         G8RTOS_WaitSemaphore(&GSMutex);
         temp_game = Game;
         G8RTOS_SignalSemaphore(&GSMutex);
+
+
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_game.bullets[i].alive == true)
+            {
+                if(temp_game.bullets[i].bullet_type == normal_shot)
+                {
+                    LCD_DrawRectangle(temp_game.prevbullets[i].CenterX - BULLETD2 , temp_game.prevbullets[i].CenterX + BULLETD2 , temp_game.prevbullets[i].CenterY - BULLETD2, temp_game.prevbullets[i].CenterY + BULLETD2, LCD_BLACK);
+                    LCD_DrawRectangle(temp_game.bullets[i].x_center - BULLETD2, temp_game.bullets[i].x_center + BULLETD2 , temp_game.bullets[i].y_center - BULLETD2 , temp_game.bullets[i].y_center + BULLETD2 , LCD_PINK);
+
+                    temp_game.prevbullets[i].CenterX = temp_game.bullets[i].x_center;
+                    temp_game.prevbullets[i].CenterY = temp_game.bullets[i].y_center;
+
+                }
+            }
+        }
+
+
 
         host_p0 = temp_game.players[Host];
         client_temp = temp_game.players[Client];
@@ -848,6 +1027,10 @@ void DrawObjects()
         prevclient_p1.CenterX = client_temp.x_center;
         prevclient_p1.CenterY = client_temp.y_center;
         prevclient_p1.rotation = client_temp.rotation;
+
+
+
+
 
         // Sleep for 10 ms //
         G8RTOS_Sleep(15);
@@ -889,6 +1072,7 @@ void InitBoardState()
     Game.Score = 0;
 
 
+
     // Kill all asteroids and set color to white //
     for(int i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
     {
@@ -900,7 +1084,13 @@ void InitBoardState()
     for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
     {
         Game.bullets[i].bullet_type = no_bullet;
-
+        Game.prevbullets[i].CenterX = 400;//prevBullets.CenterX;
+        Game.prevbullets[i].CenterY = 400;//prevBullets.CenterY;
+        Game.bullets[i].x_center = 0;
+        Game.bullets[i].y_center = 0;
+        Game.bullets[i].x_vel = 0;
+        Game.bullets[i].y_vel = 0;
+        Game.bullets[i].alive = false;
     }
     // Clear the LCD //
     LCD_Clear(LCD_BLACK);
