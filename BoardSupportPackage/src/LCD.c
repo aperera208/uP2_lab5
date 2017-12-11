@@ -313,10 +313,10 @@ void LCD_SetPoint(uint16_t Xpos, uint16_t Ypos, uint16_t color)
 inline void LCD_Write_Data_Only(uint16_t data)
 {
     /* Send out MSB */ 
-    SPISendRecvByte((data >>   8));                    /* Write D8..D15                */
+    SPISendByte((data >>   8));                    /* Write D8..D15                */
 
     /* Send out LSB */ 
-    SPISendRecvByte((data & 0xFF));                    /* Write D0..D7                 */
+    SPISendByte((data & 0xFF));                    /* Write D0..D7                 */
 
 }
 
@@ -332,9 +332,9 @@ inline void LCD_WriteData(uint16_t data)
 {
     SPI_CS_LCD_LOW;
 
-    SPISendRecvByte(SPI_START | SPI_WR | SPI_DATA);    /* Write : RS = 1, RW = 0       */
-    SPISendRecvByte((data >>   8));                    /* Write D8..D15                */
-    SPISendRecvByte((data & 0xFF));                    /* Write D0..D7                 */
+    SPISendByte(SPI_START | SPI_WR | SPI_DATA);    /* Write : RS = 1, RW = 0       */
+    SPISendByte((data >>   8));                    /* Write D8..D15                */
+    SPISendByte((data & 0xFF));                    /* Write D0..D7                 */
 
     SPI_CS_LCD_HIGH;
 }
@@ -370,9 +370,9 @@ inline void LCD_WriteIndex(uint16_t index)
     SPI_CS_LCD_LOW;
 
     /* SPI write data */
-    SPISendRecvByte(SPI_START | SPI_WR | SPI_INDEX);   /* Write : RS = 0, RW = 0  */
-    SPISendRecvByte(0);
-    SPISendRecvByte(index);
+    SPISendByte(SPI_START | SPI_WR | SPI_INDEX);   /* Write : RS = 0, RW = 0  */
+    SPISendByte(0);
+    SPISendByte(index);
 
     SPI_CS_LCD_HIGH;
 }
@@ -385,7 +385,7 @@ inline void LCD_WriteIndex(uint16_t index)
  * Return         : Received value
  * Attention      : None
  *******************************************************************************/
-inline uint8_t SPISendRecvByte (uint8_t byte)
+inline void SPISendByte (uint8_t byte)
 {
     /* Send byte of data */
     EUSCI_B3->TXBUF = byte;
@@ -395,7 +395,17 @@ inline uint8_t SPISendRecvByte (uint8_t byte)
 
 
     /* Return received value*/
-    return 0;//EUSCI_B3->RXBUF;
+    //return EUSCI_B3->RXBUF;
+}
+
+inline uint8_t SPIRecByte()
+{
+    /* Wait as long as busy */
+    while(EUSCI_B3->STATW & EUSCI_B_STATW_BUSY);
+
+
+    /* Return received value*/
+    return EUSCI_B3->RXBUF;
 }
 
 /*******************************************************************************
@@ -408,7 +418,7 @@ inline uint8_t SPISendRecvByte (uint8_t byte)
  *******************************************************************************/
 inline void LCD_Write_Data_Start(void)
 {
-    SPISendRecvByte(SPI_START | SPI_WR | SPI_DATA);    /* Write : RS = 1, RW = 0 */
+    SPISendByte(SPI_START | SPI_WR | SPI_DATA);    /* Write : RS = 1, RW = 0 */
 }
 
 
@@ -425,15 +435,15 @@ inline uint16_t LCD_ReadData()
     uint16_t value;
     SPI_CS_LCD_LOW;
 
-    SPISendRecvByte(SPI_START | SPI_RD | SPI_DATA);   /* Read: RS = 1, RW = 1   */
-    SPISendRecvByte(0);                               /* Dummy read 1           */
-    SPISendRecvByte(0);                               /* Dummy read 2           */
-    SPISendRecvByte(0);                               /* Dummy read 3           */
-    SPISendRecvByte(0);                               /* Dummy read 4           */
-    SPISendRecvByte(0);                               /* Dummy read 5           */
+    SPISendByte(SPI_START | SPI_RD | SPI_DATA);   /* Read: RS = 1, RW = 1   */
+    SPIRecByte();                               /* Dummy read 1           */
+    SPIRecByte();                               /* Dummy read 2           */
+    SPIRecByte();                               /* Dummy read 3           */
+    SPIRecByte();                               /* Dummy read 4           */
+    SPIRecByte();                               /* Dummy read 5           */
 
-    value = (SPISendRecvByte(0) << 8);                /* Read D8..D15           */
-    value |= SPISendRecvByte(0);                      /* Read D0..D7            */
+    value = (SPIRecByte() << 8);                /* Read D8..D15           */
+    value |= SPIRecByte();                      /* Read D0..D7            */
 
     SPI_CS_LCD_HIGH;
     return value;
@@ -635,9 +645,9 @@ static uint16_t TP_ReadADC(uint16_t channel)
     
     SPI_CS_TP_LOW;                                  // Start transmission
 
-    SPISendRecvByte(channel);                       // Send start bit and channel bits
-    val = (SPISendRecvByte(0) << 5);                // Get high 7 bits and shift
-    val |= (SPISendRecvByte(0) >> 3);               // Get low 5 bits and shift
+    SPISendByte(channel);                       // Send start bit and channel bits
+    val = (SPIRecByte() << 5);                // Get high 7 bits and shift
+    val |= (SPIRecByte() >> 3);               // Get low 5 bits and shift
 
     SPI_CS_TP_HIGH;
 

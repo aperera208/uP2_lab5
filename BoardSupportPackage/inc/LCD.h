@@ -235,7 +235,9 @@ inline uint8_t SPISendRecvTPByte (uint8_t byte);
 * Return         : Recieved value 
 * Attention      : None
 *******************************************************************************/
-inline uint8_t SPISendRecvByte(uint8_t byte);
+inline void SPISendByte(uint8_t byte);
+
+inline uint8_t SPIRecByte();
 
 /*******************************************************************************
 * Function Name  : LCD_Write_Data_Start
