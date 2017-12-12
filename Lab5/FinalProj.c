@@ -139,6 +139,7 @@ void JoinGame()
     G8RTOS_AddThread(Read_Joystick_Button_Client, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
+    G8RTOS_AddPeriodicEvent(periodic_button_client, 250);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill JoinGame thread  //
@@ -192,74 +193,58 @@ void Read_Joystick_Button_Client()
         // DOWN LEFT
         if(x_coord > 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = down_left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP RIGHT
         else if(x_coord > 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = up_left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP LEFT
         else if( x_coord < 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = up_right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // DOWN LEFT
         else if(x_coord < 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = down_right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // LEFT
         else if(x_coord < 0 && y_coord == 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/(SPEED2-500);
             y_update += y_coord/(SPEED2-500);
             orient_temp = right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // RIGHT
         else if(x_coord > 0 && y_coord == 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/(SPEED2-500);
             y_update += y_coord/(SPEED2-500);
             orient_temp = left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // DOWN
         else if(x_coord == 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = down;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP
         else if(x_coord == 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED2;
             y_update += y_coord/SPEED2;
             orient_temp = up;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
 
         if(((y_update + y_temp - 10 < MIN_SCREEN_Y) && ( (orient_temp == up) || (orient_temp == up_left)|| (orient_temp == up_right) )))
@@ -338,26 +323,23 @@ void ReceiveDataFromHost()
             // G8RTOS_Sleep(1);
         }
 
-        // Check to make sure the IP Addresses are equal, this is an error check to make sure no garbage data is received //
-        //if(temp_gamestate.player.IP_address == GameZ.player.IP_address)
-       // {
+
         for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
         {
             temp_gamestate.prevbullets[i] = Game.prevbullets[i];
         }
 
             // Copy local Gamestate into global Gamestate //
-            G8RTOS_WaitSemaphore(&GSMutex);
-            Game = temp_gamestate;
-            G8RTOS_SignalSemaphore(&GSMutex);
+        G8RTOS_WaitSemaphore(&GSMutex);
+        Game = temp_gamestate;
+        G8RTOS_SignalSemaphore(&GSMutex);
 
             // Check if gameDone boolean is true //
-            if(temp_gamestate.gameDone == true)
-            {
+        if(temp_gamestate.gameDone == true)
+        {
                 // Add End of Game Client thread with highest priority  //
-                //G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
-            }
-        //}
+            //G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+        }
 
         // Sleep for 3 ms, best synchronization //
         G8RTOS_Sleep(3);
@@ -391,6 +373,162 @@ void SendDataToHost()
        G8RTOS_Sleep(2);
    }
 }
+
+void periodic_button_client()
+{
+    if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+    {
+        LED_write(blue, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Client].state |= SHIELD;
+    }
+    else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+    {
+        LED_write(green, ++count);
+        G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 200);
+        Game.players[Client].bullet_request = normal_shot;
+    }
+    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+    {
+        LED_write(red, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Client].bullet_request = spread_shot;
+    }
+    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+    {
+        LED_write(blue, ++count);
+        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        Game.players[Client].bullet_request = charged0;
+    }
+}
+
+void GenerateBulletClient()
+{
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    GameState_t temp_game = Game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+    if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
+    {
+        G8RTOS_KillSelf();
+    }
+
+    if( temp_game.players[Client].bullet_request == normal_shot)
+    {
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_game.bullets[i].alive == false)
+            {
+                temp_game.bullets[i].alive = true;
+                temp_game.bullets[i].bullet_type = normal_shot;
+                if(temp_game.players[Client].rotation == up)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == down)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = 0;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = 0;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == up_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 4;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == up_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 4;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Client].rotation == down_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 4;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+                }
+                else if(temp_game.players[Client].rotation == down_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 4;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+                }
+            }
+        }
+    }
+    /*else if(request = spread_shot)
+    {
+
+    }
+    else if(request = charged0)
+    {
+
+    }*/
+
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    Game = temp_game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+
+    G8RTOS_KillSelf();
+}
+
 
 void EndOfGameClient()
 {
@@ -581,74 +719,58 @@ void Read_Joystick_Button_Host()
         // DOWN LEFT
         if(x_coord > 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = down_left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP RIGHT
         else if(x_coord > 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = up_left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP LEFT
         else if( x_coord < 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = up_right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // DOWN LEFT
         else if(x_coord < 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = down_right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // LEFT
         else if(x_coord < 0 && y_coord == 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = right;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // RIGHT
         else if(x_coord > 0 && y_coord == 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = left;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // DOWN
         else if(x_coord == 0 && y_coord > 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = down;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
         // UP
         else if(x_coord == 0 && y_coord < 0)
         {
-            G8RTOS_WaitSemaphore(&GSMutex);
             x_update -= x_coord/SPEED;
             y_update += y_coord/SPEED;
             orient_temp = up;
-            G8RTOS_SignalSemaphore(&GSMutex);
         }
 
         if(((y_update + y_temp - 10 < MIN_SCREEN_Y) && ( (orient_temp == up) || (orient_temp == up_left)|| (orient_temp == up_right) )))
@@ -673,23 +795,6 @@ void Read_Joystick_Button_Host()
         Game.players[Host].y_center += y_update;
         Game.players[Host].rotation = orient_temp;
         G8RTOS_SignalSemaphore(&GSMutex);
-
-
-
-
-
-        /*
-        if(GameZ.players[Host].currentCenter   > ARENA_MAX_X - PADDLE_LEN_D2 )
-        {
-            GameZ.players[Host].currentCenter = ARENA_MAX_X - PADDLE_LEN_D2;
-        }
-        else if(GameZ.players[Host].currentCenter < ARENA_MIN_X + PADDLE_LEN_D2 + 1)
-        {
-            GameZ.players[Host].currentCenter = ARENA_MIN_X + PADDLE_LEN_D2 + 1;
-        }
-        */
-
-
 
 
     }
@@ -938,11 +1043,12 @@ void MoveBullets()
         temp_game = Game;
         G8RTOS_SignalSemaphore(&GSMutex);
 
+
         for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
         {
             if(temp_game.bullets[i].alive == true)
             {
-                if(((temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel > MAX_SCREEN_X) || (temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel < MIN_SCREEN_Y) ))
+                if(((temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel - BULLETD2  > MAX_SCREEN_X) || (temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel + BULLETD2 + 2  < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel - BULLETD2 - 1 > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel + BULLETD2 + 1 < MIN_SCREEN_Y) ))
                 {
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
@@ -997,11 +1103,24 @@ void DrawObjects()
             {
                 if(temp_game.bullets[i].bullet_type == normal_shot)
                 {
-                    LCD_DrawRectangle(temp_game.prevbullets[i].CenterX - BULLETD2 - 2 , temp_game.prevbullets[i].CenterX + BULLETD2 + 2 , temp_game.prevbullets[i].CenterY - BULLETD2 - 2, temp_game.prevbullets[i].CenterY + BULLETD2 + 2, LCD_BLACK);
+                    LCD_DrawRectangle(temp_game.prevbullets[i].CenterX  - BULLETD2 - 3 , temp_game.prevbullets[i].CenterX  + BULLETD2 + 3 , temp_game.prevbullets[i].CenterY  - BULLETD2 - 3, temp_game.prevbullets[i].CenterY  + BULLETD2 + 3, LCD_BLACK);
                     LCD_DrawRectangle(temp_game.bullets[i].x_center - BULLETD2, temp_game.bullets[i].x_center + BULLETD2 , temp_game.bullets[i].y_center - BULLETD2 , temp_game.bullets[i].y_center + BULLETD2 , LCD_PINK);
 
                     temp_game.prevbullets[i].CenterX = temp_game.bullets[i].x_center;
                     temp_game.prevbullets[i].CenterY = temp_game.bullets[i].y_center;
+
+                    if(abs(temp_game.players[Host].x_center - temp_game.bullets[i].x_center) < 15 && abs(temp_game.players[Host].y_center - temp_game.bullets[i].y_center) < 15)
+                    {
+                        UpdatePlayerOnScreen((PrevPlayer_t *) &prevhost_p0, (GeneralPlayerInfo_t *)&temp_game.players[Host]);
+                    }
+                    if(abs(temp_game.players[Client].x_center - temp_game.bullets[i].x_center) < 15 && abs(temp_game.players[Client].y_center - temp_game.bullets[i].y_center) < 15)
+                    {
+                        UpdatePlayerOnScreen(&prevclient_p1, &temp_game.players[Client]);
+                    }
+                    if((temp_game.bullets[i].x_center < MIN_SCREEN_X + 50) && (temp_game.bullets[i].y_center < MIN_SCREEN_Y + 50))
+                    {
+                        LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
+                    }
 
                 }
             }
@@ -1032,6 +1151,7 @@ void DrawObjects()
         {
             LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
         }
+
 
         // Update previous  positions //
         prevhost_p0.CenterX = temp_game.players[Host].x_center;
@@ -1124,8 +1244,8 @@ void InitBoardState()
     // Draw initial paddles //
     //LCD_DrawRectangle(client_p1.x_center - sizediv2 , client_p1.x_center + sizediv2 , client_p1.y_center - sizediv2, client_p1.y_center + sizediv2, client_p1.color);   // Client player paddle
     //LCD_DrawRectangle(host_p0.x_center - sizediv2 , host_p0.x_center + sizediv2 , host_p0.y_center - sizediv2, host_p0.y_center + sizediv2 , host_p0.color);     // Host player paddle
-    DrawPlayer(&host_p0);
-    DrawPlayer(&client_p1);
+    DrawPlayer(&Game.players[Host]);
+    DrawPlayer(&Game.players[Client]);
 
 
     // Display overall scores on LCD //
@@ -1146,7 +1266,7 @@ void ErasePlayer( PrevPlayer_t * player)
     switch(player->rotation)
     {
         case up:
-            for(int i = 1; i < 15; i++)
+            for(int i = 1; i < 16; i++)
             {
                 LCD_DrawRectangle(player->CenterX - i, player->CenterX + i, player->CenterY - 6 + i,  player->CenterY - 5 + i, LCD_BLACK);
             }
@@ -1154,42 +1274,42 @@ void ErasePlayer( PrevPlayer_t * player)
 
 
         case down:
-            for(int i = 1; i < 15; i++)
+            for(int i = 1; i < 16; i++)
             {
                LCD_DrawRectangle(player->CenterX - i, player->CenterX + i, player->CenterY + 5 - i,  player->CenterY + 6 - i, LCD_BLACK);
             }
         break;
 
         case right:
-            for(int i = 1; i < 15; i++)
+            for(int i = 1; i < 16; i++)
             {
                LCD_DrawRectangle( player->CenterX + 5 - i, player->CenterX + 6 - i,player->CenterY - i, player->CenterY + i , LCD_BLACK);
             }
             break;
 
         case left:
-            for(int i = 1; i < 15; i++)
+            for(int i = 1; i < 16; i++)
             {
                 LCD_DrawRectangle(player->CenterX - 6 + i, player->CenterX - 5 + i,player->CenterY - i ,  player->CenterY + i, LCD_BLACK);
             }
             break;
 
         case down_right:
-            for(int i = 1; i < 20; i++)
+            for(int i = 1; i < 21; i++)
             {
                 LCD_DrawRectangle(player->CenterX - i + 5, player->CenterX + 5, player->CenterY - 6 + i,  player->CenterY - 5 + i, LCD_BLACK);
             }
             break;
 
         case down_left:
-            for(int i = 1; i < 20; i++)
+            for(int i = 1; i < 21; i++)
             {
                 LCD_DrawRectangle(player->CenterX - 5, player->CenterX - 5 + i, player->CenterY - 6 + i,  player->CenterY - 5 + i, LCD_BLACK);
             }
             break;
 
         case up_right:
-            for(int i = 0; i < 20; i++)
+            for(int i = 0; i < 21; i++)
             {
                 LCD_DrawRectangle(player->CenterX - 6 + i, player->CenterX - 5 + i, player->CenterY - 6,  player->CenterY - 5 + i, LCD_BLACK);
             }
@@ -1197,7 +1317,7 @@ void ErasePlayer( PrevPlayer_t * player)
 
 
         case up_left:
-            for(int i = 0; i < 20; i++)
+            for(int i = 0; i < 21; i++)
             {
                 LCD_DrawRectangle(player->CenterX - 7 , player->CenterX - 6 + i, player->CenterY - 7,  player->CenterY + 6 - i, LCD_BLACK);
             }

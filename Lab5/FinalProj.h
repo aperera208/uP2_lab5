@@ -86,6 +86,18 @@ typedef struct
 } Wifi_Info_t;
 
 /*
+ *  Struct for the bullets
+ */
+typedef struct
+{
+    int16_t x_center;
+    int16_t y_center;
+    int16_t x_vel;
+    int16_t y_vel;
+    bullets bullet_type;
+    bool alive;
+}Bullets_t;
+/*
  * General player info to be used by both host and client
  * Client responsible for translation
  */
@@ -114,18 +126,7 @@ typedef struct
     bool alive;
 } Asteroid_t;
 
-/*
- *  Struct for the bullets
- */
-typedef struct
-{
-    int16_t x_center;
-    int16_t y_center;
-    int16_t x_vel;
-    int16_t y_vel;
-    bullets bullet_type;
-    bool alive;
-}Bullets_t;
+
 
 /*
  * Struct of all the previous bullet locations, only changed by self for drawing!
