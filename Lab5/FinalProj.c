@@ -143,7 +143,7 @@ void JoinGame()
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
     G8RTOS_AddPeriodicEvent(periodic_button_client, 50);
-    G8RTOS_AddThread(MoveLEDs, "Move LEDs", 200);
+    G8RTOS_AddThread(DisplayHP, "DisplayHP", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill JoinGame thread  //
@@ -362,10 +362,10 @@ void ReceiveDataFromHost()
 
 
             // Check if gameDone boolean is true //
-        if(temp_gamestate.gameDone == true)
+        if( (temp_gamestate.players[Client].HP <= 2)  && (temp_gamestate.players[Host].HP <= 2))
         {
                 // Add End of Game Client thread with highest priority  //
-            //G8RTOS_AddThread(EndOfGameClient, "End Game", 1);
+            G8RTOS_AddThread(EndOfGame, "End Game", 1);
         }
 
         // Sleep for 3 ms, best synchronization //
@@ -412,8 +412,9 @@ void periodic_button_client()
     }
     else
     {
-        if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
-        {
+       // if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+        //{
+            /*
             //LED_write(blue, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
@@ -421,8 +422,9 @@ void periodic_button_client()
             G8RTOS_SignalSemaphore(&GSMutex);
 
             cool_off_client = 5;
-        }
-        else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+            */
+        //}
+        if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
            // LED_write(green, ++count);
             //G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
@@ -435,8 +437,9 @@ void periodic_button_client()
             cool_off_client = 5;
 
         }
-        else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
-        {
+        /*
+        //else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        //{
             //LED_write(red, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
@@ -444,7 +447,8 @@ void periodic_button_client()
             G8RTOS_SignalSemaphore(&GSMutex);
             cool_off_client = 5;
 
-        }
+        //}
+
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
             //LED_write(blue, ++count);
@@ -455,6 +459,7 @@ void periodic_button_client()
             cool_off_client = 5;
 
         }
+        */
         else
         {
             G8RTOS_WaitSemaphore(&GSMutex);
@@ -473,9 +478,30 @@ void periodic_button_client()
 
 
 
-void EndOfGameClient()
+void EndOfGame()
 {
-    while(1);
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    G8RTOS_WaitSemaphore(&CC_3100Mutex);
+    G8RTOS_WaitSemaphore(&PlayerMutex);
+
+    G8RTOS_KillAllOtherThreads();
+
+    LED_clear(0xFFFF);
+
+    LCD_Clear(LCD_RED);
+
+    LCD_Text((MAX_SCREEN_X>>1)-80, (MAX_SCREEN_Y>>4), "PRESS RESET GAME BUTTON!", LCD_WHITE);
+
+   while(1)
+    {
+
+
+
+
+
+    }
+
 }
 
 
@@ -604,7 +630,7 @@ void CreateGame()
     G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
     G8RTOS_AddPeriodicEvent(periodic_button_host, 50);
     G8RTOS_AddThread(GenerateAsteroids, "Gen Asteriod", 200);
-    G8RTOS_AddThread(MoveLEDs, "Move LEDs", 200);
+    G8RTOS_AddThread(DisplayHP, "DisplayHP", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill self //
@@ -779,11 +805,12 @@ void SendDataToClient()
         G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
         // Check if the game is done //
-        if(tempGamez.gameDone == true)
+        if( (tempGamez.players[Client].HP <= 0)  && (tempGamez.players[Host].HP <= 0))
         {
-            // Add End of Game Host with highest priority //
-            //G8RTOS_AddThread(EndOfGameHost, "End Game", 1);
+                // Add End of Game Client thread with highest priority  //
+            G8RTOS_AddThread(EndOfGame, "End Game", 1);
         }
+
 
         // Sleep for 5ms, good for synchronization //
         G8RTOS_Sleep(5);
@@ -852,6 +879,7 @@ void periodic_button_host()
     }
     else
     {
+        /*
         if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
            // LED_write(blue, ++count);
@@ -863,7 +891,8 @@ void periodic_button_host()
 
 
         }
-        else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        */
+        if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
             //LED_write(green, ++count);
             GenerateBulletHost();
@@ -877,6 +906,7 @@ void periodic_button_host()
             cool_off_host = 5;
 
         }
+        /*
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
            // LED_write(red, ++count);
@@ -897,6 +927,7 @@ void periodic_button_host()
             cool_off_host = 5;
 
         }
+        */
     }
 
 }
@@ -1222,7 +1253,7 @@ void MoveBullets()
 }
 
 
-void MoveLEDs()
+void DisplayHP()
 {
     GameState_t temp_game;
 

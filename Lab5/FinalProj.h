@@ -210,7 +210,7 @@ void Read_Joystick_Button_Client();
 /*
  * End of game for the client
  */
-void EndOfGameClient();
+void EndOfGame();
 
 
 void periodic_button_client();
@@ -284,7 +284,7 @@ void DrawObjects();
 /*
  * Thread to update LEDs based on score
  */
-void MoveLEDs();
+void DisplayHP();
 
 /*
  * Thread to make spaceship invisible after an asteroid collision
