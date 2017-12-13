@@ -268,9 +268,11 @@ void Read_Joystick_Button_Client()
         temp_client = Game.players[Client];
         G8RTOS_SignalSemaphore(&GSMutex);
 
+
         temp_client.x_center += x_update;
         temp_client.y_center += y_update;
         temp_client.rotation = orient_temp;
+
 
         G8RTOS_WaitSemaphore(&PlayerMutex);
         client_p1 = temp_client;
@@ -380,26 +382,41 @@ void periodic_button_client()
     {
         LED_write(blue, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Client].state |= SHIELD;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(green, ++count);
-        G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 200);
+        //G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Client].bullet_request = normal_shot;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(red, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Client].bullet_request = spread_shot;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(blue, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Client].bullet_request = charged0;
+        G8RTOS_SignalSemaphore(&GSMutex);
     }
+
+    G8RTOS_WaitSemaphore(&PlayerMutex);
+    client_p1.bullet_request = Game.players[Client].bullet_request;
+    G8RTOS_SignalSemaphore(&PlayerMutex);
 }
 
 void GenerateBulletClient()
@@ -408,6 +425,10 @@ void GenerateBulletClient()
     G8RTOS_WaitSemaphore(&GSMutex);
     GameState_t temp_game = Game;
     G8RTOS_SignalSemaphore(&GSMutex);
+
+    G8RTOS_WaitSemaphore(&PlayerMutex);
+    client_p1.bullet_request = no_bullet;
+    G8RTOS_SignalSemaphore(&PlayerMutex);
 
     if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
     {
@@ -520,6 +541,7 @@ void GenerateBulletClient()
 
     }*/
 
+    temp_game.players[Client].bullet_request = client_p1.bullet_request;
 
     G8RTOS_WaitSemaphore(&GSMutex);
     Game = temp_game;
@@ -637,7 +659,7 @@ void CreateGame()
         retval = ReceiveData((_u8*)&host_p0, sizeof(host_p0));
     }
 
-    // Initialize Pong arena //
+    // Initialize arena //
     InitBoardState();
 
     // Initialize all the semaphores //
@@ -658,8 +680,8 @@ void CreateGame()
     G8RTOS_AddThread(Read_Joystick_Button_Host, "R Joy Host", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
-    G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
-    G8RTOS_AddPeriodicEvent(periodic_button_host, 250);
+    G8RTOS_AddThread(MoveBullets, "Move Bullets", 100);
+    G8RTOS_AddPeriodicEvent(periodic_button_host, 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill self //
@@ -673,8 +695,6 @@ void CreateGame()
 •   You’ll need to add a bias to the values (found experimentally) since every joystick is offset by some small amount displacement and noise
 •   Change Self.displacement accordingly (you can experiment with how much you want to scale the ADC value)
 •   Sleep for 10ms
-•   Then add the displacement to the bottom player in the list of players (general list that’s sent to the client and used for drawing)
-•   By sleeping before updating the bottom player’s position, it makes the game more fair between client and host
  */
 void Read_Joystick_Button_Host()
 {
@@ -842,7 +862,6 @@ void SendDataToClient()
  * Thread that receives UDP packets from client
 •   Continually receive data until a return value greater than zero is returned (meaning valid data has been read)
     o   Note: Remember to release and take the semaphore again so you’re still able to send data
-•   Update the player’s current center with the displacement received from the client
 •   Sleep for 2ms (again found experimentally)
  */
 void ReceiveDataFromClient()
@@ -861,6 +880,13 @@ void ReceiveDataFromClient()
             retval = ReceiveData((_u8*)&client_p1, sizeof(client_p1));
             G8RTOS_SignalSemaphore(&CC_3100Mutex);
         }
+
+
+        if(client_p1.bullet_request == normal_shot)
+        {
+            G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+        }
+
 
         // Update gamestate with general client info //
         G8RTOS_WaitSemaphore(&GSMutex);
@@ -884,25 +910,37 @@ void periodic_button_host()
     {
         LED_write(blue, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Host].state |= SHIELD;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(green, ++count);
-        G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen Host", 100);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Host].bullet_request = normal_shot;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(red, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Host].bullet_request = spread_shot;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
     else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
     {
         LED_write(blue, ++count);
         //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+        G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Host].bullet_request = charged0;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
     }
 }
 
@@ -917,6 +955,8 @@ void GenerateBulletHost()
     {
         G8RTOS_KillSelf();
     }
+
+
 
     if( temp_game.players[Host].bullet_request == normal_shot)
     {
@@ -1033,9 +1073,68 @@ void GenerateBulletHost()
     G8RTOS_KillSelf();
 }
 
-void MoveBullets()
+
+/*
+ * Thread to Generate Asteroids
+ * Generated proportional to the current number of asteroids
+ */
+void GenerateAsteroids()
 {
+    uint8_t numAsteroids;
+
+    while(1)
+    {
+        // Copy global number of Asteroids into local Asteroids //
+        numAsteroids = Game.numberOfasteroids;
+
+        // If max number of balls are not on the screen //
+        if(numAsteroids < MAX_NUM_OF_ASTEROIDS)
+        {
+            // Add another ball and increment number of balls //
+            G8RTOS_AddThread(MoveAsteroids, "Move Asteroids", 200);
+            numAsteroids++;
+        }
+
+        // Store local numballs into global gamestate number of balls //
+        G8RTOS_WaitSemaphore(&GSMutex);
+        Game.numberOfasteroids = numAsteroids;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        // Sleep proportional to number of balls on the screen (0.5s) //
+        G8RTOS_Sleep(500*numAsteroids);
+    }
+}
+
+/*
+ * Thread to Move Asteroids
+ * Asteroids moved by Host
+ */
+void MoveAsteroids()
+{
+
     GameState_t temp_game;
+
+    temp_game = Game;
+
+    int i;
+    for(i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
+    {
+        if(temp_game.asteroids[i].alive == false)
+        {
+            break;
+        }
+        else if(i == MAX_NUM_OF_ASTEROIDS-1)
+        {
+            G8RTOS_KillSelf();
+        }
+    }
+
+    temp_game.asteroids[i].asteroid = small;
+    temp_game.asteroids[i].alive =  true;
+    temp_game.asteroids[i].currentCenterX =  (rand() % (270 - 50) + 50);
+    temp_game.asteroids[i].currentCenterY =  (rand() % (230 - 50) + 50);
+
+    Game = temp_game;
 
     while(1)
     {
@@ -1044,22 +1143,50 @@ void MoveBullets()
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
+
+
+    }
+}
+
+
+/*
+ * Thread to move all the bullets
+ * Done by Host
+ */
+void MoveBullets()
+{
+    // Temporary Gamestate
+    GameState_t temp_game;
+
+    while(1)
+    {
+        // Store global gamestate in a local variable
+        G8RTOS_WaitSemaphore(&GSMutex);
+        temp_game = Game;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        // Go through the array of bullets
         for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
         {
+            // Look for the alive bullets
             if(temp_game.bullets[i].alive == true)
             {
-                if(((temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel - BULLETD2  > MAX_SCREEN_X) || (temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel + BULLETD2 + 2  < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel - BULLETD2 - 1 > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel + BULLETD2 + 1 < MIN_SCREEN_Y) ))
+                // If the bullet goes off the screen, kill it and decrement the number of bullets
+                if(((temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel - BULLETSIZE  > MAX_SCREEN_X) || (temp_game.bullets[i].x_center + temp_game.bullets[i].x_vel + BULLETSIZE + 2  < MIN_SCREEN_X)) || ((temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel - BULLETSIZE - 1 > MAX_SCREEN_Y) || (temp_game.bullets[i].y_center + temp_game.bullets[i].y_vel + BULLETSIZE + 1 < MIN_SCREEN_Y) ))
                 {
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
                 }
-
-                temp_game.bullets[i].x_center += temp_game.bullets[i].x_vel;
-                temp_game.bullets[i].y_center += temp_game.bullets[i].y_vel;
-
+                // Otherwise, update the position based on velocity
+                else
+                {
+                    temp_game.bullets[i].x_center += temp_game.bullets[i].x_vel;
+                    temp_game.bullets[i].y_center += temp_game.bullets[i].y_vel;
+                }
             }
         }
 
+        // Store local gamestate back into the global gamestate
         G8RTOS_WaitSemaphore(&GSMutex);
         Game = temp_game;
         G8RTOS_SignalSemaphore(&GSMutex);
@@ -1088,8 +1215,6 @@ void DrawObjects()
     prevclient_p1.CenterY = (ARENA_MAX_Y >> 1);
     prevclient_p1.rotation = up_left;
 
-    //GeneralPlayerInfo_t client_temp;
-
     while(1)
     {
         // Copy global gamestate into local temporary gamestate, reduce semaphore usage //
@@ -1103,12 +1228,15 @@ void DrawObjects()
             {
                 if(temp_game.bullets[i].bullet_type == normal_shot)
                 {
+                    // Erase previous bullet and draw new bullet
                     LCD_DrawRectangle(temp_game.prevbullets[i].CenterX  - BULLETD2 - 3 , temp_game.prevbullets[i].CenterX  + BULLETD2 + 3 , temp_game.prevbullets[i].CenterY  - BULLETD2 - 3, temp_game.prevbullets[i].CenterY  + BULLETD2 + 3, LCD_BLACK);
                     LCD_DrawRectangle(temp_game.bullets[i].x_center - BULLETD2, temp_game.bullets[i].x_center + BULLETD2 , temp_game.bullets[i].y_center - BULLETD2 , temp_game.bullets[i].y_center + BULLETD2 , LCD_PINK);
 
+                    // Update previous bullet location
                     temp_game.prevbullets[i].CenterX = temp_game.bullets[i].x_center;
                     temp_game.prevbullets[i].CenterY = temp_game.bullets[i].y_center;
 
+                    // Redraw  players if the bullet gets close to the players
                     if(abs(temp_game.players[Host].x_center - temp_game.bullets[i].x_center) < 15 && abs(temp_game.players[Host].y_center - temp_game.bullets[i].y_center) < 15)
                     {
                         UpdatePlayerOnScreen((PrevPlayer_t *) &prevhost_p0, (GeneralPlayerInfo_t *)&temp_game.players[Host]);
@@ -1117,6 +1245,8 @@ void DrawObjects()
                     {
                         UpdatePlayerOnScreen(&prevclient_p1, &temp_game.players[Client]);
                     }
+
+                    // Redraw the score if a bullet gets close to the score
                     if((temp_game.bullets[i].x_center < MIN_SCREEN_X + 50) && (temp_game.bullets[i].y_center < MIN_SCREEN_Y + 50))
                     {
                         LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
@@ -1126,34 +1256,33 @@ void DrawObjects()
             }
         }
 
-
-       // host_p0 = temp_game.players[Host];
-       // client_temp = temp_game.players[Client];
-
-
+        // Redraw host player if moved
         if((prevhost_p0.CenterX != temp_game.players[Host].x_center) || (prevhost_p0.CenterY != temp_game.players[Host].y_center) || (prevhost_p0.rotation != temp_game.players[Host].rotation))
         {
             UpdatePlayerOnScreen((PrevPlayer_t *) &prevhost_p0, (GeneralPlayerInfo_t *)&temp_game.players[Host]);
         }
 
+        // Redraw the players if they collide
         if((abs(temp_game.players[Host].x_center - temp_game.players[Client].x_center) < SHIP_COLL) && (abs(temp_game.players[Host].y_center - temp_game.players[Client].y_center) < SHIP_COLL))
         {
             UpdatePlayerOnScreen((PrevPlayer_t *) &prevhost_p0, (GeneralPlayerInfo_t *)&temp_game.players[Host]);
             UpdatePlayerOnScreen(&prevclient_p1, &temp_game.players[Client]);
         }
 
+        // Redraw the client player if moved
         if((prevclient_p1.CenterX != temp_game.players[Client].x_center) || (prevclient_p1.CenterY != temp_game.players[Client].y_center) || (prevclient_p1.rotation != temp_game.players[Client].rotation))
         {
             UpdatePlayerOnScreen(&prevclient_p1, &temp_game.players[Client]);
         }
 
+        // Redraw the score if the players get close to the score
         if(((temp_game.players[Host].x_center < MIN_SCREEN_X + 50) && (temp_game.players[Host].y_center < MIN_SCREEN_Y + 50)) || ((temp_game.players[Client].x_center < MIN_SCREEN_X + 50) && (temp_game.players[Client].y_center < MIN_SCREEN_Y + 50)))
         {
             LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
         }
 
 
-        // Update previous  positions //
+        // Update previous  positions
         prevhost_p0.CenterX = temp_game.players[Host].x_center;
         prevhost_p0.CenterY = temp_game.players[Host].y_center;
         prevhost_p0.rotation = temp_game.players[Host].rotation;
@@ -1163,19 +1292,14 @@ void DrawObjects()
         prevclient_p1.rotation = temp_game.players[Client].rotation;
 
 
-
-
-
-        // Copy global gamestate into local temporary gamestate, reduce semaphore usage //
+        // Copy local gamestate into global gamestate, reduce semaphore usage //
         G8RTOS_WaitSemaphore(&GSMutex);
         Game = temp_game;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        // Sleep for 10 ms //
+        // Sleep for 12 ms //
         G8RTOS_Sleep(12);
     }
-
-
 }
 
 
@@ -1234,32 +1358,19 @@ void InitBoardState()
     // Clear the LCD //
     LCD_Clear(LCD_BLACK);
 
-    // Draw the pong arena //
-    //LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MIN_Y, ARENA_MAX_Y, LCD_BLACK);           // Draw square black arena
-    //LCD_DrawRectangle(ARENA_MIN_X, ARENA_MIN_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw left edge of arena in white
-    //LCD_DrawRectangle(ARENA_MAX_X, ARENA_MAX_X+1, ARENA_MIN_Y, ARENA_MAX_Y, LCD_WHITE);         // Draw right edge of arena in white
-    //LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MIN_Y, ARENA_MIN_Y+1, LCD_WHITE);         // Draw top edge of arena in white
-    //LCD_DrawRectangle(ARENA_MIN_X, ARENA_MAX_X, ARENA_MAX_Y-1, ARENA_MAX_Y, LCD_WHITE);         // Draw bottom edge of arena in white
-
-    // Draw initial paddles //
-    //LCD_DrawRectangle(client_p1.x_center - sizediv2 , client_p1.x_center + sizediv2 , client_p1.y_center - sizediv2, client_p1.y_center + sizediv2, client_p1.color);   // Client player paddle
-    //LCD_DrawRectangle(host_p0.x_center - sizediv2 , host_p0.x_center + sizediv2 , host_p0.y_center - sizediv2, host_p0.y_center + sizediv2 , host_p0.color);     // Host player paddle
+   // Draw initial players
     DrawPlayer(&Game.players[Host]);
     DrawPlayer(&Game.players[Client]);
 
-
-    // Display overall scores on LCD //
-   // char buffer_h[2];
+    // Draw the initial score
     sprintf(buffer_c, "%02d", Game.Score);
-    //sprintf(buffer_h, "%02d", GameZ.overallScores[Host] );
-    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      // Client score
-    //LCD_Text(MIN_SCREEN_X + 10, MAX_SCREEN_Y - 20, (uint8_t*)buffer_h, host_p0.color);        // Host score
+    LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);
 
 }
 
 
 /*
- *
+ * Erase player location
  */
 void ErasePlayer( PrevPlayer_t * player)
 {
@@ -1333,7 +1444,7 @@ void ErasePlayer( PrevPlayer_t * player)
 }
 
 /*
- *
+ * Draw player location
  */
 void DrawPlayer(volatile GeneralPlayerInfo_t * player)
 {
@@ -1410,7 +1521,7 @@ void DrawPlayer(volatile GeneralPlayerInfo_t * player)
 void StartMenu()
 {
     // Display start menu with button layout //
-    LCD_Text((MAX_SCREEN_X>>1)-64, (MAX_SCREEN_Y>>4), "WELCOME TO PONG!", LCD_WHITE);
+    LCD_Text((MAX_SCREEN_X>>1)-80, (MAX_SCREEN_Y>>4), "WELCOME TO ASTERIODS!", LCD_WHITE);
 
     LCD_DrawRectangle((MIN_SCREEN_X + (MAX_SCREEN_X>>2)-32), (MIN_SCREEN_X +(MAX_SCREEN_X>>2)+32), (MAX_SCREEN_Y>>1)-24, (MAX_SCREEN_Y>>1)+40, LCD_WHITE);
     LCD_DrawRectangle((MAX_SCREEN_X>>1)-32, (MAX_SCREEN_X>>1)+32, (MAX_SCREEN_Y - (MAX_SCREEN_Y>>2)-24), (MAX_SCREEN_Y - (MAX_SCREEN_Y>>2)+40), LCD_WHITE);
@@ -1423,105 +1534,84 @@ void StartMenu()
 
     // Initialize overall scores, only happens at beginning of program //
     Game.Score = 0;
-    //Game.overallScores[Client] = 0;
 }
 
 
 void UpdatePlayerOnScreen(PrevPlayer_t * prevPlayerIn, volatile GeneralPlayerInfo_t * outPlayer)
 {
-
-
-
-
     int16_t x_diff = outPlayer->x_center - prevPlayerIn->CenterX;
     int16_t y_diff = outPlayer->y_center - prevPlayerIn->CenterY;
 
 
-    // DOWN LEFT
-    if(outPlayer->rotation == down_right)//x_diff > 0 && y_diff > 0)
+    // DOWN RIGHT
+    if(outPlayer->rotation == down_right)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = down_right;
 
         // Draw New Player
         DrawPlayer(outPlayer);
 
     }
     // UP RIGHT
-    else if(outPlayer->rotation == up_right)//x_diff > 0 && y_diff < 0)
+    else if(outPlayer->rotation == up_right)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = up_right;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // UP LEFT
-    else if(outPlayer->rotation == up_left )// x_diff < 0 && y_diff < 0)
+    else if(outPlayer->rotation == up_left )
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = up_left;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // DOWN LEFT
-    else if(outPlayer->rotation == down_left)//x_diff < 0 && y_diff > 0)
+    else if(outPlayer->rotation == down_left)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = down_left;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // LEFT
-    else if(outPlayer->rotation == left)//x_diff < 0 && y_diff == 0)
+    else if(outPlayer->rotation == left)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = left;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // RIGHT
-    else if(outPlayer->rotation == right)// x_diff > 0 && y_diff == 0)
+    else if(outPlayer->rotation == right)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-       // outPlayer->rotation = right;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // DOWN
-    else if(outPlayer->rotation == down)//x_diff == 0 && y_diff > 0)
+    else if(outPlayer->rotation == down)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = down;
 
         // Draw New Player
         DrawPlayer(outPlayer);
     }
     // UP
-    else if(outPlayer->rotation == up)//x_diff == 0 && y_diff < 0)
+    else if(outPlayer->rotation == up)
     {
         // Erase previous player
         ErasePlayer(prevPlayerIn);
-
-        //outPlayer->rotation = up;
 
         // Draw New Player
         DrawPlayer(outPlayer);

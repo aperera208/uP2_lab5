@@ -16,11 +16,11 @@
 #include "G8RTOS_Semaphores.h"
 
 #define MAX_NUM_OF_ASTEROIDS        10
-#define MAX_NUM_OF_BULLETS          5
+#define MAX_NUM_OF_BULLETS          10
 
 #define BULLETSIZE                  4
 #define BULLETD2                    (BULLETSIZE>>1)
-#define BULLETSPEED                 2
+#define BULLETSPEED                 5
 
 /* Size of game arena */
 #define ARENA_MIN_X                  40
@@ -164,8 +164,6 @@ typedef struct
 }PrevAsteroid_t;
 
 
-
-
 /*
  * Struct of all the previous players locations, only changed by self for drawing
  */
@@ -237,7 +235,7 @@ void ReceiveDataFromClient();
 /*
  * Thread to move a single asteroid
  */
-void MoveAsteroid();
+void MoveAsteroids();
 
 /*
  * Thread to move all the bullets
