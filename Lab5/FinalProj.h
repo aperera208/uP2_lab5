@@ -15,12 +15,14 @@
 #include "G8RTOS.h"
 #include "G8RTOS_Semaphores.h"
 
-#define MAX_NUM_OF_ASTEROIDS        10
+#define MAX_NUM_OF_ASTEROIDS        9
 #define MAX_NUM_OF_BULLETS          10
 
 #define BULLETSIZE                  4
 #define BULLETD2                    (BULLETSIZE>>1)
 #define BULLETSPEED                 5
+#define S_ASTSIZE                     8
+#define S_ASTSIZED2                  (S_ASTSIZE>>1)
 
 /* Size of game arena */
 #define ARENA_MIN_X                  40
@@ -39,7 +41,7 @@
 #define SHIELD              4
 #define NO_SHIELD           0
 #define SPEED               4000  //8000/SPEED = How far the ship moves
-#define SPEED2              2500
+#define SPEED2              4000
 #define SHIP_COLL           20
 
 /* Enum for ship orientation    */
@@ -124,6 +126,7 @@ typedef struct
     int16_t currentCenterY;
     asteroid_status asteroid;
     bool alive;
+    bool on_screen;
 } Asteroid_t;
 
 
@@ -138,6 +141,16 @@ typedef struct
 }PrevBullet_t;
 
 /*
+ * Struct of all the previous asteroid locations, only changed by self for drawing!
+ */
+typedef struct
+{
+    int16_t CenterX;
+    int16_t CenterY;
+    asteroid_status asteroid;
+}PrevAsteroid_t;
+
+/*
  * Struct to be sent from the host to the client
  */
 typedef struct
@@ -150,18 +163,11 @@ typedef struct
     bool gameDone;
     uint16_t Score;
     PrevBullet_t prevbullets[MAX_NUM_OF_BULLETS];
+    PrevAsteroid_t prevasteroids[MAX_NUM_OF_ASTEROIDS];
 } GameState_t;
 #pragma pack ( pop )
 
-/*
- * Struct of all the previous asteroid locations, only changed by self for drawing!
- */
-typedef struct
-{
-    int16_t CenterX;
-    int16_t CenterY;
-    asteroid_status asteroid;
-}PrevAsteroid_t;
+
 
 
 /*
@@ -245,7 +251,7 @@ void MoveBullets();
 /*
  * Generate Asteroid thread
  */
-void GenerateAsteroid();
+void GenerateAsteroids();
 
 /*
  * Generate Bullet based on button press flag

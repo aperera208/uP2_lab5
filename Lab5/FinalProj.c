@@ -15,6 +15,9 @@ volatile GeneralPlayerInfo_t client_p1;
 volatile Wifi_Info_t client_info;
 volatile GameState_t Game;
  PrevBullet_t prevBullets;
+int8_t cool_off_host = 0;
+int8_t cool_off_client = 0;
+
 //prevBullets.CenterX = 0;
 //prevBulletss.CenterY = 0;
 
@@ -139,7 +142,7 @@ void JoinGame()
     G8RTOS_AddThread(Read_Joystick_Button_Client, "Read JoyClient", 200);
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
-    G8RTOS_AddPeriodicEvent(periodic_button_client, 250);
+    G8RTOS_AddPeriodicEvent(periodic_button_client, 50);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill JoinGame thread  //
@@ -274,9 +277,14 @@ void Read_Joystick_Button_Client()
         temp_client.rotation = orient_temp;
 
 
+        //G8RTOS_WaitSemaphore(&GSMutex);
+        //Game.players[Client] = temp_client;
+        //G8RTOS_SignalSemaphore(&GSMutex);
+
         G8RTOS_WaitSemaphore(&PlayerMutex);
         client_p1 = temp_client;
         G8RTOS_SignalSemaphore(&PlayerMutex);
+
 
         /*
          *         G8RTOS_WaitSemaphore(&GSMutex);
@@ -325,16 +333,22 @@ void ReceiveDataFromHost()
             // G8RTOS_Sleep(1);
         }
 
-
+        // Bits being dropped on client side
         for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
         {
             temp_gamestate.prevbullets[i] = Game.prevbullets[i];
         }
 
+        G8RTOS_WaitSemaphore(&PlayerMutex);
+        temp_gamestate.players[Client] = client_p1;
+        G8RTOS_SignalSemaphore(&PlayerMutex);
+
             // Copy local Gamestate into global Gamestate //
         G8RTOS_WaitSemaphore(&GSMutex);
         Game = temp_gamestate;
         G8RTOS_SignalSemaphore(&GSMutex);
+
+
 
             // Check if gameDone boolean is true //
         if(temp_gamestate.gameDone == true)
@@ -362,7 +376,6 @@ void SendDataToHost()
    {
        // Copy global specific client info into temporary  //
        G8RTOS_WaitSemaphore(&PlayerMutex);
-       // TODO: Maybe add mutex for general player info
        temp_client = client_p1; //Game.players[Client];
        G8RTOS_SignalSemaphore(&PlayerMutex);
 
@@ -371,6 +384,10 @@ void SendDataToHost()
        SendData((_u8*)&temp_client, HOST_IP_ADDR, sizeof(temp_client));
        G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
+       //G8RTOS_WaitSemaphore(&PlayerMutex);
+       client_p1.bullet_request = no_bullet;
+       //G8RTOS_SignalSemaphore(&PlayerMutex);
+
        // Sleep for 2 ms, good for synchronization
        G8RTOS_Sleep(2);
    }
@@ -378,154 +395,184 @@ void SendDataToHost()
 
 void periodic_button_client()
 {
-    if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+    if(cool_off_client > 0)
     {
-        LED_write(blue, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Client].state |= SHIELD;
-        G8RTOS_SignalSemaphore(&GSMutex);
-
+        cool_off_client--;
     }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+    else
     {
-        LED_write(green, ++count);
-        //G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Client].bullet_request = normal_shot;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(blue, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].state |= SHIELD;
+            G8RTOS_SignalSemaphore(&GSMutex);
 
-    }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
-    {
-        LED_write(red, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Client].bullet_request = spread_shot;
-        G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_client = 10;
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(green, ++count);
+            //G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].bullet_request = normal_shot;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_client = 10;
 
-    }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
-    {
-        LED_write(blue, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Client].bullet_request = charged0;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(red, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].bullet_request = spread_shot;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_client = 10;
+
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(blue, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].bullet_request = charged0;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_client = 10;
+
+        }
+        else
+        {
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].bullet_request = no_bullet;
+            G8RTOS_SignalSemaphore(&GSMutex);
+        }
+
+        G8RTOS_WaitSemaphore(&PlayerMutex);
+        client_p1.bullet_request = Game.players[Client].bullet_request;
+        G8RTOS_SignalSemaphore(&PlayerMutex);
     }
 
-    G8RTOS_WaitSemaphore(&PlayerMutex);
-    client_p1.bullet_request = Game.players[Client].bullet_request;
-    G8RTOS_SignalSemaphore(&PlayerMutex);
+
 }
 
 void GenerateBulletClient()
 {
+    GeneralPlayerInfo_t temp_client;
+    uint8_t temp_numBullets;
+    Bullets_t temp_bullets[MAX_NUM_OF_BULLETS];
 
     G8RTOS_WaitSemaphore(&GSMutex);
-    GameState_t temp_game = Game;
+    temp_client = Game.players[Client];
+    temp_numBullets = Game.numberOfbullets;
+
+
+    for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+    {
+        temp_bullets[i] = Game.bullets[i];
+    }
     G8RTOS_SignalSemaphore(&GSMutex);
 
     G8RTOS_WaitSemaphore(&PlayerMutex);
     client_p1.bullet_request = no_bullet;
     G8RTOS_SignalSemaphore(&PlayerMutex);
 
-    if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
+    if (temp_numBullets >= MAX_NUM_OF_BULLETS)
     {
         G8RTOS_KillSelf();
     }
 
-    if( temp_game.players[Client].bullet_request == normal_shot)
+    if( temp_client.bullet_request == normal_shot)
     {
         for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
         {
-            if(temp_game.bullets[i].alive == false)
+            if(temp_bullets[i].alive == false)
             {
-                temp_game.bullets[i].alive = true;
-                temp_game.bullets[i].bullet_type = normal_shot;
-                if(temp_game.players[Client].rotation == up)
+                temp_bullets[i].alive = true;
+                temp_bullets[i].bullet_type = normal_shot;
+                if(temp_client.rotation == up)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 7;
-                    temp_game.bullets[i].x_vel = 0;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center;
+                    temp_bullets[i].y_center = temp_client.y_center - 7;
+                    temp_bullets[i].x_vel = 0;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == down)
+                else if(temp_client.rotation == down)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 7;
-                    temp_game.bullets[i].x_vel = 0;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center;
+                    temp_bullets[i].y_center = temp_client.y_center + 7;
+                    temp_bullets[i].x_vel = 0;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == left)
+                else if(temp_client.rotation == left)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 7;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = 0;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center - 7;
+                    temp_bullets[i].y_center = temp_client.y_center;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = 0;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == right)
+                else if(temp_client.rotation == right)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 7;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = 0;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center + 7;
+                    temp_bullets[i].y_center = temp_client.y_center;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = 0;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == up_left)
+                else if(temp_client.rotation == up_left)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 4;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center - 4;
+                    temp_bullets[i].y_center = temp_client.y_center - 4;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == up_right)
+                else if(temp_client.rotation == up_right)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center - 4;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center + 4;
+                    temp_bullets[i].y_center = temp_client.y_center - 4;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
 
                 }
-                else if(temp_game.players[Client].rotation == down_left)
+                else if(temp_client.rotation == down_left)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center - 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 4;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center - 4;
+                    temp_bullets[i].y_center = temp_client.y_center + 4;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
                 }
-                else if(temp_game.players[Client].rotation == down_right)
+                else if(temp_client.rotation == down_right)
                 {
-                    temp_game.bullets[i].x_center = temp_game.players[Client].x_center + 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Client].y_center + 4;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
+                    temp_bullets[i].x_center = temp_client.x_center + 4;
+                    temp_bullets[i].y_center = temp_client.y_center + 4;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
 
                     break;
                 }
@@ -541,12 +588,19 @@ void GenerateBulletClient()
 
     }*/
 
-    temp_game.players[Client].bullet_request = client_p1.bullet_request;
+    temp_client.bullet_request = client_p1.bullet_request;
 
     G8RTOS_WaitSemaphore(&GSMutex);
-    Game = temp_game;
-    G8RTOS_SignalSemaphore(&GSMutex);
 
+
+    G8RTOS_SignalSemaphore(&GSMutex);
+    Game.players[Client] = temp_client;
+    Game.numberOfbullets = temp_numBullets;
+
+     for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+     {
+        Game.bullets[i] = temp_bullets[i];
+     }
 
     G8RTOS_KillSelf();
 }
@@ -681,7 +735,8 @@ void CreateGame()
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
     G8RTOS_AddThread(MoveBullets, "Move Bullets", 100);
-    G8RTOS_AddPeriodicEvent(periodic_button_host, 200);
+    G8RTOS_AddPeriodicEvent(periodic_button_host, 50);
+    G8RTOS_AddThread(GenerateAsteroids, "Gen Asteriod", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill self //
@@ -906,42 +961,55 @@ void EndOfGameHost()
 
 void periodic_button_host()
 {
-    if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+    if(cool_off_host > 0)
     {
-        LED_write(blue, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Host].state |= SHIELD;
-        G8RTOS_SignalSemaphore(&GSMutex);
-
+        cool_off_host--;
     }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+    else
     {
-        LED_write(green, ++count);
-        G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen Host", 100);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Host].bullet_request = normal_shot;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(blue, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Host].state |= SHIELD;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_host = 10;
 
-    }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
-    {
-        LED_write(red, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Host].bullet_request = spread_shot;
-        G8RTOS_SignalSemaphore(&GSMutex);
 
-    }
-    else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
-    {
-        LED_write(blue, ++count);
-        //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.players[Host].bullet_request = charged0;
-        G8RTOS_SignalSemaphore(&GSMutex);
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(green, ++count);
+            G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen Host", 100);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Host].bullet_request = normal_shot;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_host = 10;
 
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(red, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Host].bullet_request = spread_shot;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_host = 10;
+
+        }
+        else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
+        {
+            LED_write(blue, ++count);
+            //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Host].bullet_request = charged0;
+            G8RTOS_SignalSemaphore(&GSMutex);
+            cool_off_host = 10;
+
+        }
     }
+
 }
 
 void GenerateBulletHost()
@@ -1076,7 +1144,6 @@ void GenerateBulletHost()
 
 /*
  * Thread to Generate Asteroids
- * Generated proportional to the current number of asteroids
  */
 void GenerateAsteroids()
 {
@@ -1085,7 +1152,9 @@ void GenerateAsteroids()
     while(1)
     {
         // Copy global number of Asteroids into local Asteroids //
+        G8RTOS_WaitSemaphore(&GSMutex);
         numAsteroids = Game.numberOfasteroids;
+        G8RTOS_SignalSemaphore(&GSMutex);
 
         // If max number of balls are not on the screen //
         if(numAsteroids < MAX_NUM_OF_ASTEROIDS)
@@ -1100,8 +1169,8 @@ void GenerateAsteroids()
         Game.numberOfasteroids = numAsteroids;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        // Sleep proportional to number of balls on the screen (0.5s) //
-        G8RTOS_Sleep(500*numAsteroids);
+        // Sleep  //
+        G8RTOS_Sleep(2000);
     }
 }
 
@@ -1114,7 +1183,9 @@ void MoveAsteroids()
 
     GameState_t temp_game;
 
+    G8RTOS_WaitSemaphore(&GSMutex);
     temp_game = Game;
+    G8RTOS_SignalSemaphore(&GSMutex);
 
     int i;
     for(i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
@@ -1129,22 +1200,87 @@ void MoveAsteroids()
         }
     }
 
-    temp_game.asteroids[i].asteroid = small;
+    temp_game.asteroids[i].asteroid = small; // Random size
     temp_game.asteroids[i].alive =  true;
-    temp_game.asteroids[i].currentCenterX =  (rand() % (270 - 50) + 50);
-    temp_game.asteroids[i].currentCenterY =  (rand() % (230 - 50) + 50);
+    temp_game.numberOfasteroids++;
 
+    uint8_t side = rand() % 3 ;
+    uint8_t location_side;
+    int8_t x_vel;
+    int8_t y_vel;
+
+
+    if(side == 0 || side == 2)
+    {
+        location_side = rand() % MAX_SCREEN_X;
+        if(side == 0)
+        {
+            x_vel = (rand() % 3) - 1;
+            y_vel = 1;
+            temp_game.asteroids[i].currentCenterX =  location_side;
+            temp_game.asteroids[i].currentCenterY =  MIN_SCREEN_Y - 4;
+        }
+        else if(side == 2)
+        {
+            x_vel = (rand() % 3) - 1;
+            y_vel = -1;
+            temp_game.asteroids[i].currentCenterX =  location_side;
+            temp_game.asteroids[i].currentCenterY =  MAX_SCREEN_Y + 4;
+        }
+    }
+    else if(side == 1 || side == 3)
+    {
+        location_side = rand() % MAX_SCREEN_Y;
+        if(side == 1)
+        {
+            x_vel = -1;
+            y_vel = (rand() % 3) - 1;
+            temp_game.asteroids[i].currentCenterX =  MAX_SCREEN_X + 4;
+            temp_game.asteroids[i].currentCenterY =  location_side;
+        }
+        else if(side == 3)
+        {
+            x_vel = 1;
+            y_vel = (rand() % 3) - 1;
+            temp_game.asteroids[i].currentCenterX =  MIN_SCREEN_X - 4;
+            temp_game.asteroids[i].currentCenterY =  location_side;
+        }
+    }
+
+
+    G8RTOS_WaitSemaphore(&GSMutex);
     Game = temp_game;
+    G8RTOS_SignalSemaphore(&GSMutex);
 
     while(1)
     {
+        /*
         G8RTOS_WaitSemaphore(&GSMutex);
         temp_game = Game;
         G8RTOS_SignalSemaphore(&GSMutex);
 
+        temp_game.asteroids[i].currentCenterX += x_vel;
+        temp_game.asteroids[i].currentCenterY += y_vel;
 
+        if(((temp_game.asteroids[i].currentCenterX < MAX_SCREEN_X)  && (temp_game.asteroids[i].currentCenterX > MIN_SCREEN_X)) && \
+                ((temp_game.asteroids[i].currentCenterY < MAX_SCREEN_Y) && (temp_game.asteroids[i].currentCenterY > MIN_SCREEN_Y)))
+        {
+            temp_game.asteroids[i].on_screen = true;
+        }
+        else if(!(((temp_game.asteroids[i].currentCenterX < MAX_SCREEN_X)  && (temp_game.asteroids[i].currentCenterX > MIN_SCREEN_X)) && \
+                ((temp_game.asteroids[i].currentCenterY < MAX_SCREEN_Y) && (temp_game.asteroids[i].currentCenterY > MIN_SCREEN_Y))) && temp_game.asteroids[i].on_screen == true)
+        {
+            temp_game.asteroids[i].alive = false;
+            temp_game.numberOfasteroids--;
+            G8RTOS_KillSelf();
+        }
 
+        G8RTOS_WaitSemaphore(&GSMutex);
+        Game = temp_game;
+        G8RTOS_SignalSemaphore(&GSMutex);
+        */
 
+        G8RTOS_Sleep(30);
     }
 }
 
@@ -1256,6 +1392,19 @@ void DrawObjects()
             }
         }
 
+        for(int i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
+        {
+            if(temp_game.asteroids[i].alive == true)
+            {
+                // Erase previous asteroid and draw new asteroid
+                LCD_DrawRectangle(temp_game.prevasteroids[i].CenterX - S_ASTSIZED2, temp_game.prevasteroids[i].CenterX + S_ASTSIZED2 , temp_game.prevasteroids[i].CenterY - S_ASTSIZED2, temp_game.prevasteroids[i].CenterY + S_ASTSIZED2, LCD_BLACK);
+                LCD_DrawRectangle(temp_game.asteroids[i].currentCenterX - S_ASTSIZED2, temp_game.asteroids[i].currentCenterX + S_ASTSIZED2, temp_game.asteroids[i].currentCenterY - S_ASTSIZED2, temp_game.asteroids[i].currentCenterY + S_ASTSIZED2 , LCD_MAGENTA);
+
+                temp_game.prevasteroids[i].CenterX = temp_game.asteroids[i].currentCenterX;
+                temp_game.prevasteroids[i].CenterY = temp_game.asteroids[i].currentCenterY;
+            }
+        }
+
         // Redraw host player if moved
         if((prevhost_p0.CenterX != temp_game.players[Host].x_center) || (prevhost_p0.CenterY != temp_game.players[Host].y_center) || (prevhost_p0.rotation != temp_game.players[Host].rotation))
         {
@@ -1340,7 +1489,9 @@ void InitBoardState()
     for(int i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
     {
         Game.asteroids[i].alive = false;
-
+        Game.prevasteroids[i].CenterX = 400;
+        Game.prevasteroids[i].CenterY = 400;
+        Game.prevasteroids[i].asteroid = small;
     }
 
     // Kill all bullets and set color to white //
