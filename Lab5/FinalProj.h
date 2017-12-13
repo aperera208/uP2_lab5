@@ -15,7 +15,7 @@
 #include "G8RTOS.h"
 #include "G8RTOS_Semaphores.h"
 
-#define MAX_NUM_OF_ASTEROIDS        6
+#define MAX_NUM_OF_ASTEROIDS        3
 #define MAX_NUM_OF_BULLETS          3
 
 #define BULLETSIZE                  4
@@ -110,7 +110,7 @@ typedef struct
     shipOrientation rotation;
     uint16_t color;                 // Might be able to delete this
     bullets bullet_request;
-    uint8_t HP;
+    int16_t HP;
     uint8_t state;                  // Bits contain alive, invisible, and shield info
     //bool alive;
     //bool invisible;

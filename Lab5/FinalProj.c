@@ -270,6 +270,14 @@ void Read_Joystick_Button_Client()
 
         G8RTOS_WaitSemaphore(&GSMutex);
         temp_client = Game.players[Client];
+
+        if( Game.players[Client].HP <= 0)
+        {
+            x_update = 0;
+            y_update = 0;
+            orient_temp = up;
+        }
+
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
@@ -387,9 +395,9 @@ void SendDataToHost()
        SendData((_u8*)&temp_client, HOST_IP_ADDR, sizeof(temp_client));
        G8RTOS_SignalSemaphore(&CC_3100Mutex);
 
-       //G8RTOS_WaitSemaphore(&PlayerMutex);
+       G8RTOS_WaitSemaphore(&PlayerMutex);
        client_p1.bullet_request = no_bullet;
-       //G8RTOS_SignalSemaphore(&PlayerMutex);
+       G8RTOS_SignalSemaphore(&PlayerMutex);
 
        // Sleep for 2 ms, good for synchronization
        G8RTOS_Sleep(2);
@@ -406,7 +414,7 @@ void periodic_button_client()
     {
         if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(blue, ++count);
+            //LED_write(blue, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].state |= SHIELD;
@@ -416,17 +424,20 @@ void periodic_button_client()
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(green, ++count);
+           // LED_write(green, ++count);
             //G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
             G8RTOS_WaitSemaphore(&GSMutex);
-            Game.players[Client].bullet_request = normal_shot;
+            if(Game.players[Client].HP > 0)
+            {
+                Game.players[Client].bullet_request = normal_shot;
+            }
             G8RTOS_SignalSemaphore(&GSMutex);
             cool_off_client = 5;
 
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(red, ++count);
+            //LED_write(red, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].bullet_request = spread_shot;
@@ -436,7 +447,7 @@ void periodic_button_client()
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(blue, ++count);
+            //LED_write(blue, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].bullet_request = charged0;
@@ -635,6 +646,7 @@ void Read_Joystick_Button_Host()
         GetJoystickCoordinates(&x_coord, &y_coord);
 
 
+
         // Sleep before doing anything to make game fairer between host and client //
         G8RTOS_Sleep(10);
 
@@ -722,7 +734,15 @@ void Read_Joystick_Button_Host()
             x_update = 0;
         }
 
+
         G8RTOS_WaitSemaphore(&GSMutex);
+        if(Game.players[Host].HP <= 0)
+        {
+            x_update = 0;
+            y_update = 0;
+            orient_temp = up;
+        }
+
         Game.players[Host].x_center += x_update;
         Game.players[Host].y_center += y_update;
         Game.players[Host].rotation = orient_temp;
@@ -848,7 +868,11 @@ void periodic_button_host()
             //LED_write(green, ++count);
             GenerateBulletHost();
             G8RTOS_WaitSemaphore(&GSMutex);
-            Game.players[Host].bullet_request = normal_shot;
+
+            if(Game.players[Host].HP > 0)
+            {
+                Game.players[Host].bullet_request = normal_shot;
+            }
             G8RTOS_SignalSemaphore(&GSMutex);
             cool_off_host = 5;
 
@@ -1079,9 +1103,10 @@ void MoveAsteroids()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].HP =  Game.players[Host].HP - 1;
             Game.players[Host].HP =  Game.players[Host].HP - 1;
-            if(Game.players[Host].HP == 0)
+            if(Game.players[Host].HP < 0)
             {
-                Game.players[Host].state |= DEAD;
+                Game.players[Host].HP = 0;
+                Game.players[Host].state &= DEAD;
             }
 
             G8RTOS_SignalSemaphore(&GSMutex);
@@ -1092,9 +1117,10 @@ void MoveAsteroids()
         {
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].HP =  Game.players[Client].HP - 1;
-            if(Game.players[Client].HP == 0)
+            if(Game.players[Client].HP < 0)
             {
-                Game.players[Client].state |= DEAD;
+                Game.players[Client].HP = 0;
+                Game.players[Client].state &= DEAD;
             }
             G8RTOS_SignalSemaphore(&GSMutex);
 
