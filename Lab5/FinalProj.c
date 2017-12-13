@@ -790,17 +790,19 @@ void ReceiveDataFromClient()
         }
 
 
-        if(client_p1.bullet_request == normal_shot)
-        {
-           // G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
-            GenerateBulletClient();
-        }
 
 
         // Update gamestate with general client info //
         G8RTOS_WaitSemaphore(&GSMutex);
         Game.players[Client] = client_p1;
         G8RTOS_SignalSemaphore(&GSMutex);
+
+
+        if(client_p1.bullet_request == normal_shot)
+        {
+           // G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+            GenerateBulletClient();
+        }
 
         // Sleep for 2ms, good for synchronization //
         G8RTOS_Sleep(2);
@@ -908,16 +910,21 @@ void GenerateAsteroids()
 void MoveAsteroids()
 {
 
-    GameState_t temp_game;
+    Asteroid_t temp_ast[MAX_NUM_OF_ASTEROIDS];
+    uint8_t temp_numAst;
 
     G8RTOS_WaitSemaphore(&GSMutex);
-    temp_game = Game;
+    for(int i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
+    {
+        temp_ast[i] = Game.asteroids[i];
+    }
+    temp_numAst = Game.numberOfasteroids;
     G8RTOS_SignalSemaphore(&GSMutex);
 
     int i;
     for(i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
     {
-        if(temp_game.asteroids[i].alive == false)
+        if(temp_ast[i].alive == false)
         {
             break;
         }
@@ -927,9 +934,9 @@ void MoveAsteroids()
         }
     }
 
-    temp_game.asteroids[i].asteroid = small; // Random size
-    temp_game.asteroids[i].alive =  true;
-    //temp_game.numberOfasteroids++;
+
+    temp_ast[i].asteroid = small; // Random size
+    temp_ast[i].alive =  true;
 
     uint8_t side = rand() % 3 ;
     uint8_t location_side;
@@ -944,15 +951,15 @@ void MoveAsteroids()
         {
             x_vel = (rand() % 3) - 1;
             y_vel = 1;
-            temp_game.asteroids[i].currentCenterX =  location_side;
-            temp_game.asteroids[i].currentCenterY =  MIN_SCREEN_Y - 4;
+            temp_ast[i].currentCenterX =  location_side;
+            temp_ast[i].currentCenterY =  MIN_SCREEN_Y - 4;
         }
         else if(side == 2)
         {
             x_vel = (rand() % 3) - 1;
             y_vel = -1;
-            temp_game.asteroids[i].currentCenterX =  location_side;
-            temp_game.asteroids[i].currentCenterY =  MAX_SCREEN_Y + 4;
+            temp_ast[i].currentCenterX =  location_side;
+            temp_ast[i].currentCenterY =  MAX_SCREEN_Y + 4;
         }
     }
     else if(side == 1 || side == 3)
@@ -962,50 +969,66 @@ void MoveAsteroids()
         {
             x_vel = -1;
             y_vel = (rand() % 3) - 1;
-            temp_game.asteroids[i].currentCenterX =  MAX_SCREEN_X + 4;
-            temp_game.asteroids[i].currentCenterY =  location_side;
+            temp_ast[i].currentCenterX =  MAX_SCREEN_X + 4;
+            temp_ast[i].currentCenterY =  location_side;
         }
         else if(side == 3)
         {
             x_vel = 1;
             y_vel = (rand() % 3) - 1;
-            temp_game.asteroids[i].currentCenterX =  MIN_SCREEN_X - 4;
-            temp_game.asteroids[i].currentCenterY =  location_side;
+            temp_ast[i].currentCenterX =  MIN_SCREEN_X - 4;
+            temp_ast[i].currentCenterY =  location_side;
         }
     }
 
 
     G8RTOS_WaitSemaphore(&GSMutex);
-    Game = temp_game;
+    for(int j = 0; j < MAX_NUM_OF_ASTEROIDS; j++)
+    {
+        Game.asteroids[j] = temp_ast[j];
+    }
+    Game.numberOfasteroids = temp_numAst;
     G8RTOS_SignalSemaphore(&GSMutex);
 
     while(1)
     {
-        /*
+
         G8RTOS_WaitSemaphore(&GSMutex);
-        temp_game = Game;
+        for(int j = 0; j < MAX_NUM_OF_ASTEROIDS; j++)
+        {
+            temp_ast[j] = Game.asteroids[j];
+        }
+        temp_numAst = Game.numberOfasteroids;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        temp_game.asteroids[i].currentCenterX += x_vel;
-        temp_game.asteroids[i].currentCenterY += y_vel;
+        temp_ast[i].currentCenterX += x_vel;
+        temp_ast[i].currentCenterY += y_vel;
 
-        if(((temp_game.asteroids[i].currentCenterX < MAX_SCREEN_X)  && (temp_game.asteroids[i].currentCenterX > MIN_SCREEN_X)) && \
-                ((temp_game.asteroids[i].currentCenterY < MAX_SCREEN_Y) && (temp_game.asteroids[i].currentCenterY > MIN_SCREEN_Y)))
+        if(((temp_ast[i].currentCenterX < MAX_SCREEN_X)  && (temp_ast[i].currentCenterX > MIN_SCREEN_X)) && \
+                ((temp_ast[i].currentCenterY < MAX_SCREEN_Y) && (temp_ast[i].currentCenterY > MIN_SCREEN_Y)))
         {
-            temp_game.asteroids[i].on_screen = true;
+            temp_ast[i].on_screen = true;
         }
-        else if(!(((temp_game.asteroids[i].currentCenterX < MAX_SCREEN_X)  && (temp_game.asteroids[i].currentCenterX > MIN_SCREEN_X)) && \
-                ((temp_game.asteroids[i].currentCenterY < MAX_SCREEN_Y) && (temp_game.asteroids[i].currentCenterY > MIN_SCREEN_Y))) && temp_game.asteroids[i].on_screen == true)
+        else if( ( (temp_ast[i].currentCenterX - S_ASTSIZED2 > MAX_SCREEN_X) || (temp_ast[i].currentCenterX + S_ASTSIZED2 < MIN_SCREEN_X) || \
+                (temp_ast[i].currentCenterY - S_ASTSIZED2 > MAX_SCREEN_Y) || (temp_ast[i].currentCenterY + S_ASTSIZED2 < MIN_SCREEN_Y) ) && temp_ast[i].on_screen == true)
         {
-            temp_game.asteroids[i].alive = false;
-            temp_game.numberOfasteroids--;
+            temp_ast[i].alive = false;
+            temp_numAst--;
+        }
+
+        G8RTOS_WaitSemaphore(&GSMutex);
+        for(int j = 0; j < MAX_NUM_OF_ASTEROIDS; j++)
+        {
+            Game.asteroids[j] = temp_ast[j];
+        }
+        Game.numberOfasteroids = temp_numAst;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+        if(temp_ast[i].alive == false)
+        {
             G8RTOS_KillSelf();
         }
 
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game = temp_game;
-        G8RTOS_SignalSemaphore(&GSMutex);
-        */
 
         G8RTOS_Sleep(30);
     }
@@ -1445,15 +1468,15 @@ void GenerateBulletClient()
 
     G8RTOS_WaitSemaphore(&GSMutex);
 
-
-    G8RTOS_SignalSemaphore(&GSMutex);
     Game.players[Client] = temp_client;
     Game.numberOfbullets = temp_numBullets;
-
      for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
      {
         Game.bullets[i] = temp_bullets[i];
      }
+
+    G8RTOS_SignalSemaphore(&GSMutex);
+
 
     //G8RTOS_KillSelf();
      return;
