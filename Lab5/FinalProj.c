@@ -409,7 +409,7 @@ void periodic_button_client()
             Game.players[Client].state |= SHIELD;
             G8RTOS_SignalSemaphore(&GSMutex);
 
-            cool_off_client = 10;
+            cool_off_client = 5;
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
@@ -418,7 +418,7 @@ void periodic_button_client()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].bullet_request = normal_shot;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_client = 10;
+            cool_off_client = 5;
 
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
@@ -428,7 +428,7 @@ void periodic_button_client()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].bullet_request = spread_shot;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_client = 10;
+            cool_off_client = 5;
 
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
@@ -438,7 +438,7 @@ void periodic_button_client()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Client].bullet_request = charged0;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_client = 10;
+            cool_off_client = 5;
 
         }
         else
@@ -587,7 +587,7 @@ void CreateGame()
     G8RTOS_AddThread(Read_Joystick_Button_Host, "R Joy Host", 200);
     G8RTOS_AddThread(ReceiveDataFromClient, "Rec from client", 200);
     G8RTOS_AddThread(SendDataToClient, "Send data to client", 200);
-    G8RTOS_AddThread(MoveBullets, "Move Bullets", 100);
+    G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
     G8RTOS_AddPeriodicEvent(periodic_button_host, 50);
     G8RTOS_AddThread(GenerateAsteroids, "Gen Asteriod", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
@@ -830,7 +830,7 @@ void periodic_button_host()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].state |= SHIELD;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_host = 10;
+            cool_off_host = 5;
 
 
         }
@@ -841,7 +841,7 @@ void periodic_button_host()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = normal_shot;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_host = 10;
+            cool_off_host = 5;
 
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
@@ -851,7 +851,7 @@ void periodic_button_host()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = spread_shot;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_host = 10;
+            cool_off_host = 5;
 
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
@@ -861,7 +861,7 @@ void periodic_button_host()
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = charged0;
             G8RTOS_SignalSemaphore(&GSMutex);
-            cool_off_host = 10;
+            cool_off_host = 5;
 
         }
     }
@@ -885,21 +885,23 @@ void GenerateAsteroids()
         numAsteroids = Game.numberOfasteroids;
         G8RTOS_SignalSemaphore(&GSMutex);
 
-        // If max number of balls are not on the screen //
+        // If max number of asteroids are not on the screen //
         if(numAsteroids < MAX_NUM_OF_ASTEROIDS)
         {
-            // Add another ball and increment number of balls //
+
+            // Store local numballs into global gamestate number of asteroids //
+            //G8RTOS_WaitSemaphore(&GSMutex);
+            //Game.numberOfasteroids++;
+            //G8RTOS_SignalSemaphore(&GSMutex);
+
+            // Add another ball and increment number of asteroids //
             G8RTOS_AddThread(MoveAsteroids, "Move Asteroids", 200);
-            numAsteroids++;
         }
 
-        // Store local numballs into global gamestate number of balls //
-        G8RTOS_WaitSemaphore(&GSMutex);
-        Game.numberOfasteroids = numAsteroids;
-        G8RTOS_SignalSemaphore(&GSMutex);
+
 
         // Sleep  //
-        G8RTOS_Sleep(2000);
+        G8RTOS_Sleep(3000);
     }
 }
 
@@ -926,6 +928,7 @@ void MoveAsteroids()
     {
         if(temp_ast[i].alive == false)
         {
+            temp_numAst++;
             break;
         }
         else if(i == MAX_NUM_OF_ASTEROIDS-1)
@@ -940,8 +943,8 @@ void MoveAsteroids()
 
     uint8_t side = rand() % 3 ;
     uint8_t location_side;
-    int8_t x_vel;
-    int8_t y_vel;
+    int16_t x_vel;
+    int16_t y_vel;
 
 
     if(side == 0 || side == 2)
@@ -990,6 +993,9 @@ void MoveAsteroids()
     Game.numberOfasteroids = temp_numAst;
     G8RTOS_SignalSemaphore(&GSMutex);
 
+    //Bullets_t temp_bullet[MAX_NUM_OF_BULLETS];
+    //uint8_t temp_numBull;
+
     while(1)
     {
 
@@ -999,7 +1005,18 @@ void MoveAsteroids()
             temp_ast[j] = Game.asteroids[j];
         }
         temp_numAst = Game.numberOfasteroids;
+
+        //for(int j = 0; j < MAX_NUM_OF_BULLETS; j++)
+        //{
+          //  temp_bullet[j] = Game.bullets[i];
+        //}
+
+        //temp_numBull = Game.numberOfbullets;
+
         G8RTOS_SignalSemaphore(&GSMutex);
+
+
+
 
         temp_ast[i].currentCenterX += x_vel;
         temp_ast[i].currentCenterY += y_vel;
@@ -1009,26 +1026,56 @@ void MoveAsteroids()
         {
             temp_ast[i].on_screen = true;
         }
-        else if( ( (temp_ast[i].currentCenterX - S_ASTSIZED2 > MAX_SCREEN_X) || (temp_ast[i].currentCenterX + S_ASTSIZED2 < MIN_SCREEN_X) || \
-                (temp_ast[i].currentCenterY - S_ASTSIZED2 > MAX_SCREEN_Y) || (temp_ast[i].currentCenterY + S_ASTSIZED2 < MIN_SCREEN_Y) ) && temp_ast[i].on_screen == true)
+        else if( ( ((temp_ast[i].currentCenterX - S_ASTSIZED2) > MAX_SCREEN_X) || ((temp_ast[i].currentCenterX + S_ASTSIZED2) < MIN_SCREEN_X) || \
+                ((temp_ast[i].currentCenterY - S_ASTSIZED2) > MAX_SCREEN_Y) || ((temp_ast[i].currentCenterY + S_ASTSIZED2) < MIN_SCREEN_Y) ) && (temp_ast[i].on_screen == true))
         {
             temp_ast[i].alive = false;
-            temp_numAst--;
+            temp_ast[i].on_screen = false;
+            //temp_numAst--;
         }
+
+       /* for(int j = 0; j < MAX_NUM_OF_BULLETS; j++)
+        {
+            if(temp_bullet[j].alive == true)
+            {
+                if( (abs(temp_ast[i].currentCenterX - temp_bullet[j].x_center) < 20) && (abs(temp_ast[i].currentCenterY - temp_bullet[i].y_center) < 20) )
+                {
+                    temp_ast[i].alive = false;
+                    temp_ast[i].on_screen = false;
+                    temp_bullet[j].alive = false;
+                    temp_bullet[j].bullet_type = no_bullet;
+                    //temp_numAst--;
+                    temp_numBull--;
+                }
+            }
+        }*/
 
         G8RTOS_WaitSemaphore(&GSMutex);
         for(int j = 0; j < MAX_NUM_OF_ASTEROIDS; j++)
         {
             Game.asteroids[j] = temp_ast[j];
         }
+
         Game.numberOfasteroids = temp_numAst;
+
+       // for(int j = 0; j < MAX_NUM_OF_BULLETS; j++)
+        //{
+          //  Game.bullets[j] = temp_bullet[j];
+        //}
+
+        //Game.numberOfbullets = temp_numBull;
+
         G8RTOS_SignalSemaphore(&GSMutex);
 
         if(temp_ast[i].alive == false)
         {
+            //temp_numAst--;
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.numberOfasteroids = temp_numAst;
+            Game.numberOfasteroids--;
+            G8RTOS_SignalSemaphore(&GSMutex);
             G8RTOS_KillSelf();
         }
-
 
         G8RTOS_Sleep(30);
     }
@@ -1062,6 +1109,13 @@ void MoveBullets()
                 {
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
+                }
+                else if((abs(temp_game.asteroids[i].currentCenterX - temp_game.bullets[i].x_center) < 20) && (abs(temp_game.asteroids[i].currentCenterY - temp_game.bullets[i].y_center) < 20))
+                {
+                    temp_game.bullets[i].alive = false;
+                    temp_game.numberOfbullets--;
+                    temp_game.asteroids[i].alive = false;
+                    temp_game.numberOfasteroids--;
                 }
                 // Otherwise, update the position based on velocity
                 else
@@ -1146,8 +1200,55 @@ void DrawObjects()
         {
             if(temp_game.asteroids[i].alive == true)
             {
+
+                int16_t x_off = temp_game.asteroids[i].currentCenterX - temp_game.prevasteroids[i].CenterX;
+                int16_t y_off = temp_game.asteroids[i].currentCenterY - temp_game.prevasteroids[i].CenterY;
+
                 // Erase previous asteroid and draw new asteroid
-                LCD_DrawRectangle(temp_game.prevasteroids[i].CenterX - S_ASTSIZED2, temp_game.prevasteroids[i].CenterX + S_ASTSIZED2 , temp_game.prevasteroids[i].CenterY - S_ASTSIZED2, temp_game.prevasteroids[i].CenterY + S_ASTSIZED2, LCD_BLACK);
+                // Moving bottom right
+                if(x_off > 0  &&  y_off > 0)
+                {
+
+                }
+                // Moving top right
+                else if(x_off > 0 && y_off < 0)
+                {
+
+                }
+                // Moving right
+                else if(x_off > 0 && y_off == 0)
+                {
+
+                }
+                // Moving bottom left
+                else if(x_off < 0 && y_off > 0)
+                {
+
+                }
+                // Moving top left
+                else if(x_off < 0 && y_off < 0)
+                {
+
+                }
+                // Moving left
+                else if(x_off < 0 && y_off == 0)
+                {
+
+                }
+                // Moving down
+                else if(x_off == 0 && y_off > 0)
+                {
+
+                }
+                // Moving up
+                else if(x_off == 0 && y_off < 0)
+                {
+
+                }
+
+
+
+                LCD_DrawRectangle(temp_game.prevasteroids[i].CenterX - S_ASTSIZED2 - 4, temp_game.prevasteroids[i].CenterX + S_ASTSIZED2 + 4 , temp_game.prevasteroids[i].CenterY - S_ASTSIZED2 - 4, temp_game.prevasteroids[i].CenterY + S_ASTSIZED2 + 4, LCD_BLACK);
                 LCD_DrawRectangle(temp_game.asteroids[i].currentCenterX - S_ASTSIZED2, temp_game.asteroids[i].currentCenterX + S_ASTSIZED2, temp_game.asteroids[i].currentCenterY - S_ASTSIZED2, temp_game.asteroids[i].currentCenterY + S_ASTSIZED2 , LCD_MAGENTA);
 
                 temp_game.prevasteroids[i].CenterX = temp_game.asteroids[i].currentCenterX;

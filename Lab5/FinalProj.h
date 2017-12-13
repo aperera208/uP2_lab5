@@ -15,13 +15,13 @@
 #include "G8RTOS.h"
 #include "G8RTOS_Semaphores.h"
 
-#define MAX_NUM_OF_ASTEROIDS        9
-#define MAX_NUM_OF_BULLETS          10
+#define MAX_NUM_OF_ASTEROIDS        3
+#define MAX_NUM_OF_BULLETS          3
 
 #define BULLETSIZE                  4
 #define BULLETD2                    (BULLETSIZE>>1)
 #define BULLETSPEED                 5
-#define S_ASTSIZE                     8
+#define S_ASTSIZE                     12
 #define S_ASTSIZED2                  (S_ASTSIZE>>1)
 
 /* Size of game arena */

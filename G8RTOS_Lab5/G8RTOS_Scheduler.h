@@ -11,8 +11,8 @@
 #include "G8RTOS_Structures.h"
 
 /*********************************************** Sizes and Limits *********************************************************************/
-#define MAX_THREADS 32
-#define STACKSIZE 256
+#define MAX_THREADS 28
+#define STACKSIZE 512
 #define OSINT_PRIORITY 7
 #define MAX_FIFOS 4
 #define FIFOSIZE 16
