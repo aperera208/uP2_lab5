@@ -143,6 +143,7 @@ void JoinGame()
     G8RTOS_AddThread(SendDataToHost, "Send data to host", 200);
     G8RTOS_AddThread(ReceiveDataFromHost, "Rec data from host", 200);
     G8RTOS_AddPeriodicEvent(periodic_button_client, 50);
+    G8RTOS_AddThread(MoveLEDs, "Move LEDs", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill JoinGame thread  //
@@ -340,6 +341,7 @@ void ReceiveDataFromHost()
         }
 
         G8RTOS_WaitSemaphore(&PlayerMutex);
+        client_p1.HP = temp_gamestate.players[Client].HP;
         temp_gamestate.players[Client] = client_p1;
         G8RTOS_SignalSemaphore(&PlayerMutex);
 
@@ -347,6 +349,7 @@ void ReceiveDataFromHost()
         G8RTOS_WaitSemaphore(&GSMutex);
         Game = temp_gamestate;
         G8RTOS_SignalSemaphore(&GSMutex);
+
 
 
 
@@ -590,6 +593,7 @@ void CreateGame()
     G8RTOS_AddThread(MoveBullets, "Move Bullets", 200);
     G8RTOS_AddPeriodicEvent(periodic_button_host, 50);
     G8RTOS_AddThread(GenerateAsteroids, "Gen Asteriod", 200);
+    G8RTOS_AddThread(MoveLEDs, "Move LEDs", 200);
     G8RTOS_AddThread(IdleThread, "Idle", 255);
 
     // Kill self //
@@ -780,6 +784,8 @@ void ReceiveDataFromClient()
     while(1)
     {
 
+
+
         // Receive the specific client info from client //
         _i32 retval = -1;
         while(retval != 0)
@@ -794,7 +800,10 @@ void ReceiveDataFromClient()
 
         // Update gamestate with general client info //
         G8RTOS_WaitSemaphore(&GSMutex);
+        uint8_t tempHP = Game.players[Client].HP;
         Game.players[Client] = client_p1;
+        Game.players[Client].HP = tempHP;
+
         G8RTOS_SignalSemaphore(&GSMutex);
 
 
@@ -825,7 +834,7 @@ void periodic_button_host()
     {
         if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(blue, ++count);
+           // LED_write(blue, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].state |= SHIELD;
@@ -836,7 +845,7 @@ void periodic_button_host()
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(green, ++count);
+            //LED_write(green, ++count);
             GenerateBulletHost();
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = normal_shot;
@@ -846,7 +855,7 @@ void periodic_button_host()
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(red, ++count);
+           // LED_write(red, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = spread_shot;
@@ -856,7 +865,7 @@ void periodic_button_host()
         }
         else if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
         {
-            LED_write(blue, ++count);
+           // LED_write(blue, ++count);
             //G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen", 200);
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = charged0;
@@ -876,7 +885,7 @@ void periodic_button_host()
  */
 void GenerateAsteroids()
 {
-    uint8_t numAsteroids;
+    int8_t numAsteroids;
 
     while(1)
     {
@@ -913,7 +922,7 @@ void MoveAsteroids()
 {
 
     Asteroid_t temp_ast[MAX_NUM_OF_ASTEROIDS];
-    uint8_t temp_numAst;
+    int8_t temp_numAst;
 
     G8RTOS_WaitSemaphore(&GSMutex);
     for(int i = 0; i < MAX_NUM_OF_ASTEROIDS; i++)
@@ -993,6 +1002,14 @@ void MoveAsteroids()
     Game.numberOfasteroids = temp_numAst;
     G8RTOS_SignalSemaphore(&GSMutex);
 
+
+    int16_t temp_hostX ;
+     int16_t temp_hostY ;
+     int16_t temp_clientX ;
+     int16_t temp_clientY;
+
+    // uint8_t temp_Host_hp;
+     //uint8_t temp_Client_hp ;
     //Bullets_t temp_bullet[MAX_NUM_OF_BULLETS];
     //uint8_t temp_numBull;
 
@@ -1006,6 +1023,13 @@ void MoveAsteroids()
         }
         temp_numAst = Game.numberOfasteroids;
 
+         temp_hostX = Game.players[Host].x_center;
+         temp_hostY = Game.players[Host].y_center;
+         temp_clientX = Game.players[Client].x_center;
+         temp_clientY = Game.players[Client].y_center;
+
+         //temp_Host_hp = Game.players[Host].HP;
+         //temp_Client_hp = Game.players[Client].HP;
         //for(int j = 0; j < MAX_NUM_OF_BULLETS; j++)
         //{
           //  temp_bullet[j] = Game.bullets[i];
@@ -1026,8 +1050,8 @@ void MoveAsteroids()
         {
             temp_ast[i].on_screen = true;
         }
-        else if( ( ((temp_ast[i].currentCenterX - S_ASTSIZED2) > MAX_SCREEN_X) || ((temp_ast[i].currentCenterX + S_ASTSIZED2) < MIN_SCREEN_X) || \
-                ((temp_ast[i].currentCenterY - S_ASTSIZED2) > MAX_SCREEN_Y) || ((temp_ast[i].currentCenterY + S_ASTSIZED2) < MIN_SCREEN_Y) ) && (temp_ast[i].on_screen == true))
+        else if( ( ((temp_ast[i].currentCenterX - S_ASTSIZED2) > (MAX_SCREEN_X + 4)) || ((temp_ast[i].currentCenterX + S_ASTSIZED2) < (MIN_SCREEN_X - 4)) || \
+                ((temp_ast[i].currentCenterY - S_ASTSIZED2) > (MAX_SCREEN_Y + 4)) || ((temp_ast[i].currentCenterY + S_ASTSIZED2) < (MIN_SCREEN_Y - 4) )) && (temp_ast[i].on_screen == true))
         {
             temp_ast[i].alive = false;
             temp_ast[i].on_screen = false;
@@ -1050,6 +1074,31 @@ void MoveAsteroids()
             }
         }*/
 
+        if(  (abs(temp_ast[i].currentCenterX - temp_hostX) < 20)  && (abs(temp_ast[i].currentCenterY - temp_hostY) < 20))
+        {
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Host].HP =  Game.players[Host].HP - 1;
+            Game.players[Host].HP =  Game.players[Host].HP - 1;
+            if(Game.players[Host].HP == 0)
+            {
+                Game.players[Host].state |= DEAD;
+            }
+
+            G8RTOS_SignalSemaphore(&GSMutex);
+
+        }
+
+        if(  (abs(temp_ast[i].currentCenterX - temp_clientX) < 20)  && (abs(temp_ast[i].currentCenterY - temp_clientY) < 20))
+        {
+            G8RTOS_WaitSemaphore(&GSMutex);
+            Game.players[Client].HP =  Game.players[Client].HP - 1;
+            if(Game.players[Client].HP == 0)
+            {
+                Game.players[Client].state |= DEAD;
+            }
+            G8RTOS_SignalSemaphore(&GSMutex);
+
+        }
         G8RTOS_WaitSemaphore(&GSMutex);
         for(int j = 0; j < MAX_NUM_OF_ASTEROIDS; j++)
         {
@@ -1071,8 +1120,16 @@ void MoveAsteroids()
         {
             //temp_numAst--;
             G8RTOS_WaitSemaphore(&GSMutex);
-            Game.numberOfasteroids = temp_numAst;
-            Game.numberOfasteroids--;
+            //Game.numberOfasteroids = temp_numAst;
+            //Game.numberOfasteroids--;
+
+           // Game.players[Host].HP = temp_Host_hp;
+            //Game.players[Client].HP = temp_Client_hp;
+
+            if(Game.numberOfasteroids > 0)
+            {
+                Game.numberOfasteroids--;
+            }
             G8RTOS_SignalSemaphore(&GSMutex);
             G8RTOS_KillSelf();
         }
@@ -1110,12 +1167,14 @@ void MoveBullets()
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
                 }
-                else if((abs(temp_game.asteroids[i].currentCenterX - temp_game.bullets[i].x_center) < 20) && (abs(temp_game.asteroids[i].currentCenterY - temp_game.bullets[i].y_center) < 20))
+                else if((abs(temp_game.asteroids[i].currentCenterX - temp_game.bullets[i].x_center) < 25) && (abs(temp_game.asteroids[i].currentCenterY - temp_game.bullets[i].y_center) < 25))
                 {
                     temp_game.bullets[i].alive = false;
                     temp_game.numberOfbullets--;
                     temp_game.asteroids[i].alive = false;
-                    temp_game.numberOfasteroids--;
+                    temp_game.Score++;
+
+                    //temp_game.numberOfasteroids--;
                 }
                 // Otherwise, update the position based on velocity
                 else
@@ -1137,7 +1196,24 @@ void MoveBullets()
 }
 
 
+void MoveLEDs()
+{
+    GameState_t temp_game;
 
+    LED_clear(0xFFFF);
+    while(1)
+    {
+        // Store global gamestate in a local variable
+        G8RTOS_WaitSemaphore(&GSMutex);
+        temp_game = Game;
+        G8RTOS_SignalSemaphore(&GSMutex);
+
+
+        LED_write(red, temp_game.players[Host].HP);
+        LED_write(blue, temp_game.players[Client].HP << 8);
+    }
+
+}
 
 
 void DrawObjects()
@@ -1189,8 +1265,9 @@ void DrawObjects()
                     // Redraw the score if a bullet gets close to the score
                     if((temp_game.bullets[i].x_center < MIN_SCREEN_X + 50) && (temp_game.bullets[i].y_center < MIN_SCREEN_Y + 50))
                     {
-                        LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
+                        //LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
                     }
+
 
                 }
             }
@@ -1200,14 +1277,31 @@ void DrawObjects()
         {
             if(temp_game.asteroids[i].alive == true)
             {
-
+                if( (temp_game.asteroids[i].currentCenterX < (MIN_SCREEN_X + 50)) && (temp_game.asteroids[i].currentCenterY < (MIN_SCREEN_Y + 50)))
+                {
+                    //LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
+                }
+                /*
                 int16_t x_off = temp_game.asteroids[i].currentCenterX - temp_game.prevasteroids[i].CenterX;
                 int16_t y_off = temp_game.asteroids[i].currentCenterY - temp_game.prevasteroids[i].CenterY;
+
+                int ax = temp_game.asteroids[i].currentCenterx - S_ASTSIZED2;
+                int ay = temp_game.asteroids[i].currentCentery - S_ASTSIZED2;
+                int bx = temp_game.asteroids[i].currentCenterx + S_ASTSIZED2;
+                int by = temp_game.asteroids[i].currentCentery - S_ASTSIZED2;
+                int cx = temp_game.asteroids[i].currentCenterx - S_ASTSIZED2;
+                int cy = temp_game.asteroids[i].currentCentery + S_ASTSIZED2;
+                int dx = temp_game.asteroids[i].currentCenterx + S_ASTSIZED2;
+                int dy = temp_game.asteroids[i].currentCentery + S_ASTSIZED2;
 
                 // Erase previous asteroid and draw new asteroid
                 // Moving bottom right
                 if(x_off > 0  &&  y_off > 0)
                 {
+                    LCD_DrawRectangle(ax, bx, ay, ay + y_offset, Color);
+                    LCD_DrawRectangle(ax, ax + x_off, ay, cy, Color);
+                    LCD_DrawRectangle(bx, bx + x_off, by + y_off, dy + y_off, Color);
+                    LCD_DrawRectangle(bx, bx + x_off, by + y_off, dy + y_off, Color);
 
                 }
                 // Moving top right
@@ -1246,6 +1340,8 @@ void DrawObjects()
 
                 }
 
+                */
+
 
 
                 LCD_DrawRectangle(temp_game.prevasteroids[i].CenterX - S_ASTSIZED2 - 4, temp_game.prevasteroids[i].CenterX + S_ASTSIZED2 + 4 , temp_game.prevasteroids[i].CenterY - S_ASTSIZED2 - 4, temp_game.prevasteroids[i].CenterY + S_ASTSIZED2 + 4, LCD_BLACK);
@@ -1278,8 +1374,13 @@ void DrawObjects()
         // Redraw the score if the players get close to the score
         if(((temp_game.players[Host].x_center < MIN_SCREEN_X + 50) && (temp_game.players[Host].y_center < MIN_SCREEN_Y + 50)) || ((temp_game.players[Client].x_center < MIN_SCREEN_X + 50) && (temp_game.players[Client].y_center < MIN_SCREEN_Y + 50)))
         {
-            LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
+            //LCD_DrawRectangle(0, 50, 0, 50, LCD_BLACK);
+            //LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
         }
+
+        LCD_DrawRectangle(0, 35, 0, 25, LCD_BLACK);
+        sprintf(buffer_c, "%02d", Game.Score);
+        LCD_Text(MIN_SCREEN_X + 10, MIN_SCREEN_Y + 5, (uint8_t*)buffer_c, LCD_ORANGE);      //  score
 
 
         // Update previous  positions

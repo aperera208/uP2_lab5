@@ -15,7 +15,7 @@
 #include "G8RTOS.h"
 #include "G8RTOS_Semaphores.h"
 
-#define MAX_NUM_OF_ASTEROIDS        3
+#define MAX_NUM_OF_ASTEROIDS        6
 #define MAX_NUM_OF_BULLETS          3
 
 #define BULLETSIZE                  4
@@ -31,8 +31,8 @@
 #define ARENA_MAX_Y                  240
 
 /* Ship attributes */
-#define MAX_HP              16
-#define shipSize                16
+#define MAX_HP              128
+#define shipSize            16
 #define sizediv2            (shipSize>>1)
 #define ALIVE               1
 #define DEAD                0
@@ -159,7 +159,7 @@ typedef struct
     Asteroid_t asteroids[MAX_NUM_OF_ASTEROIDS];
     Bullets_t bullets[MAX_NUM_OF_BULLETS];
     uint8_t numberOfbullets;
-    uint8_t numberOfasteroids;
+    int8_t numberOfasteroids;
     bool gameDone;
     uint16_t Score;
     PrevBullet_t prevbullets[MAX_NUM_OF_BULLETS];
