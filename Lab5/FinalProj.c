@@ -456,154 +456,7 @@ void periodic_button_client()
 
 }
 
-void GenerateBulletClient()
-{
-    GeneralPlayerInfo_t temp_client;
-    uint8_t temp_numBullets;
-    Bullets_t temp_bullets[MAX_NUM_OF_BULLETS];
 
-    G8RTOS_WaitSemaphore(&GSMutex);
-    temp_client = Game.players[Client];
-    temp_numBullets = Game.numberOfbullets;
-
-
-    for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
-    {
-        temp_bullets[i] = Game.bullets[i];
-    }
-    G8RTOS_SignalSemaphore(&GSMutex);
-
-    G8RTOS_WaitSemaphore(&PlayerMutex);
-    client_p1.bullet_request = no_bullet;
-    G8RTOS_SignalSemaphore(&PlayerMutex);
-
-    if (temp_numBullets >= MAX_NUM_OF_BULLETS)
-    {
-        G8RTOS_KillSelf();
-    }
-
-    if( temp_client.bullet_request == normal_shot)
-    {
-        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
-        {
-            if(temp_bullets[i].alive == false)
-            {
-                temp_bullets[i].alive = true;
-                temp_bullets[i].bullet_type = normal_shot;
-                if(temp_client.rotation == up)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center;
-                    temp_bullets[i].y_center = temp_client.y_center - 7;
-                    temp_bullets[i].x_vel = 0;
-                    temp_bullets[i].y_vel = -BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == down)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center;
-                    temp_bullets[i].y_center = temp_client.y_center + 7;
-                    temp_bullets[i].x_vel = 0;
-                    temp_bullets[i].y_vel = BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == left)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center - 7;
-                    temp_bullets[i].y_center = temp_client.y_center;
-                    temp_bullets[i].x_vel = -BULLETSPEED;
-                    temp_bullets[i].y_vel = 0;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == right)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center + 7;
-                    temp_bullets[i].y_center = temp_client.y_center;
-                    temp_bullets[i].x_vel = BULLETSPEED;
-                    temp_bullets[i].y_vel = 0;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == up_left)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center - 4;
-                    temp_bullets[i].y_center = temp_client.y_center - 4;
-                    temp_bullets[i].x_vel = -BULLETSPEED;
-                    temp_bullets[i].y_vel = -BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == up_right)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center + 4;
-                    temp_bullets[i].y_center = temp_client.y_center - 4;
-                    temp_bullets[i].x_vel = BULLETSPEED;
-                    temp_bullets[i].y_vel = -BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-
-                }
-                else if(temp_client.rotation == down_left)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center - 4;
-                    temp_bullets[i].y_center = temp_client.y_center + 4;
-                    temp_bullets[i].x_vel = -BULLETSPEED;
-                    temp_bullets[i].y_vel = BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-                }
-                else if(temp_client.rotation == down_right)
-                {
-                    temp_bullets[i].x_center = temp_client.x_center + 4;
-                    temp_bullets[i].y_center = temp_client.y_center + 4;
-                    temp_bullets[i].x_vel = BULLETSPEED;
-                    temp_bullets[i].y_vel = BULLETSPEED;
-                    temp_numBullets++;
-
-                    break;
-                }
-            }
-        }
-    }
-    /*else if(request = spread_shot)
-    {
-
-    }
-    else if(request = charged0)
-    {
-
-    }*/
-
-    temp_client.bullet_request = client_p1.bullet_request;
-
-    G8RTOS_WaitSemaphore(&GSMutex);
-
-
-    G8RTOS_SignalSemaphore(&GSMutex);
-    Game.players[Client] = temp_client;
-    Game.numberOfbullets = temp_numBullets;
-
-     for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
-     {
-        Game.bullets[i] = temp_bullets[i];
-     }
-
-    G8RTOS_KillSelf();
-}
 
 
 void EndOfGameClient()
@@ -939,7 +792,8 @@ void ReceiveDataFromClient()
 
         if(client_p1.bullet_request == normal_shot)
         {
-            G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+           // G8RTOS_AddThread(GenerateBulletClient, "Bullet Gen", 100);
+            GenerateBulletClient();
         }
 
 
@@ -981,7 +835,7 @@ void periodic_button_host()
         else if(GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5) == GPIO_INPUT_PIN_LOW)
         {
             LED_write(green, ++count);
-            G8RTOS_AddThread(GenerateBulletHost, "Bullet Gen Host", 100);
+            GenerateBulletHost();
             G8RTOS_WaitSemaphore(&GSMutex);
             Game.players[Host].bullet_request = normal_shot;
             G8RTOS_SignalSemaphore(&GSMutex);
@@ -1012,134 +866,7 @@ void periodic_button_host()
 
 }
 
-void GenerateBulletHost()
-{
 
-    G8RTOS_WaitSemaphore(&GSMutex);
-    GameState_t temp_game = Game;
-    G8RTOS_SignalSemaphore(&GSMutex);
-
-    if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
-    {
-        G8RTOS_KillSelf();
-    }
-
-
-
-    if( temp_game.players[Host].bullet_request == normal_shot)
-    {
-        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
-        {
-            if(temp_game.bullets[i].alive == false)
-            {
-                temp_game.bullets[i].alive = true;
-                temp_game.bullets[i].bullet_type = normal_shot;
-                if(temp_game.players[Host].rotation == up)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 7;
-                    temp_game.bullets[i].x_vel = 0;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == down)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 7;
-                    temp_game.bullets[i].x_vel = 0;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == left)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 7;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = 0;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == right)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 7;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = 0;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == up_left)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == up_right)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = -BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-
-                }
-                else if(temp_game.players[Host].rotation == down_left)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
-                    temp_game.bullets[i].x_vel = -BULLETSPEED;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-                }
-                else if(temp_game.players[Host].rotation == down_right)
-                {
-                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
-                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
-                    temp_game.bullets[i].x_vel = BULLETSPEED;
-                    temp_game.bullets[i].y_vel = BULLETSPEED;
-                    temp_game.numberOfbullets++;
-
-                    break;
-                }
-            }
-        }
-    }
-    /*else if(request = spread_shot)
-    {
-
-    }
-    else if(request = charged0)
-    {
-
-    }*/
-
-
-    G8RTOS_WaitSemaphore(&GSMutex);
-    Game = temp_game;
-    G8RTOS_SignalSemaphore(&GSMutex);
-
-
-    G8RTOS_KillSelf();
-}
 
 
 /*
@@ -1202,7 +929,7 @@ void MoveAsteroids()
 
     temp_game.asteroids[i].asteroid = small; // Random size
     temp_game.asteroids[i].alive =  true;
-    temp_game.numberOfasteroids++;
+    //temp_game.numberOfasteroids++;
 
     uint8_t side = rand() % 3 ;
     uint8_t location_side;
@@ -1451,7 +1178,286 @@ void DrawObjects()
     }
 }
 
+void GenerateBulletHost()
+{
 
+    G8RTOS_WaitSemaphore(&GSMutex);
+    GameState_t temp_game = Game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+    if (temp_game.numberOfbullets >= MAX_NUM_OF_BULLETS)
+    {
+        //G8RTOS_KillSelf();
+        return;
+    }
+
+
+
+    if( temp_game.players[Host].bullet_request == normal_shot)
+    {
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_game.bullets[i].alive == false)
+            {
+                temp_game.bullets[i].alive = true;
+                temp_game.bullets[i].bullet_type = normal_shot;
+                if(temp_game.players[Host].rotation == up)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == down)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 7;
+                    temp_game.bullets[i].x_vel = 0;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = 0;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 7;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = 0;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == up_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == up_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center - 4;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = -BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+
+                }
+                else if(temp_game.players[Host].rotation == down_left)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center - 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
+                    temp_game.bullets[i].x_vel = -BULLETSPEED;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+                }
+                else if(temp_game.players[Host].rotation == down_right)
+                {
+                    temp_game.bullets[i].x_center = temp_game.players[Host].x_center + 4;
+                    temp_game.bullets[i].y_center = temp_game.players[Host].y_center + 4;
+                    temp_game.bullets[i].x_vel = BULLETSPEED;
+                    temp_game.bullets[i].y_vel = BULLETSPEED;
+                    temp_game.numberOfbullets++;
+
+                    break;
+                }
+            }
+        }
+    }
+    /*else if(request = spread_shot)
+    {
+
+    }
+    else if(request = charged0)
+    {
+
+    }*/
+
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    Game = temp_game;
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+
+    //G8RTOS_KillSelf();
+}
+
+void GenerateBulletClient()
+{
+    GeneralPlayerInfo_t temp_client;
+    uint8_t temp_numBullets;
+    Bullets_t temp_bullets[MAX_NUM_OF_BULLETS];
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+    temp_client = Game.players[Client];
+    temp_numBullets = Game.numberOfbullets;
+
+
+    for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+    {
+        temp_bullets[i] = Game.bullets[i];
+    }
+    G8RTOS_SignalSemaphore(&GSMutex);
+
+    G8RTOS_WaitSemaphore(&PlayerMutex);
+    client_p1.bullet_request = no_bullet;
+    G8RTOS_SignalSemaphore(&PlayerMutex);
+
+    if (temp_numBullets >= MAX_NUM_OF_BULLETS)
+    {
+        //G8RTOS_KillSelf();
+        return;
+    }
+
+    if( temp_client.bullet_request == normal_shot)
+    {
+        for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+        {
+            if(temp_bullets[i].alive == false)
+            {
+                temp_bullets[i].alive = true;
+                temp_bullets[i].bullet_type = normal_shot;
+                if(temp_client.rotation == up)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center;
+                    temp_bullets[i].y_center = temp_client.y_center - 7;
+                    temp_bullets[i].x_vel = 0;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == down)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center;
+                    temp_bullets[i].y_center = temp_client.y_center + 7;
+                    temp_bullets[i].x_vel = 0;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == left)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center - 7;
+                    temp_bullets[i].y_center = temp_client.y_center;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = 0;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == right)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center + 7;
+                    temp_bullets[i].y_center = temp_client.y_center;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = 0;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == up_left)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center - 4;
+                    temp_bullets[i].y_center = temp_client.y_center - 4;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == up_right)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center + 4;
+                    temp_bullets[i].y_center = temp_client.y_center - 4;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = -BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+
+                }
+                else if(temp_client.rotation == down_left)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center - 4;
+                    temp_bullets[i].y_center = temp_client.y_center + 4;
+                    temp_bullets[i].x_vel = -BULLETSPEED;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+                }
+                else if(temp_client.rotation == down_right)
+                {
+                    temp_bullets[i].x_center = temp_client.x_center + 4;
+                    temp_bullets[i].y_center = temp_client.y_center + 4;
+                    temp_bullets[i].x_vel = BULLETSPEED;
+                    temp_bullets[i].y_vel = BULLETSPEED;
+                    temp_numBullets++;
+
+                    break;
+                }
+            }
+        }
+    }
+    /*else if(request = spread_shot)
+    {
+
+    }
+    else if(request = charged0)
+    {
+
+    }*/
+
+    temp_client.bullet_request = client_p1.bullet_request;
+
+    G8RTOS_WaitSemaphore(&GSMutex);
+
+
+    G8RTOS_SignalSemaphore(&GSMutex);
+    Game.players[Client] = temp_client;
+    Game.numberOfbullets = temp_numBullets;
+
+     for(int i = 0; i < MAX_NUM_OF_BULLETS; i++)
+     {
+        Game.bullets[i] = temp_bullets[i];
+     }
+
+    //G8RTOS_KillSelf();
+     return;
+}
 
 /*
  * Initializes and prints initial game state

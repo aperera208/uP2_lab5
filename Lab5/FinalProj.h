@@ -215,10 +215,6 @@ void EndOfGameClient();
 
 void periodic_button_client();
 
-/*
- * Generate Bullet based on button press flag
- */
-void GenerateBulletClient();
 
 /*********************************************** Client Threads *********************************************************************/
 
@@ -256,7 +252,7 @@ void GenerateAsteroids();
 /*
  * Generate Bullet based on button press flag
  */
-void GenerateBulletHost();
+//void GenerateBulletHost();
 
 /*
  * Thread to read host's joystick
@@ -299,6 +295,14 @@ void MakeInvisible();
 
 
 /*********************************************** Public Functions *********************************************************************/
+/*
+ * Generate Bullet based on button press flag
+ */
+void GenerateBulletClient();
+
+
+void GenerateBulletHost();
+
 /*
  * Returns either Host or Client depending on button press
  */
